@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Event Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px auto;
+            max-width: 500px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 { text-align: center; color: #333; }
+        form { margin-top: 20px; display: flex; flex-direction: column; }
+        label { margin-top: 10px; font-weight: bold; }
+        input {
+            margin-top: 5px;
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover { background-color: #0056b3; }
+        #status { margin-top: 15px; font-weight: bold; color: blue; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>Generate Event Ticket</h2>
+
+    <form id="ticketForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+
+        <label for="eventName">Event Name:</label>
+        <input type="text" id="eventName" placeholder="e.g. Tech Expo 2025" required>
+
+        <label for="ticketId">Ticket Number (Serial):</label>
+        <input type="text" id="ticketId" placeholder="e.g. 001" required>
+
+        <button type="submit">Generate Ticket</button>
+    </form>
+
+    <div id="status"></div>
+
+    <script>
+        // Autofill email from query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailInput = document.getElementById("email");
+        emailInput.value = urlParams.get("email") || "";
+
+        const form = document.getElementById("ticketForm");
+        const statusDiv = document.getElementById("status");
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            statusDiv.style.color = "blue";
+            statusDiv.textContent = "Processing ticket...";
+
+            const email = emailInput.value.trim();
+            const eventName = document.getElementById("eventName").value.trim();
+            const ticketId = document.getElementById("ticketId").value.trim();
+
+            if (!email || !eventName || !ticketId) {
+                statusDiv.textContent = "Please fill all fields.";
+                statusDiv.style.color = "red";
+                return;
+            }
+
+            try {
+                const res = await fetch("/issue.html", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        user_email: email,
+                        event_name: eventName,
+                        ticket_id: ticketId
+                    })
+                });
+
+                if (!res.ok) throw new Error("Failed to create ticket.");
+
+                const data = await res.json();
+                statusDiv.style.color = "green";
+                statusDiv.innerHTML = `
+                    ✅ Ticket for <strong>${data.event_name}</strong> (No. ${data.ticket_number})
+                    has been successfully added!<br>
+                    <small>Added on: ${new Date(data.date_added).toLocaleString()}</small>
+                `;
+
+                // Redirect to dashboard after a short delay
+                setTimeout(() => {
+                    window.location.href = "/dashboard.html";
+                }, 2000);
+            } catch (error) {
+                statusDiv.textContent = `❌ ${error.message}`;
+                statusDiv.style.color = "red";
+            }
+        };
+    </script>
+</body>
+</html>

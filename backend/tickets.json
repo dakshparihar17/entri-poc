@@ -1,0 +1,37 @@
+[
+    {
+        "email": "df@gmail.com",
+        "event_name": "tech expo",
+        "ticket_id": "1234",
+        "date": "2025-10-06T11:53:34.645655",
+        "qr_code_url": "/tickets/05cd74c26202c3cdc9a8c0c336b1f13593e82e75d5e6a31fb970bedcd150bb22.png"
+    },
+    {
+        "email": "df@gmail.com",
+        "event_name": "Daksh",
+        "ticket_id": "122344",
+        "date": "2025-10-06T12:14:22.426116",
+        "qr_code_url": "/tickets/43b0c58394be087214c0f67f12f79b2339d4db45e598f9e56b2d3f04a96d2012.png"
+    },
+    {
+        "email": "daksh@g.com",
+        "event_name": "brunel",
+        "ticket_id": "12345",
+        "date": "2025-10-06T12:49:15.135925",
+        "qr_code_url": "/tickets/531f9141e0d7a6c8460dfd548d940465533ef36fa31af7eb6b759938d692f3c4.png"
+    },
+    {
+        "email": "daksh@gmail.com",
+        "event_name": "brunel",
+        "ticket_id": "12345678",
+        "date": "2025-10-06T15:42:06.311607",
+        "qr_code_url": "/tickets/7023bea6a7ee4b02bf919143b073aa0a6fe6e21f760f9e308f7db993476d463a.png"
+    },
+    {
+        "email": "daksh@gmail.com",
+        "event_name": "Smartr",
+        "ticket_id": "12345r",
+        "date": "2025-10-06T15:48:39.545685",
+        "qr_code_url": "/tickets/46f73219a91d3453a8f317b3e5d1e17fb2c30ede4e4ef9e7c326b2c4d9a51d97.png"
+    }
+]

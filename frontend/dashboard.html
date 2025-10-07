@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f9fa; }
+        h1 { text-align: center; }
+        h2 { margin-top: 20px; }
+        .section { 
+            margin-bottom: 30px; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            background-color: #fff; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        button { 
+            margin: 5px 0; 
+            padding: 10px; 
+            cursor: pointer; 
+            width: 250px; 
+            border: none; 
+            border-radius: 6px; 
+            background-color: #007BFF; 
+            color: white; 
+            font-weight: bold;
+        }
+        button:hover { background-color: #0056b3; }
+        .ticket {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #fdfdfd;
+        }
+        /* Popup modal styling */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 10; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto; 
+            padding: 20px; 
+            border-radius: 10px; 
+            width: 90%; 
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .close {
+            float: right; 
+            font-size: 24px; 
+            cursor: pointer; 
+            color: #666;
+        }
+        .close:hover { color: black; }
+        .ticket-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .ticket-item:last-child { border-bottom: none; }
+        .ticket-item small { color: gray; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Your Dashboard</h1>
+
+    <!-- MRZ Details Section -->
+    <div class="section">
+        <h2>Your Verified ID (MRZ Details)</h2>
+        <pre id="mrzDetails">Loading...</pre>
+    </div>
+
+    <!-- Latest Ticket Section -->
+    <div class="section">
+        <h2>Latest Ticket</h2>
+        <div id="latestTicket">Loading...</div>
+        <button id="viewAllBtn" style="display:none;">View All Tickets</button>
+    </div>
+
+    <!-- User Face Section -->
+    <div class="section">
+        <h2>Your Profile Photo</h2>
+        <img id="userFace" src="" alt="User Face" style="width:150px; border-radius:10px;">
+    </div>
+
+    <!-- Redirect to Issue Page -->
+    <div class="section" style="text-align:center;">
+        <h2>Issue a New Event Ticket</h2>
+        <button id="issueButton">Go to Issue Ticket Page</button>
+    </div>
+
+    <!-- Modal Popup for All Tickets -->
+    <div id="ticketModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>All Your Tickets</h2>
+            <div id="allTickets"></div>
+        </div>
+    </div>
+
+    <script>
+        let email = null;
+        let allTickets = [];
+
+        // --- Fetch current user profile and MRZ ---
+        (async () => {
+            try {
+                const res = await fetch("/user/profile");
+                if (!res.ok) throw new Error("Could not fetch user profile");
+                const data = await res.json();
+                email = data.email;
+
+                // Display MRZ info
+                document.getElementById("mrzDetails").textContent = JSON.stringify(data.mrz, null, 2);
+
+                // Display cropped face
+                if (data.cropped_face_url) {
+                    document.getElementById("userFace").src = data.cropped_face_url;
+                }
+
+                // Load tickets after user info is loaded
+                loadTickets();
+            } catch (err) {
+                document.getElementById("mrzDetails").textContent = "Error: " + err.message;
+                document.getElementById("latestTicket").textContent = "Unable to load tickets.";
+            }
+        })();
+
+        // --- Load User Tickets ---
+        async function loadTickets() {
+            try {
+                const res = await fetch("/user/tickets");
+                if (!res.ok) throw new Error("Failed to fetch tickets");
+                const tickets = await res.json();
+
+                // Assign serial numbers to tickets (1-based index)
+                allTickets = tickets.map((t, index) => ({
+                    ...t,
+                    serial_number: index + 1
+                }));
+
+                const latestDiv = document.getElementById("latestTicket");
+                const viewAllBtn = document.getElementById("viewAllBtn");
+
+                if (allTickets.length === 0) {
+                    latestDiv.innerHTML = "<p>No tickets yet.</p>";
+                    viewAllBtn.style.display = "none";
+                    return;
+                }
+
+                const latest = allTickets[allTickets.length - 1];
+                latestDiv.innerHTML = `
+                    <p><strong> #${latest.serial_number}</strong></p>
+                    <p><strong>Event:</strong> ${latest.event_name || "Unnamed Event"}</p>
+                    <p><strong>Date Added:</strong> ${formatDate(latest.date)}</p>
+                `;
+
+                viewAllBtn.style.display = "inline-block";
+            } catch (err) {
+                document.getElementById("latestTicket").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+            }
+        }
+
+        // --- Format Date Nicely ---
+        function formatDate(dateStr) {
+            if (!dateStr) return "N/A";
+            const date = new Date(dateStr);
+            return date.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+        }
+
+        // --- Modal Controls ---
+        const modal = document.getElementById("ticketModal");
+        const closeModal = document.getElementById("closeModal");
+        const allTicketsDiv = document.getElementById("allTickets");
+
+        document.getElementById("viewAllBtn").onclick = function() {
+            modal.style.display = "block";
+            if (allTickets.length === 0) {
+                allTicketsDiv.innerHTML = "<p>No tickets available.</p>";
+            } else {
+                allTicketsDiv.innerHTML = allTickets.map(t => `
+                    <div class="ticket-item">
+                        <strong> #${t.serial_number}</strong><br>
+                        <strong>Event:</strong> ${t.event_name || "Unnamed Event"}<br>
+                        <small><strong>Date Added:</strong> ${formatDate(t.date)}</small>
+                    </div>
+                `).join("");
+            }
+        };
+
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        };
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // --- Redirect to Issue Ticket Page ---
+        document.getElementById("issueButton").onclick = () => {
+            window.location.href = `/issue.html?email=${encodeURIComponent(email)}`;
+        };
+    </script>
+</body>
+</html>

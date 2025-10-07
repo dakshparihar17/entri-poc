@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up / Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { margin-bottom: 20px; }
+        input, button { margin: 5px 0; padding: 8px; width: 250px; }
+        button { cursor: pointer; }
+        #status { margin-top: 10px; color: blue; }
+    </style>
+</head>
+<body>
+    <h2>Sign Up / Login</h2>
+    <form id="signupForm" enctype="multipart/form-data">
+        <label>Email:</label><br>
+        <input type="email" id="email" placeholder="Enter your email" required><br>
+        <label>Upload Physical ID:</label><br>
+        <input type="file" id="idImage" accept="image/*" required><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="status"></div>
+
+    <script>
+        const form = document.getElementById("signupForm");
+        const statusDiv = document.getElementById("status");
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            statusDiv.textContent = "Processing...";
+
+            const email = document.getElementById("email").value;
+            const file = document.getElementById("idImage").files[0];
+
+            const formData = new FormData();
+            formData.append("email", email);
+            formData.append("id_image", file);
+
+            try {
+                const res = await fetch("/signup.html", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    statusDiv.style.color = "green";
+                    statusDiv.textContent = "Registration successful!";
+                } else {
+                    statusDiv.style.color = "red";
+                    statusDiv.textContent = `Error: ${data.message}`;
+                }
+            } catch (error) {
+                statusDiv.style.color = "red";
+                statusDiv.textContent = `Error: ${error.message}`;
+            }
+        };
+    </script>
+</body>
+</html>

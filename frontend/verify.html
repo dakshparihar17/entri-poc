@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><title>Verify Ticket</title></head>
+<body>
+    <h2>Verify Ticket</h2>
+    <form id="verifyForm">
+        Ticket ID (SHA256 Hash):<br>
+        <input type="text" id="ticketId" required size="70"><br>
+        <button type="submit">Verify</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        const form = document.getElementById("verifyForm");
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const ticketId = document.getElementById("ticketId").value;
+
+            const formData = new FormData();
+            formData.append("ticket_id", ticketId);
+
+            const res = await fetch("http://127.0.0.1:8000/verify-ticket", {
+                method: "POST",
+                body: formData
+            });
+            const data = await res.json();
+            document.getElementById("result").innerText = `Ticket is ${data.status}`;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizer Verification</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; text-align:center; }
+        video { border-radius: 8px; }
+        button { margin-top: 10px; padding: 8px 16px; cursor:pointer; }
+        #status { margin-top: 15px; font-weight:bold; }
+    </style>
+</head>
+<body>
+    <h2>Organizer: Verify User</h2>
+    <video id="cameraFeed" autoplay width="320" height="240"></video><br>
+    <button id="verifyBtn">Verify User</button>
+    <p id="status"></p>
+
+    <script>
+        const video = document.getElementById("cameraFeed");
+        const verifyBtn = document.getElementById("verifyBtn");
+        const status = document.getElementById("status");
+
+        // Start camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => video.srcObject = stream)
+            .catch(err => status.textContent = "Cannot access camera: " + err.message);
+
+        verifyBtn.onclick = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append("live_photo", blob, "live_photo.jpg");
+
+                status.textContent = "Verifying user...";
+
+                try {
+                    const res = await fetch("/organizer/verify", { method: "POST", body: formData });
+                    const data = await res.json();
+                    if (res.ok) {
+                        status.textContent = `User Verified: ${data.email}`;
+                    } else {
+                        status.textContent = `Verification failed: ${data.message}`;
+                    }
+                } catch (err) {
+                    status.textContent = "Error: " + err.message;
+                }
+            }, "image/jpeg");
+        };
+    </script>
+</body>
+</html>
