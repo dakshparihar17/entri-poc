@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f9fafb;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .form-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="email"],
+    input[type="password"],
+    input[type="file"] {
+      margin-top: 5px;
+      margin-bottom: 15px;
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #status {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    /* Modal */
+    #liveFaceModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #liveFaceModal .modal-content {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 400px;
+    }
+    #cameraFeed {
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Complete Your Signup</h2>
+
+  <div class="form-card">
+    <form id="signupForm" enctype="multipart/form-data">
+      <input type="hidden" id="email" name="email" value="" />
+      <label>Create Password:</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter a strong password"
+        required
+      />
+
+      <label>Upload Physical ID:</label>
+      <input
+        type="file"
+        id="idImage"
+        name="id_image"
+        accept="image/*"
+        required
+      />
+
+      <button type="submit">Submit & Continue</button>
+    </form>
+
+    <div id="status"></div>
+  </div>
+
+  <!-- Live Face Modal -->
+  <div id="liveFaceModal">
+    <div class="modal-content">
+      <h2>Take a Live Selfie</h2>
+      <video id="cameraFeed" autoplay width="320" height="240"></video>
+      <br />
+      <button id="captureBtn">Capture Photo</button>
+      <p id="captureStatus"></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("signupForm");
+    const statusDiv = document.getElementById("status");
+
+    // Autofill email from query param
+    const urlParams = new URLSearchParams(window.location.search);
+    document.getElementById("email").value = urlParams.get("email") || "";
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      statusDiv.style.color = "blue";
+      statusDiv.textContent = "Processing registration...";
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const file = document.getElementById("idImage").files[0];
+
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("id_image", file);
+
+      try {
+        const res = await fetch("/signup.html", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          statusDiv.style.color = "red";
+          statusDiv.textContent = `Error: ${data.message}`;
+          return;
+        }
+
+        statusDiv.style.color = "green";
+        statusDiv.textContent =
+          "Registration successful! Please take a live selfie.";
+
+        // Wait for selfie capture before redirect
+        await openLiveFaceModal(email);
+
+        // Redirect after selfie
+        window.location.href = "/dashboard.html";
+      } catch (err) {
+        statusDiv.style.color = "red";
+        statusDiv.textContent = `Error: ${err.message}`;
+      }
+    };
+
+    function openLiveFaceModal(email) {
+      return new Promise(async (resolve, reject) => {
+        const modal = document.getElementById("liveFaceModal");
+        const video = document.getElementById("cameraFeed");
+        const captureBtn = document.getElementById("captureBtn");
+        const status = document.getElementById("captureStatus");
+
+        modal.style.display = "flex";
+        status.textContent = "";
+
+        let stream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+        } catch (err) {
+          status.textContent = "Cannot access camera: " + err.message;
+          reject(err);
+          return;
+        }
+
+        captureBtn.onclick = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append("email", email);
+            formData.append("live_face", blob, "live_face.jpg");
+
+            status.textContent = "Uploading selfie...";
+
+            try {
+              const res = await fetch("/signup/live-face", {
+                method: "POST",
+                body: formData,
+              });
+              const data = await res.json();
+
+              if (res.ok) {
+                status.textContent = "Selfie captured successfully!";
+                stream.getTracks().forEach((track) => track.stop());
+                setTimeout(() => {
+                  modal.style.display = "none";
+                  resolve();
+                }, 1000);
+              } else {
+                status.textContent = "Error: " + data.message;
+              }
+            } catch (err) {
+              status.textContent = "Upload failed: " + err.message;
+            }
+          }, "image/jpeg");
+        };
+      });
+    }
+  </script>
+</body>
+</html>

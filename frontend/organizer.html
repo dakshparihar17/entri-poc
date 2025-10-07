@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organizer Dashboard</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1, h2 { margin-bottom: 10px; }
+    .event-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; cursor: pointer; }
+    .attendees { display: none; margin-top: 10px; padding-left: 15px; }
+    .attendees li { margin-bottom: 5px; }
+</style>
+</head>
+<body>
+
+<h1>Organizer Dashboard</h1>
+<div id="eventsContainer">Loading events...</div>
+
+<script>
+let organizerEmail = null;
+
+(async () => {
+    try {
+        // Fetch organizer info (assume logged-in user cookie)
+        const resUser = await fetch("/user/profile");
+        if (!resUser.ok) throw new Error("Cannot fetch organizer info");
+        const dataUser = await resUser.json();
+        organizerEmail = dataUser.email;
+
+        // Fetch all events for this organizer
+        const res = await fetch(`/organizer/events?email=${encodeURIComponent(organizerEmail)}`);
+        if (!res.ok) throw new Error("Cannot fetch events");
+        const events = await res.json();
+
+        const container = document.getElementById("eventsContainer");
+        container.innerHTML = "";
+
+        if (events.length === 0) {
+            container.innerHTML = "<p>No events found.</p>";
+        } else {
+            events.forEach(event => {
+                const div = document.createElement("div");
+                div.className = "event-card";
+                div.innerHTML = `<h2>${event.event_name}</h2><p>Tickets: ${event.tickets.length}</p>`;
+                
+                const attendeeList = document.createElement("ul");
+                attendeeList.className = "attendees";
+                div.appendChild(attendeeList);
+
+                div.onclick = async () => {
+                    if (attendeeList.style.display === "block") {
+                        attendeeList.style.display = "none";
+                        return;
+                    }
+                    // Load attendees
+                    attendeeList.innerHTML = "<li>Loading attendees...</li>";
+                    const resAttendees = await fetch(`/organizer/event-attendees?event_name=${encodeURIComponent(event.event_name)}`);
+                    const attendees = await resAttendees.json();
+                    if (attendees.length === 0) {
+                        attendeeList.innerHTML = "<li>No attendees yet</li>";
+                    } else {
+                        attendeeList.innerHTML = "";
+                        attendees.forEach(a => {
+                            attendeeList.innerHTML += `<li>${a.attendee_email} - Ticket #${a.ticket_number} (${new Date(a.date).toLocaleString()})</li>`;
+                        });
+                    }
+                    attendeeList.style.display = "block";
+                };
+
+                container.appendChild(div);
+            });
+        }
+    } catch (err) {
+        document.getElementById("eventsContainer").textContent = "Error: " + err.message;
+    }
+})();
+</script>
+</body>
+</html>

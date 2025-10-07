@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Entri</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #f0f4ff, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .card {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #111827;
+      font-size: 24px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      text-align: left;
+      margin-top: 15px;
+      color: #444;
+    }
+
+    input[type="email"] {
+      margin-top: 6px;
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 16px;
+      width: 100%;
+      background-color: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 15px;
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+    }
+
+    footer span {
+      color: #007bff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Welcome to Entri</h2>
+    <p style="margin-bottom: 25px; color: #555;">
+      Verify your identity once and unlock access to events effortlessly.
+    </p>
+
+    <form id="emailForm">
+      <label for="email">Email Address:</label>
+      <input
+        type="email"
+        id="email"
+        required
+        placeholder="Enter your email"
+        autocomplete="email"
+      />
+      <button type="submit">Continue</button>
+    </form>
+
+    <div id="status"></div>
+  </div>
+
+  <footer>
+    <p>Powered by <span>Entri</span> — A Smarter Way to Verify</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById("emailForm");
+    const statusDiv = document.getElementById("status");
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      statusDiv.textContent = "Checking...";
+      statusDiv.style.color = "#007bff";
+
+      const email = document.getElementById("email").value;
+
+      try {
+        const res = await fetch("/check-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+
+        const data = await res.json();
+
+        if (data.exists) {
+          statusDiv.textContent = "Redirecting to login...";
+          setTimeout(() => {
+            window.location.href = `/login.html?email=${encodeURIComponent(email)}`;
+          }, 700);
+        } else {
+          statusDiv.textContent = "Redirecting to signup...";
+          setTimeout(() => {
+            window.location.href = `/signup.html?email=${encodeURIComponent(email)}`;
+          }, 700);
+        }
+      } catch (error) {
+        statusDiv.style.color = "red";
+        statusDiv.textContent = `Error: ${error.message}`;
+      }
+    };
+  </script>
+</body>
+</html>
