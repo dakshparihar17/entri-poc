@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from passporteye import read_mrz
+from passlib.context import CryptContext
 from storage import save_user, get_user_by_email
 from pydantic import BaseModel
 import qrcode
@@ -115,6 +116,7 @@ users_file = Path("Users.json")
 faces_dir = Path("faces")
 
 
+
 def load_users():
     if users_file.exists():
         with open(users_file, "r") as f:
@@ -125,9 +127,13 @@ def load_users():
 async def check_email(request: Request):
     data = await request.json()
     email = data.get("email")
+    
     users = load_users()
-    exists = any(u["email"] == email for u in users)
+    organizers = load_json("organizers.json")  # Load organizers too
+    
+    exists = any(u["email"] == email for u in users) or any(o["email"] == email for o in organizers)
     return {"exists": exists}
+
 
 CURRENT_USER = {"email": "test@example.com"}
 
@@ -147,15 +153,23 @@ def get_current_user(request: Request):
 
 @app.get("/user/profile")
 def get_user_profile(request: Request):
-    # Read the email from the cookie
     email = request.cookies.get("user_email")
     if not email:
         raise HTTPException(status_code=401, detail="Not logged in")
 
     user = get_user_by_email(email)
     if not user:
+        # fallback: check organizers
+        organizers = load_json("organizers.json")
+        organizer = next((o for o in organizers if o["email"] == email), None)
+        if organizer:
+            return {
+                "email": organizer["email"],
+                "name": organizer["name"],
+                "role": "organizer"
+            }
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     face_url = None
     if user.get("live_face_path"):
         face_url = str(request.base_url) + f"live_faces/{Path(user['live_face_path']).name}"
@@ -163,8 +177,10 @@ def get_user_profile(request: Request):
     return {
         "email": user["email"],
         "mrz": user.get("mrz", {}),
-        "cropped_face_url": face_url
+        "cropped_face_url": face_url,
+        "role": "user"
     }
+
 
 @app.get("/user/face")
 def get_user_face(email: str):
@@ -205,25 +221,38 @@ def get_tickets(request: Request):
         t["ticket_number"] = t["ticket_id"][-6:].upper()
 
     return user_tickets
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def load_json(filename):
+    with open(filename, "r") as f:
+        return json.load(f)
 
 @app.post("/login")
-async def login(request: Request, response: Response):
+async def login_user(request: Request):
     data = await request.json()
-    email = data.get("email")
-    password = data.get("password")  # not used yet
-    if not email:
-        raise HTTPException(status_code=400, detail="Email required")
+    email = data.get("email").strip().lower()  # normalize
+    password = data.get("password")
 
-    users = load_users()
-    user = next((u for u in users if u["email"] == email), None)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+    users = load_json("users.json")
+    organizers = load_json("organizers.json")
 
-    # TODO: verify password here later if you implement password storage
+    # Case-insensitive search
+    user = next((u for u in users if u["email"].strip().lower() == email), None)
+    organizer = next((o for o in organizers if o["email"].strip().lower() == email), None)
 
-    # Store email in cookie
-    response.set_cookie(key="user_email", value=email, httponly=True)
-    return {"message": "Login successful", "email": email}
+    if user:
+        if not pwd_context.verify(password, user["password"]):
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        return {"redirect": "/dashboard.html", "role": "user"}
+
+    elif organizer:
+        if not pwd_context.verify(password, organizer["password"]):
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        return {"redirect": "/organizer.html", "role": "organizer"}
+
+    else:
+        raise HTTPException(status_code=404, detail="Account not found")
+
 
 @app.post("/signup.html")
 async def signup(response: Response,email: str = Form(...), password: str = Form(...), id_image: UploadFile = File(...)):
@@ -334,41 +363,16 @@ async def save_live_face(email: str = Form(...), live_face: UploadFile = File(..
 
     return {"message": "Live selfie verified and saved successfully", "live_face_path": str(live_face_path)}
 
-@app.post("/organizer/verify")
-async def organizer_verify(live_photo: UploadFile = File(...)):
-    # Save the uploaded photo temporarily
-    temp_path = live_faces_dir / "temp_verify.jpg"
-    with open(temp_path, "wb") as f:
-        shutil.copyfileobj(live_photo.file, f)
 
-    try:
-        uploaded_image = face_recognition.load_image_file(temp_path)
-        uploaded_encodings = face_recognition.face_encodings(uploaded_image)
-        if not uploaded_encodings:
-            temp_path.unlink()
-            return JSONResponse(status_code=400, content={"message": "No face detected in uploaded photo"})
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-        uploaded_encoding = uploaded_encodings[0]
+# def add_organizer(email, password, name):
+#     with open("organizers.json", "r") as f:
+#         data = json.load(f)
+#     hashed = pwd_context.hash(password)
+#     data.append({"email": email, "password": hashed, "name": name})
+#     with open("organizers.json", "w") as f:
+#         json.dump(data, f, indent=2)
+#     print(f"✅ Organizer {email} added.")
 
-        # Check against all live selfies
-        for selfie_file in live_faces_dir.iterdir():
-            if selfie_file.name == "temp_verify.jpg":
-                continue
-            existing_image = face_recognition.load_image_file(selfie_file)
-            existing_encodings = face_recognition.face_encodings(existing_image)
-            if not existing_encodings:
-                continue
-            match = face_recognition.compare_faces([existing_encodings[0]], uploaded_encoding)
-            if match[0]:
-                temp_path.unlink()
-                # Email can be inferred from filename convention
-                email = selfie_file.stem.replace("_live", "").replace("_", "@", 1).replace("_", ".")
-                return {"email": email}
-
-        temp_path.unlink()
-        return JSONResponse(status_code=404, content={"message": "User not found"})
-
-    except Exception as e:
-        temp_path.unlink()
-        return JSONResponse(status_code=500, content={"message": f"Error during verification: {str(e)}"})
-
+# add_organizer("eventhost@entriplatform.com", "secure123", "Host One")

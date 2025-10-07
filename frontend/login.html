@@ -3,22 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Login | Entri</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    input, button { margin: 5px 0; padding: 8px; width: 250px; }
-    #status { margin-top: 10px; color: blue; }
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-card {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #222;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      background: #0078ff;
+      color: white;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #005fcc;
+    }
+    #status {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #0078ff;
+    }
   </style>
 </head>
 <body>
-  <h2>Login</h2>
-  <form id="loginForm">
-    <input type="hidden" id="email" value="">
-    <label>Password:</label><br>
-    <input type="password" id="password" required><br>
-    <button type="submit">Login</button>
-  </form>
-  <div id="status"></div>
+  <div class="login-card">
+    <h2>Welcome Back 👋</h2>
+    <form id="loginForm">
+      <input type="hidden" id="email" value="">
+      <label for="password">Password:</label><br>
+      <input type="password" id="password" required placeholder="Enter your password"><br>
+      <button type="submit">Login</button>
+    </form>
+    <div id="status"></div>
+  </div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -46,10 +90,15 @@
 
         if (res.ok) {
           statusDiv.style.color = "green";
-          statusDiv.textContent = "Login successful!";
-          // Redirect to dashboard
+          statusDiv.textContent = "Login successful! Redirecting...";
+
+          // Backend sends role info (user or organiser)
+          const redirectUrl = data.role === "organizer"
+            ? "/organizer.html"
+            : "/dashboard.html";
+
           setTimeout(() => {
-            window.location.href = "/dashboard.html";
+            window.location.href = redirectUrl;
           }, 1000);
         } else {
           statusDiv.style.color = "red";
