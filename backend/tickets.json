@@ -1,37 +1,65 @@
 [
     {
-        "email": "df@gmail.com",
-        "event_name": "tech expo",
-        "ticket_id": "1234",
-        "date": "2025-10-06T11:53:34.645655",
-        "qr_code_url": "/tickets/05cd74c26202c3cdc9a8c0c336b1f13593e82e75d5e6a31fb970bedcd150bb22.png"
+        "email": "s@g.com",
+        "event_code": "EVT-EA91C3",
+        "event_name": "Smart",
+        "ticket_id": "1234567",
+        "date": "2025-10-08T11:43:23.268591",
+        "qr_code_url": "/tickets/f240386cc8b9fab02756349e6d450b8071eff5709055cbd0a875289c243ed49d.png",
+        "organizer_email": "eventhost@entriplatform.com"
     },
     {
-        "email": "df@gmail.com",
-        "event_name": "Daksh",
-        "ticket_id": "122344",
-        "date": "2025-10-06T12:14:22.426116",
-        "qr_code_url": "/tickets/43b0c58394be087214c0f67f12f79b2339d4db45e598f9e56b2d3f04a96d2012.png"
-    },
-    {
-        "email": "daksh@g.com",
-        "event_name": "brunel",
+        "email": "s@g.com",
+        "event_code": "EVT-081193",
+        "event_name": "Smartr365",
         "ticket_id": "12345",
-        "date": "2025-10-06T12:49:15.135925",
-        "qr_code_url": "/tickets/531f9141e0d7a6c8460dfd548d940465533ef36fa31af7eb6b759938d692f3c4.png"
+        "date": "2025-10-08T11:45:14.295313",
+        "qr_code_url": "/tickets/718ca40e546cb96bf3aee8aea988b0b0690d0309e5b8e07d31339eafb3784b82.png",
+        "organizer_email": "eventhost@entriplatform.com"
     },
     {
-        "email": "daksh@gmail.com",
-        "event_name": "brunel",
+        "email": "s@g.com",
+        "event_code": "EVT-081193",
+        "event_name": "Smartr365",
+        "ticket_id": "1234",
+        "date": "2025-10-08T11:45:40.027688",
+        "qr_code_url": "/tickets/ad8bd4fa49ae68073d29c7020878892d490c6a9f8f83fa9340eed040f579cd87.png",
+        "organizer_email": "eventhost@entriplatform.com"
+    },
+    {
+        "email": "s@g.com",
+        "event_code": "EVT-EA91C3",
+        "event_name": "Smart",
         "ticket_id": "12345678",
-        "date": "2025-10-06T15:42:06.311607",
-        "qr_code_url": "/tickets/7023bea6a7ee4b02bf919143b073aa0a6fe6e21f760f9e308f7db993476d463a.png"
+        "date": "2025-10-08T12:21:15.117338",
+        "qr_code_url": "/tickets/40d3b79d95e6be81fc6ba7a775991f6fc098f263a94208c83de66fe75248d2b3.png",
+        "organizer_email": "eventhost@entriplatform.com"
     },
     {
-        "email": "daksh@gmail.com",
-        "event_name": "Smartr",
-        "ticket_id": "12345r",
-        "date": "2025-10-06T15:48:39.545685",
-        "qr_code_url": "/tickets/46f73219a91d3453a8f317b3e5d1e17fb2c30ede4e4ef9e7c326b2c4d9a51d97.png"
+        "email": "s@g.com",
+        "event_code": "EVT-081193",
+        "event_name": "Smartr365",
+        "ticket_id": "54678",
+        "date": "2025-10-08T14:50:30.023643",
+        "qr_code_url": "/tickets/2055fb3a991459684a54b0fe46454597a20171ab2e11a02445f74c0140824d09.png",
+        "organizer_email": "eventhost@entriplatform.com"
+    },
+    {
+        "email": "s@g.com",
+        "event_code": "EVT-AC8FAE",
+        "event_name": "Brunel",
+        "ticket_id": "etuyio",
+        "date": "2025-10-09T15:12:49.277759",
+        "qr_code_url": "/tickets/78070a9581ba13381ea9cb65441eec95557dc966148e12311f2dc83450768aee.png",
+        "organizer_email": "eventhost@entriplatform.com"
+    },
+    {
+        "email": "s@g.com",
+        "event_code": "EVT-EFD421",
+        "event_name": "htdytuvbu",
+        "ticket_id": "12345678i9op[]",
+        "date": "2025-10-14T14:59:36.136515",
+        "qr_code_url": "/tickets/c2827a0b3d34377b1cb0ffa044b2f645b4e7b67c924cbab506b0b423d570ee86.png",
+        "organizer_email": "eventhost@entriplatform.com"
     }
 ]

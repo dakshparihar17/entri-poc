@@ -3,6 +3,8 @@ from pathlib import Path
 
 data_file = Path(__file__).parent / "tickets.json"
 users_file = Path(__file__).parent / "users.json"
+data_dir = Path(__file__).parent / "data"
+
 
 
 # Initialize file if not exists
@@ -48,3 +50,21 @@ def get_tickets_by_email(email: str):
     with open(data_file, "r") as f:
         tickets = json.load(f)
         return [t for t in tickets if t.get("email") == email]
+    
+
+def load_json(filename: str):
+    """Load JSON data from a file. Returns an empty list if the file doesn't exist."""
+    file_path = Path(__file__).parent / filename
+    if not file_path.exists():
+        return []
+    with open(file_path, "r") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return []
+
+def save_json(filename: str, data):
+    """Overwrite a JSON file with new data."""
+    file_path = Path(__file__).parent / filename
+    with open(file_path, "w") as f:
+        json.dump(data, f, indent=4)

@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from passporteye import read_mrz
+from passporteye.mrz.text import MRZ
 from passlib.context import CryptContext
 from storage import save_user, get_user_by_email
 from pydantic import BaseModel
@@ -19,6 +20,7 @@ from pathlib import Path
 from blockchain import Blockchain
 from storage import save_ticket , get_tickets_by_email
 from organizers import router as organiser_router
+from organizers import router
 
 
 app = FastAPI()
@@ -29,9 +31,12 @@ tickets_path = Path(__file__).parent / "tickets"
 tickets_path.mkdir(exist_ok=True)  # Ensure tickets folder exists
 live_faces_dir = Path("live_faces")
 live_faces_dir.mkdir(exist_ok=True)
+app.mount("/backend", StaticFiles(directory=Path(__file__).parent), name="backend")
+
 
 # Routes
 app.include_router(organiser_router)
+
 
 # Initialize Blockchain
 blockchain = Blockchain()
@@ -65,6 +70,12 @@ def client_dashboard():
 def organizer_dashboard():
     return FileResponse( frontend_path / "organizer.html")  
 
+@app.get("/events")
+def get_all_events():
+
+    events = load_json("events.json")
+    return events
+
 # Serve static files
 app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 app.mount("/tickets", StaticFiles(directory=tickets_path), name="tickets")
@@ -75,42 +86,50 @@ app.mount("/live_faces", StaticFiles(directory="live_faces"), name="live_faces")
 # Ticket data model
 class TicketRequest(BaseModel):
     user_email: str
-    event_name: str
     ticket_id: str
+    event_code: str
 
 uploads_path = Path(__file__).parent / "uploads"
 uploads_path.mkdir(exist_ok=True)
 
-# Issue ticket endpoint
 @app.post("/issue.html")
 def issue_ticket(data: TicketRequest):
-    # Generate unique hash for backend reference (not shown to user)
-    ticket_id_raw = f"{data.user_email}-{data.ticket_id}-{data.event_name}"
+    # Load events
+    events = load_json("events.json")
+
+    # Verify event_code exists
+    event = next((e for e in events if e["event_code"] == data.event_code), None)
+    if not event:
+        raise HTTPException(status_code=404, detail="Invalid event code. Please check and try again.")
+
+    # Generate unique hash for backend reference
+    ticket_id_raw = f"{data.user_email}-{data.ticket_id}-{data.event_code}"
     unique_ticket_hash = hashlib.sha256(ticket_id_raw.encode()).hexdigest()
 
-    # Optionally generate QR code (kept but not displayed)
+    # Generate QR code
     qr = qrcode.make(unique_ticket_hash)
     qr_path = tickets_path / f"{unique_ticket_hash}.png"
     qr.save(qr_path)
 
-    # Save ticket data (simple version: no blockchain or screenshot)
+    # Create ticket record
     ticket_data = {
         "email": data.user_email,
-        "event_name": data.event_name,
-        "ticket_id": data.ticket_id,   # user’s chosen serial/number
-        "date": datetime.now().isoformat(),  # date when added
-        "qr_code_url": f"/tickets/{unique_ticket_hash}.png"
+        "event_code": data.event_code,
+        "event_name": event["event_name"],  # pulled from events.json
+        "ticket_id": data.ticket_id,
+        "date": datetime.now().isoformat(),
+        "qr_code_url": f"/tickets/{unique_ticket_hash}.png",
+        "organizer_email": event["organizer_email"]
     }
 
     save_ticket(ticket_data)
 
     return {
-        "message": "Ticket issued successfully",
-        "event_name": data.event_name,
+        "message": f"Ticket issued for {event['event_name']} successfully!",
+        "event_code": data.event_code,
         "ticket_number": data.ticket_id,
         "date_added": ticket_data["date"]
     }
-
 
 users_file = Path("Users.json")
 faces_dir = Path("faces")
@@ -240,19 +259,26 @@ async def login_user(request: Request):
     user = next((u for u in users if u["email"].strip().lower() == email), None)
     organizer = next((o for o in organizers if o["email"].strip().lower() == email), None)
 
+    response = JSONResponse(content={})
+
     if user:
         if not pwd_context.verify(password, user["password"]):
             raise HTTPException(status_code=401, detail="Invalid credentials")
-        return {"redirect": "/dashboard.html", "role": "user"}
+        # Set cookie here
+        response = JSONResponse(content={"redirect": "/dashboard.html", "role": "user"})
+        response.set_cookie(key="user_email", value=user["email"], httponly=True)
+        return response
 
     elif organizer:
         if not pwd_context.verify(password, organizer["password"]):
             raise HTTPException(status_code=401, detail="Invalid credentials")
-        return {"redirect": "/organizer.html", "role": "organizer"}
+        response = JSONResponse(content={"redirect": "/organizer.html", "role": "organizer"})
+        response.set_cookie(key="user_email", value=organizer["email"], httponly=True)
+        return response
+
 
     else:
         raise HTTPException(status_code=404, detail="Account not found")
-
 
 @app.post("/signup.html")
 async def signup(response: Response,email: str = Form(...), password: str = Form(...), id_image: UploadFile = File(...)):
@@ -294,11 +320,12 @@ async def signup(response: Response,email: str = Form(...), password: str = Form
     else:
         return JSONResponse(status_code=400, content={"message": "No face detected in uploaded image."})
     # ---- FACE CROPPING END ----
+    hashed_password = pwd_context.hash(password)
 
     # Save user info (including cropped face)
     save_user({
         "email": email,
-        "password": password,
+        "password": hashed_password,
         "mrz": mrz_data,
         "id_image_path": str(file_path),
         "cropped_face_path": cropped_face_path

@@ -5,76 +5,478 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Organizer Dashboard</title>
 <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1, h2 { margin-bottom: 10px; }
-    .event-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; cursor: pointer; }
-    .attendees { display: none; margin-top: 10px; padding-left: 15px; }
-    .attendees li { margin-bottom: 5px; }
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f4f6f9;
+        color: #333;
+    }
+
+    header {
+        background: #0078ff;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    main {
+        padding: 20px;
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    .btn {
+        background: #0078ff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s;
+        margin-top: 5px;
+    }
+
+    .btn:hover {
+        background: #005fcc;
+    }
+
+    #eventsContainer {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .event-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+    }
+
+    .event-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .event-card h2 {
+        margin: 0 0 10px 0;
+        font-size: 1.2rem;
+    }
+
+    .event-card small {
+        color: #666;
+        font-size: 0.85rem;
+    }
+
+    .attendees {
+        margin-top: 10px;
+        padding-left: 15px;
+    }
+
+    .attendees li {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none; 
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        position: relative;
+        animation: scaleUp 0.3s;
+    }
+
+    .modal-content h2 {
+        margin-top: 0;
+    }
+
+    .modal-content input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #f44336;
+        border: none;
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        line-height: 0.8;
+    }
+
+    .status-message {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+
+    @keyframes scaleUp {
+        from {transform: scale(0.9);}
+        to {transform: scale(1);}
+    }
+
 </style>
 </head>
 <body>
 
-<h1>Organizer Dashboard</h1>
-<div id="eventsContainer">Loading events...</div>
+<header>
+    Organizer Dashboard
+</header>
+
+<main>
+    <button class="btn" id="openModalBtn">+ Create New Event</button>
+    <div id="eventsContainer" class="loading">Loading events...</div>
+</main>
+
+<!-- Modal for Create Event -->
+<div class="modal" id="createEventModal">
+    <div class="modal-content">
+        <button class="close-btn" id="closeModalBtn">&times;</button>
+        <h2>Create Event</h2>
+        <form id="createEventForm">
+            <input type="text" id="event_name" placeholder="Event Name" required>
+            <input type="date" id="event_date" required>
+            <input type="text" id="event_location" placeholder="Location" required>
+            <input type="text" id="event_description" placeholder="Description">
+            <button type="submit" class="btn">Create Event</button>
+        </form>
+        <div id="createEventStatus" class="status-message"></div>
+    </div>
+</div>
+
+<!-- Modal for Attendees -->
+<div class="modal" id="attendeesModal">
+    <div class="modal-content">
+        <button class="close-btn" id="closeAttendeesModal">&times;</button>
+        <h2 id="attendeesEventTitle">Event Attendees</h2>
+        <table id="attendeesTable" style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th style="padding:8px; border:1px solid #ccc;"> #</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Ticket #</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Email</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Name</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Gender</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Other Info</th>
+                </tr>
+            </thead>
+            <tbody id="attendeesTableBody"></tbody>
+        </table>
+        <p id="noAttendeesMsg" style="display:none; color:#666;">No attendees yet.</p>
+    </div>
+</div>
+
+<!-- Modal for Live Face Scan -->
+<div class="modal" id="liveScanModal">
+    <div class="modal-content">
+        <button class="close-btn" id="closeLiveScanModal">&times;</button>
+        <h2 id="liveScanTitle">Live Face Scan</h2>
+        <video id="liveVideo" width="100%" autoplay muted style="border-radius:12px; margin-bottom:10px;"></video>
+        <button class="btn" id="captureBtn">Scan User</button>
+        <div id="scanStatus" class="status-message"></div>
+    </div>
+</div>
 
 <script>
 let organizerEmail = null;
+let selectedEventCode = null;
 
+// Fetch organizer info + load events
 (async () => {
     try {
-        // Fetch organizer info (assume logged-in user cookie)
         const resUser = await fetch("/user/profile");
         if (!resUser.ok) throw new Error("Cannot fetch organizer info");
         const dataUser = await resUser.json();
         organizerEmail = dataUser.email;
 
-        // Fetch all events for this organizer
-        const res = await fetch(`/organizer/events?email=${encodeURIComponent(organizerEmail)}`);
-        if (!res.ok) throw new Error("Cannot fetch events");
-        const events = await res.json();
+        const modal = document.getElementById("createEventModal");
+        const openBtn = document.getElementById("openModalBtn");
+        const closeBtn = document.getElementById("closeModalBtn");
+        const createForm = document.getElementById("createEventForm");
+        const statusDiv = document.getElementById("createEventStatus");
 
-        const container = document.getElementById("eventsContainer");
-        container.innerHTML = "";
+        openBtn.onclick = () => modal.style.display = "flex";
+        closeBtn.onclick = () => modal.style.display = "none";
 
-        if (events.length === 0) {
-            container.innerHTML = "<p>No events found.</p>";
-        } else {
-            events.forEach(event => {
-                const div = document.createElement("div");
-                div.className = "event-card";
-                div.innerHTML = `<h2>${event.event_name}</h2><p>Tickets: ${event.tickets.length}</p>`;
-                
-                const attendeeList = document.createElement("ul");
-                attendeeList.className = "attendees";
-                div.appendChild(attendeeList);
+        // Create Event
+        createForm.onsubmit = async (e) => {
+            e.preventDefault();
+            statusDiv.style.color = "black";
+            statusDiv.textContent = "Creating event...";
 
-                div.onclick = async () => {
-                    if (attendeeList.style.display === "block") {
-                        attendeeList.style.display = "none";
-                        return;
-                    }
-                    // Load attendees
-                    attendeeList.innerHTML = "<li>Loading attendees...</li>";
-                    const resAttendees = await fetch(`/organizer/event-attendees?event_name=${encodeURIComponent(event.event_name)}`);
-                    const attendees = await resAttendees.json();
-                    if (attendees.length === 0) {
-                        attendeeList.innerHTML = "<li>No attendees yet</li>";
-                    } else {
-                        attendeeList.innerHTML = "";
-                        attendees.forEach(a => {
-                            attendeeList.innerHTML += `<li>${a.attendee_email} - Ticket #${a.ticket_number} (${new Date(a.date).toLocaleString()})</li>`;
-                        });
-                    }
-                    attendeeList.style.display = "block";
-                };
+            const formData = new FormData();
+            formData.append("event_name", document.getElementById("event_name").value);
+            formData.append("date", document.getElementById("event_date").value);
+            formData.append("location", document.getElementById("event_location").value);
+            formData.append("description", document.getElementById("event_description").value);
+            formData.append("organizer_email", organizerEmail);
 
-                container.appendChild(div);
-            });
+            const res = await fetch("/organizer/create-event", { method: "POST", body: formData });
+            const data = await res.json();
+
+            if (res.ok) {
+                statusDiv.style.color = "green";
+                statusDiv.textContent = `Event created! Event Code: ${data.event_code}`;
+                createForm.reset();
+                loadEvents();
+            } else {
+                statusDiv.style.color = "red";
+                statusDiv.textContent = `Error: ${data.detail || data.message}`;
+            }
+        };
+
+        // Load Events
+        async function loadEvents() {
+            const container = document.getElementById("eventsContainer");
+            container.innerHTML = "Loading events...";
+            const res = await fetch(`/organizer/events?email=${encodeURIComponent(organizerEmail)}`);
+
+            if (res.status === 404) {
+                container.innerHTML = "<p>No events found.</p>";
+                return;
+            }
+            if (!res.ok) throw new Error("Cannot fetch events");
+
+            const events = await res.json();
+            container.innerHTML = "";
+
+            if (events.length === 0) {
+                container.innerHTML = "<p>No events found.</p>";
+            } else {
+                events.forEach(event => {
+                    const div = document.createElement("div");
+                    div.className = "event-card";
+                    div.innerHTML = `
+                        <h2>${event.event_name} <small>(${event.event_code})</small></h2>
+                        <p>Tickets Issued: ${event.ticket_count || 0}</p>
+                        <p>Date: ${event.date || "N/A"} | Location: ${event.location || "N/A"}</p>
+                        <button class="btn selectEventBtn">Select Event</button>
+                        <button class="btn viewAttendeesBtn">View Attendees</button>
+                    `;
+
+                    div.querySelector(".selectEventBtn").onclick = (e) => {
+                        e.stopPropagation();
+                        selectedEventCode = event.event_code;
+                        // Remove alert, open live scan modal
+                        liveScanModal.style.display = "flex";
+                        startCamera();
+                    };
+
+                    div.querySelector(".viewAttendeesBtn").onclick = (e) => {
+                        e.stopPropagation();
+                        loadAttendees(event.event_code);
+                    };
+
+                    container.appendChild(div);
+                });
+            }
         }
+
+        loadEvents();
+
     } catch (err) {
         document.getElementById("eventsContainer").textContent = "Error: " + err.message;
     }
 })();
+
+// Load attendees for an event
+async function loadAttendees(eventCode) {
+    const attendeesModal = document.getElementById("attendeesModal");
+    const attendeesEventTitle = document.getElementById("attendeesEventTitle");
+    const attendeesTableBody = document.getElementById("attendeesTableBody");
+    const noAttendeesMsg = document.getElementById("noAttendeesMsg");
+
+    attendeesTableBody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+    noAttendeesMsg.style.display = "none";
+
+    try {
+        const [attendeesRes, attendanceRes] = await Promise.all([
+            fetch(`/organizer/event-attendees?event_code=${eventCode}`),
+            fetch(`/organizer/attendance?event_code=${eventCode}`)
+        ]);
+
+        let attendees = [];
+        if (attendeesRes.ok) {
+            attendees = await attendeesRes.json();
+        } else if (attendeesRes.status === 404) {
+            attendees = []; // no attendees found
+        } else {
+            throw new Error("Failed to load attendees");
+        }
+
+        let attendance = [];
+        if (attendanceRes.ok) {
+            attendance = await attendanceRes.json();
+        }
+
+        // Create a quick lookup for attendance
+        const attendanceMap = {};
+        attendance.forEach(a => {
+            attendanceMap[a.email] = a.attended;
+        });
+
+        // Update the table or show 'no attendees' message
+        if (attendees.length === 0) {
+            attendeesTableBody.innerHTML = "";
+            noAttendeesMsg.style.display = "block";
+        } else {
+            noAttendeesMsg.style.display = "none";
+            attendeesTableBody.innerHTML = attendees.map((att, index) => `
+                <tr>
+                    <td style="padding:8px; border:1px solid #ccc;">${index + 1}</td>
+                    <td style="padding:8px; border:1px solid #ccc;">${att.ticket_number || "-"}</td>
+                    <td style="padding:8px; border:1px solid #ccc;">${att.attendee_email}</td>
+                    <td style="padding:8px; border:1px solid #ccc;">${att.name || "-"}</td>
+                    <td style="padding:8px; border:1px solid #ccc;">${att.gender || "-"}</td>
+                    <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                        ${attendanceMap[att.attendee_email] ? "✅" : "❌"}
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        // ✅ Always show the modal (even if empty)
+        attendeesEventTitle.textContent = `Event Attendees (${eventCode})`;
+        attendeesModal.style.display = "flex";
+
+    } catch (error) {
+        console.error("Error loading attendees:", error);
+        attendeesTableBody.innerHTML = "<tr><td colspan='6'>Error loading attendees.</td></tr>";
+        attendeesModal.style.display = "flex";
+    }
+}
+
+
+// Close attendees modal
+document.getElementById("closeAttendeesModal").onclick = () => {
+    document.getElementById("attendeesModal").style.display = "none";
+};
+
+// Close modals if clicking outside
+window.onclick = (e) => {
+    const attendeesModal = document.getElementById("attendeesModal");
+    const createEventModal = document.getElementById("createEventModal");
+    if (e.target === attendeesModal) attendeesModal.style.display = "none";
+    if (e.target === createEventModal) createEventModal.style.display = "none";
+};
+
+const liveScanModal = document.getElementById("liveScanModal");
+const liveVideo = document.getElementById("liveVideo");
+const captureBtn = document.getElementById("captureBtn");
+const scanStatus = document.getElementById("scanStatus");
+const closeLiveScanModal = document.getElementById("closeLiveScanModal");
+
+// Open Live Scan modal when an event is selected
+// document.querySelectorAll(".selectEventBtn").forEach(btn => {
+//     btn.onclick = (e) => {
+//         e.stopPropagation();
+//         const eventCard = btn.closest(".event-card");
+//         selectedEventCode = eventCard.querySelector("small").textContent.replace(/[()]/g,'');
+//         liveScanModal.style.display = "flex";
+//         startCamera();
+//     };
+// });
+
+// Close modal & stop camera
+closeLiveScanModal.onclick = () => {
+    stopCamera();
+    liveScanModal.style.display = "none";
+};
+
+// Camera setup
+let mediaStream = null;
+async function startCamera() {
+    scanStatus.textContent = "";
+    try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        liveVideo.srcObject = mediaStream;
+    } catch (err) {
+        scanStatus.style.color = "red";
+        scanStatus.textContent = "Error accessing camera: " + err.message;
+    }
+}
+
+function stopCamera() {
+    if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        mediaStream = null;
+    }
+}
+
+// Capture & scan user
+captureBtn.onclick = async () => {
+    if (!mediaStream) return;
+    scanStatus.style.color = "black";
+    scanStatus.textContent = "Scanning...";
+
+    // Capture frame from video
+    const canvas = document.createElement("canvas");
+    canvas.width = liveVideo.videoWidth;
+    canvas.height = liveVideo.videoHeight;
+    canvas.getContext("2d").drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg"));
+
+    const formData = new FormData();
+    formData.append("event_code", selectedEventCode);
+    formData.append("live_image", blob, "scan.jpg");
+
+    try {
+        const res = await fetch("/organizer/scan-face", { method: "POST", body: formData });
+        const data = await res.json();
+
+        if (res.ok) {
+            scanStatus.style.color = "green";
+            scanStatus.textContent = `✅ Recognized: ${data.recognized_user}. Current attendance: ${data.current_attendance_count}`;
+        } else {
+            scanStatus.style.color = "red";
+            scanStatus.textContent = `❌ ${data.message || data.detail}`;
+        }
+    } catch (err) {
+        scanStatus.style.color = "red";
+        scanStatus.textContent = "Error scanning user: " + err.message;
+    }
+};
 </script>
+
 </body>
 </html>
