@@ -1,0 +1,70 @@
+# ==========================
+# Python & FastAPI Project
+# ==========================
+
+# --- Python cache & virtual environment ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.so
+*.egg
+*.egg-info/
+.env
+.venv/
+venv/
+env/
+build/
+dist/
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE / Editor files ---
+.vscode/
+.idea/
+*.swp
+
+# ==========================
+# Application specific ignores
+# ==========================
+
+# --- User & Organizer data ---
+users.json
+organizers.json
+events.json
+tickets.json
+blockchain_data.json
+attendance.json
+
+# --- Uploaded or generated media ---
+uploads/
+faces/
+live_faces/
+tickets/
+
+
+# --- Sensitive configs & environment ---
+.env
+*.env
+secrets.json
+config.json
+
+# --- Logs & temporary files ---
+*.log
+logs/
+tmp/
+temp/
+__temp__/
+*.bak
+
+# --- Database files (if any) ---
+*.db
+*.sqlite3
+
+# --- Test / Debug outputs ---
+test_output/
+debug/
+*.tmp
