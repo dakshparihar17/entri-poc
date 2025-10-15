@@ -28,7 +28,7 @@ cycler==0.12.1
 Cython==3.1.4
 decorator==5.2.1
 Django==5.0.1
-dlib==20.0.0
+#dlib==20.0.0
 dm-tree==0.1.8
 et_xmlfile==2.0.0
 exceptiongroup==1.2.2
