@@ -26,11 +26,17 @@ from organizers import router
 app = FastAPI()
 
 # Paths
-frontend_path = Path(__file__).parent.parent / "frontend"
-tickets_path = Path(__file__).parent / "tickets"
-tickets_path.mkdir(exist_ok=True)  # Ensure tickets folder exists
-live_faces_dir = Path("live_faces")
+BASE_DIR = Path(__file__).parent
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
+frontend_path = BASE_DIR.parent / "frontend"
+tickets_path = BASE_DIR / "tickets"
+tickets_path.mkdir(exist_ok=True)
+live_faces_dir = BASE_DIR / "live_faces"
 live_faces_dir.mkdir(exist_ok=True)
+faces_dir_path = BASE_DIR / "faces"
+faces_dir_path.mkdir(exist_ok=True)
 app.mount("/backend", StaticFiles(directory=Path(__file__).parent), name="backend")
 
 
@@ -83,8 +89,8 @@ def get_all_events():
 # Serve static files
 app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 app.mount("/tickets", StaticFiles(directory=tickets_path), name="tickets")
-app.mount("/faces", StaticFiles(directory="faces"), name="faces")
-app.mount("/live_faces", StaticFiles(directory="live_faces"), name="live_faces")
+app.mount("/faces", StaticFiles(directory=faces_dir_path), name="faces")
+app.mount("/live_faces", StaticFiles(directory=live_faces_dir), name="live_faces")
 
 
 # Ticket data model
@@ -135,8 +141,8 @@ def issue_ticket(data: TicketRequest):
         "date_added": ticket_data["date"]
     }
 
-users_file = Path("Users.json")
-faces_dir = Path("faces")
+users_file = DATA_DIR / "users.json"
+faces_dir = faces_dir_path
 
 
 
@@ -247,7 +253,8 @@ def get_tickets(request: Request):
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def load_json(filename):
-    with open(filename, "r") as f:
+    path = DATA_DIR / filename if not Path(filename).is_absolute() else Path(filename)
+    with open(path, "r") as f:
         return json.load(f)
 
 @app.post("/login")
