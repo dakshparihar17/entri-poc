@@ -1,482 +1,971 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Organizer Dashboard</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizer Dashboard | Entri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #5B21B6;
+      --primary-light: #7C3AED;
+      --primary-dark: #3B0764;
+      --accent: #F59E0B;
+      --bg: #F5F3FF;
+      --card: #FFFFFF;
+      --text: #1E1B4B;
+      --text-muted: #6B7280;
+      --border: #EDE9FE;
+      --success: #059669;
+      --error: #DC2626;
+    }
+
     body {
-        font-family: 'Segoe UI', Tahoma, sans-serif;
-        margin: 0;
-        padding: 0;
-        background: #f4f6f9;
-        color: #333;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
     header {
-        background: #0078ff;
-        color: white;
-        padding: 20px;
-        text-align: center;
-        font-size: 1.5rem;
+      background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(59, 7, 100, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-diamond {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-diamond::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #F59E0B;
+      transform: rotate(45deg);
+      border-radius: 8px;
+    }
+
+    .logo-diamond img {
+      position: relative;
+      z-index: 1;
+      height: 28px;
+      filter: brightness(0);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .btn-logout {
+      padding: 8px 18px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.85);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: rgba(255,255,255,0.18);
+      color: white;
     }
 
     main {
-        padding: 20px;
-        max-width: 1000px;
-        margin: auto;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      gap: 20px;
+    }
+
+    .page-header-left h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .page-header-left p {
+      font-size: 15px;
+      color: var(--text-muted);
     }
 
     .btn {
-        background: #0078ff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: background 0.3s;
-        margin-top: 5px;
+      padding: 11px 22px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .btn:hover {
-        background: #005fcc;
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
     }
 
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(91, 33, 182, 0.35);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #1E1B4B;
+    }
+
+    .btn-accent:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(245,158,11,0.35);
+    }
+
+    .btn-ghost {
+      background: white;
+      color: var(--primary);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      background: var(--border);
+      transform: translateY(-1px);
+    }
+
+    /* Events grid */
     #eventsContainer {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
     }
 
     .event-card {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-        position: relative;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(91, 33, 182, 0.06);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .event-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(91, 33, 182, 0.14);
     }
 
-    .event-card h2 {
-        margin: 0 0 10px 0;
-        font-size: 1.2rem;
+    .event-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
     }
 
-    .event-card small {
-        color: #666;
-        font-size: 0.85rem;
+    .event-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
     }
 
-    .attendees {
-        margin-top: 10px;
-        padding-left: 15px;
+    .event-code-badge {
+      background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .attendees li {
-        margin-bottom: 5px;
-        font-size: 0.9rem;
+    .event-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
 
-    /* Modal Styles */
+    .event-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .event-meta-icon { font-size: 14px; }
+
+    .ticket-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ECFDF5;
+      color: #059669;
+      border: 1px solid #A7F3D0;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .event-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .event-actions .btn {
+      flex: 1;
+      justify-content: center;
+      font-size: 13px;
+      padding: 9px 12px;
+    }
+
+    .no-events {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .no-events-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .no-events h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    /* Modals */
     .modal {
-        display: none; 
-        position: fixed;
-        z-index: 999;
-        left: 0;
-        top: 0;
-        width: 100%; 
-        height: 100%; 
-        overflow: auto;
-        background-color: rgba(0,0,0,0.5);
-        align-items: center;
-        justify-content: center;
-        animation: fadeIn 0.3s;
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 10, 41, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
     }
+
+    .modal.active { display: flex; }
 
     .modal-content {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 12px;
-        max-width: 500px;
-        width: 90%;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        position: relative;
-        animation: scaleUp 0.3s;
+      background: white;
+      border-radius: 20px;
+      padding: 36px;
+      width: 90%;
+      max-width: 540px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(91, 33, 182, 0.2);
+      position: relative;
+      animation: scaleUp 0.25s ease;
     }
 
-    .modal-content h2 {
-        margin-top: 0;
+    .modal-content.wide { max-width: 700px; }
+
+    @keyframes scaleUp {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
-    .modal-content input {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 6px;
-        border: 1px solid #ccc;
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .modal-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
     }
 
     .close-btn {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: #f44336;
-        border: none;
-        color: white;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        font-size: 1rem;
-        font-weight: bold;
-        line-height: 0.8;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--border);
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+
+    .close-btn:hover { background: #DDD6FE; color: var(--primary); }
+
+    .form-group { margin-bottom: 18px; }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
     }
 
     .status-message {
-        margin-top: 10px;
-        font-weight: bold;
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      min-height: 18px;
     }
 
-    @keyframes fadeIn {
-        from {opacity: 0;}
-        to {opacity: 1;}
+    /* Attendees table */
+    .attendees-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
     }
 
-    @keyframes scaleUp {
-        from {transform: scale(0.9);}
-        to {transform: scale(1);}
+    .attendees-table th {
+      background: #F5F3FF;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
     }
 
-</style>
+    .attendees-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .attendees-table tr:last-child td { border-bottom: none; }
+    .attendees-table tr:hover td { background: #FAFAFF; }
+
+    .attendance-yes {
+      display: inline-block;
+      background: #ECFDF5;
+      color: #059669;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .attendance-no {
+      display: inline-block;
+      background: #FEF2F2;
+      color: #DC2626;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Event stats bar */
+    .event-stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      margin-bottom: 24px;
+      background: var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .stat-box {
+      background: #FAFAFF;
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .stat-box-number {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .stat-box-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .stat-box.stat-arrived .stat-box-number { color: #059669; }
+    .stat-box.stat-face-ok .stat-box-number { color: #059669; }
+    .stat-box.stat-face-fail .stat-box-number { color: #DC2626; }
+
+    /* Live scan modal */
+    #liveVideo {
+      width: 100%;
+      border-radius: 14px;
+      border: 2px solid var(--border);
+      margin-bottom: 16px;
+      background: #0F0A29;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; }
+      main { padding: 24px 16px; }
+      .page-header { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    Organizer Dashboard
-</header>
+  <header>
+    <a class="logo" href="/homepage.html">
+      <div class="logo-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+    </a>
+    <div class="nav-right">
+      <span class="nav-tag">Organizer Dashboard</span>
+      <button class="btn-logout" id="logoutButton">Log Out</button>
+    </div>
+  </header>
 
-<main>
-    <button class="btn" id="openModalBtn">+ Create New Event</button>
-    <div id="eventsContainer" class="loading">Loading events...</div>
-</main>
+  <main>
+    <div class="page-header">
+      <div class="page-header-left">
+        <h1>Your Events</h1>
+        <p>Manage events, view attendees, and scan guests in real time.</p>
+      </div>
+      <button class="btn btn-accent" id="openModalBtn">+ Create New Event</button>
+    </div>
 
-<!-- Modal for Create Event -->
-<div class="modal" id="createEventModal">
+    <div id="eventsContainer">
+      <div class="no-events">
+        <div class="no-events-icon">⏳</div>
+        <h3>Loading events...</h3>
+      </div>
+    </div>
+  </main>
+
+  <!-- Create Event Modal -->
+  <div class="modal" id="createEventModal">
     <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create New Event</h2>
         <button class="close-btn" id="closeModalBtn">&times;</button>
-        <h2>Create Event</h2>
-        <form id="createEventForm">
-            <input type="text" id="event_name" placeholder="Event Name" required>
-            <input type="date" id="event_date" required>
-            <input type="text" id="event_location" placeholder="Location" required>
-            <input type="text" id="event_description" placeholder="Description">
-            <button type="submit" class="btn">Create Event</button>
-        </form>
-        <div id="createEventStatus" class="status-message"></div>
+      </div>
+      <form id="createEventForm">
+        <div class="form-group">
+          <label>Event Name</label>
+          <input type="text" id="event_name" placeholder="e.g. Tech Summit 2026" required>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="event_date" required>
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="event_location" placeholder="e.g. Mumbai Convention Centre" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="event_description" placeholder="Brief description (optional)">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Create Event →</button>
+      </form>
+      <div id="createEventStatus" class="status-message"></div>
     </div>
-</div>
+  </div>
 
-<!-- Modal for Attendees -->
-<div class="modal" id="attendeesModal">
-    <div class="modal-content">
-        <button class="close-btn" id="closeAttendeesModal">&times;</button>
+  <!-- Attendees Modal -->
+  <div class="modal" id="attendeesModal">
+    <div class="modal-content wide">
+      <div class="modal-header">
         <h2 id="attendeesEventTitle">Event Attendees</h2>
-        <table id="attendeesTable" style="width:100%; border-collapse: collapse;">
-            <thead>
-                <tr style="background:#f0f0f0;">
-                    <th style="padding:8px; border:1px solid #ccc;"> #</th>
-                    <th style="padding:8px; border:1px solid #ccc;">Ticket #</th>
-                    <th style="padding:8px; border:1px solid #ccc;">Email</th>
-                    <th style="padding:8px; border:1px solid #ccc;">Name</th>
-                    <th style="padding:8px; border:1px solid #ccc;">Gender</th>
-                    <th style="padding:8px; border:1px solid #ccc;">Other Info</th>
-                </tr>
-            </thead>
-            <tbody id="attendeesTableBody"></tbody>
+        <button class="close-btn" id="closeAttendeesModal">&times;</button>
+      </div>
+      <div id="eventStatsBar" class="event-stats-bar" style="display:none;">
+        <div class="stat-box">
+          <div class="stat-box-number" id="statExpected">—</div>
+          <div class="stat-box-label">Expected</div>
+        </div>
+        <div class="stat-box stat-arrived">
+          <div class="stat-box-number" id="statArrived">—</div>
+          <div class="stat-box-label">Arrived</div>
+        </div>
+        <div class="stat-box stat-face-ok">
+          <div class="stat-box-number" id="statFaceOk">—</div>
+          <div class="stat-box-label">Face ID ✓</div>
+        </div>
+        <div class="stat-box stat-face-fail">
+          <div class="stat-box-number" id="statFaceFail">—</div>
+          <div class="stat-box-label">Face ID ✗</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="attendees-table" id="attendeesTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Ticket</th>
+              <th>Email</th>
+              <th>Name</th>
+              <th>Gender</th>
+              <th>Attended</th>
+            </tr>
+          </thead>
+          <tbody id="attendeesTableBody"></tbody>
         </table>
-        <p id="noAttendeesMsg" style="display:none; color:#666;">No attendees yet.</p>
+        <p id="noAttendeesMsg" style="display:none; color:var(--text-muted); text-align:center; padding:24px; font-size:14px;">No attendees registered yet.</p>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Modal for Live Face Scan -->
-<div class="modal" id="liveScanModal">
+  <!-- Live Scan Modal -->
+  <div class="modal" id="liveScanModal">
     <div class="modal-content">
-        <button class="close-btn" id="closeLiveScanModal">&times;</button>
+      <div class="modal-header">
         <h2 id="liveScanTitle">Live Face Scan</h2>
-        <video id="liveVideo" width="100%" autoplay muted style="border-radius:12px; margin-bottom:10px;"></video>
-        <button class="btn" id="captureBtn">Scan User</button>
+        <button class="close-btn" id="closeLiveScanModal">&times;</button>
+      </div>
+
+      <!-- Camera view -->
+      <div id="cameraView">
+        <video id="liveVideo" autoplay muted></video>
+        <button class="btn btn-primary" id="captureBtn" style="width:100%;justify-content:center;">📸 Scan User</button>
         <div id="scanStatus" class="status-message"></div>
+      </div>
+
+      <!-- Result view (shown after successful scan) -->
+      <div id="scanResultView" style="display:none;">
+        <div style="text-align:center; margin-bottom:20px;">
+          <div id="resultIcon" style="font-size:56px; margin-bottom:8px;">✅</div>
+          <div id="resultLabel" style="font-size:15px; font-weight:700; color:#059669;">Attendee Verified</div>
+          <img id="resultSelfie" src="" alt="Selfie"
+            style="width:96px; height:96px; border-radius:50%; object-fit:cover; border:3px solid #DDD6FE; margin-top:14px; display:none;">
+        </div>
+        <div style="background:#F5F3FF; border:1px solid #DDD6FE; border-radius:14px; padding:20px; margin-bottom:20px;">
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Name</span>
+              <span id="resultName" style="font-size:14px; font-weight:700; color:var(--text);">—</span>
+            </div>
+            <div style="border-top:1px solid #EDE9FE;"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Email</span>
+              <span id="resultEmail" style="font-size:13px; font-weight:600; color:var(--text);">—</span>
+            </div>
+            <div style="border-top:1px solid #EDE9FE;"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Ticket #</span>
+              <span id="resultTicket" style="font-size:14px; font-weight:700; color:var(--primary);">—</span>
+            </div>
+            <div style="border-top:1px solid #EDE9FE;"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Gender</span>
+              <span id="resultGender" style="font-size:14px; font-weight:600; color:var(--text);">—</span>
+            </div>
+            <div style="border-top:1px solid #EDE9FE;"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Total Admitted</span>
+              <span id="resultCount" style="font-size:14px; font-weight:700; color:#059669;">—</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary" id="scanNextBtn" style="flex:1; justify-content:center;">📸 Scan Next</button>
+          <button class="btn btn-ghost" id="goToDashboardBtn" style="flex:1; justify-content:center;">🏠 Dashboard</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<script>
-let organizerEmail = null;
-let selectedEventCode = null;
+  <script>
+    document.getElementById("logoutButton").onclick = async () => {
+      await fetch("/logout", { method: "POST" });
+      window.location.href = "/homepage.html";
+    };
 
-// Fetch organizer info + load events
-(async () => {
-    try {
+    let organizerEmail = null;
+    let selectedEventCode = null;
+
+    (async () => {
+      try {
         const resUser = await fetch("/user/profile");
         if (!resUser.ok) throw new Error("Cannot fetch organizer info");
         const dataUser = await resUser.json();
         organizerEmail = dataUser.email;
 
-        const modal = document.getElementById("createEventModal");
+        const createEventModal = document.getElementById("createEventModal");
         const openBtn = document.getElementById("openModalBtn");
         const closeBtn = document.getElementById("closeModalBtn");
         const createForm = document.getElementById("createEventForm");
         const statusDiv = document.getElementById("createEventStatus");
 
-        openBtn.onclick = () => modal.style.display = "flex";
-        closeBtn.onclick = () => modal.style.display = "none";
+        openBtn.onclick = () => createEventModal.classList.add("active");
+        closeBtn.onclick = () => createEventModal.classList.remove("active");
 
-        // Create Event
         createForm.onsubmit = async (e) => {
-            e.preventDefault();
-            statusDiv.style.color = "black";
-            statusDiv.textContent = "Creating event...";
+          e.preventDefault();
+          statusDiv.style.color = "#7C3AED";
+          statusDiv.textContent = "Creating event...";
 
-            const formData = new FormData();
-            formData.append("event_name", document.getElementById("event_name").value);
-            formData.append("date", document.getElementById("event_date").value);
-            formData.append("location", document.getElementById("event_location").value);
-            formData.append("description", document.getElementById("event_description").value);
-            formData.append("organizer_email", organizerEmail);
+          const formData = new FormData();
+          formData.append("event_name", document.getElementById("event_name").value);
+          formData.append("date", document.getElementById("event_date").value);
+          formData.append("location", document.getElementById("event_location").value);
+          formData.append("description", document.getElementById("event_description").value);
+          formData.append("organizer_email", organizerEmail);
 
-            const res = await fetch("/organizer/create-event", { method: "POST", body: formData });
-            const data = await res.json();
+          const res = await fetch("/organizer/create-event", { method: "POST", body: formData });
+          const data = await res.json();
 
-            if (res.ok) {
-                statusDiv.style.color = "green";
-                statusDiv.textContent = `Event created! Event Code: ${data.event_code}`;
-                createForm.reset();
-                loadEvents();
-            } else {
-                statusDiv.style.color = "red";
-                statusDiv.textContent = `Error: ${data.detail || data.message}`;
-            }
+          if (res.ok) {
+            statusDiv.style.color = "#059669";
+            statusDiv.textContent = `Event created! Code: ${data.event_code}`;
+            createForm.reset();
+            loadEvents();
+          } else {
+            statusDiv.style.color = "#DC2626";
+            statusDiv.textContent = `Error: ${data.detail || data.message}`;
+          }
         };
 
-        // Load Events
-        async function loadEvents() {
-            const container = document.getElementById("eventsContainer");
-            container.innerHTML = "Loading events...";
-            const res = await fetch(`/organizer/events?email=${encodeURIComponent(organizerEmail)}`);
-
-            if (res.status === 404) {
-                container.innerHTML = "<p>No events found.</p>";
-                return;
-            }
-            if (!res.ok) throw new Error("Cannot fetch events");
-
-            const events = await res.json();
-            container.innerHTML = "";
-
-            if (events.length === 0) {
-                container.innerHTML = "<p>No events found.</p>";
-            } else {
-                events.forEach(event => {
-                    const div = document.createElement("div");
-                    div.className = "event-card";
-                    div.innerHTML = `
-                        <h2>${event.event_name} <small>(${event.event_code})</small></h2>
-                        <p>Tickets Issued: ${event.ticket_count || 0}</p>
-                        <p>Date: ${event.date || "N/A"} | Location: ${event.location || "N/A"}</p>
-                        <button class="btn selectEventBtn">Select Event</button>
-                        <button class="btn viewAttendeesBtn">View Attendees</button>
-                    `;
-
-                    div.querySelector(".selectEventBtn").onclick = (e) => {
-                        e.stopPropagation();
-                        selectedEventCode = event.event_code;
-                        // Remove alert, open live scan modal
-                        liveScanModal.style.display = "flex";
-                        startCamera();
-                    };
-
-                    div.querySelector(".viewAttendeesBtn").onclick = (e) => {
-                        e.stopPropagation();
-                        loadAttendees(event.event_code);
-                    };
-
-                    container.appendChild(div);
-                });
-            }
-        }
-
         loadEvents();
+      } catch (err) {
+        document.getElementById("eventsContainer").innerHTML = `
+          <div class="no-events">
+            <div class="no-events-icon">⚠️</div>
+            <h3>Error loading events</h3>
+            <p>${err.message}</p>
+          </div>`;
+      }
+    })();
 
-    } catch (err) {
-        document.getElementById("eventsContainer").textContent = "Error: " + err.message;
+    async function loadEvents() {
+      const container = document.getElementById("eventsContainer");
+      container.innerHTML = `<div class="no-events"><div class="no-events-icon">⏳</div><h3>Loading...</h3></div>`;
+
+      const res = await fetch(`/organizer/events?email=${encodeURIComponent(organizerEmail)}`);
+      if (res.status === 404) {
+        container.innerHTML = `<div class="no-events"><div class="no-events-icon">📋</div><h3>No events yet</h3><p>Create your first event to get started.</p></div>`;
+        return;
+      }
+      if (!res.ok) { container.innerHTML = `<div class="no-events"><p>Error loading events.</p></div>`; return; }
+
+      const events = await res.json();
+      container.innerHTML = "";
+
+      if (events.length === 0) {
+        container.innerHTML = `<div class="no-events"><div class="no-events-icon">📋</div><h3>No events yet</h3><p>Create your first event to get started.</p></div>`;
+        return;
+      }
+
+      events.forEach(event => {
+        const div = document.createElement("div");
+        div.className = "event-card";
+        div.innerHTML = `
+          <div class="event-card-header">
+            <div class="event-name">${event.event_name}</div>
+            <span class="event-code-badge">${event.event_code}</span>
+          </div>
+          <div class="event-meta">
+            <div class="event-meta-item"><span class="event-meta-icon">📅</span>${event.date || "Date TBD"}</div>
+            <div class="event-meta-item"><span class="event-meta-icon">📍</span>${event.location || "Location TBD"}</div>
+          </div>
+          <div>
+            <span class="ticket-count">🎟️ ${event.ticket_count || 0} Tickets</span>
+          </div>
+          <div class="event-actions">
+            <button class="btn btn-primary selectEventBtn">📸 Scan Faces</button>
+            <button class="btn btn-ghost viewAttendeesBtn">👥 Attendees</button>
+          </div>
+        `;
+
+        div.querySelector(".selectEventBtn").onclick = (e) => {
+          e.stopPropagation();
+          selectedEventCode = event.event_code;
+          document.getElementById("liveScanTitle").textContent = `Scan — ${event.event_name}`;
+          document.getElementById("liveScanModal").classList.add("active");
+          startCamera();
+        };
+
+        div.querySelector(".viewAttendeesBtn").onclick = (e) => {
+          e.stopPropagation();
+          loadAttendees(event.event_code, event.event_name);
+        };
+
+        container.appendChild(div);
+      });
     }
-})();
 
-// Load attendees for an event
-async function loadAttendees(eventCode) {
-    const attendeesModal = document.getElementById("attendeesModal");
-    const attendeesEventTitle = document.getElementById("attendeesEventTitle");
-    const attendeesTableBody = document.getElementById("attendeesTableBody");
-    const noAttendeesMsg = document.getElementById("noAttendeesMsg");
+    async function loadAttendees(eventCode, eventName) {
+      const attendeesModal = document.getElementById("attendeesModal");
+      const attendeesTableBody = document.getElementById("attendeesTableBody");
+      const noAttendeesMsg = document.getElementById("noAttendeesMsg");
 
-    attendeesTableBody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
-    noAttendeesMsg.style.display = "none";
+      document.getElementById("attendeesEventTitle").textContent = `${eventName || eventCode} — Attendees`;
+      attendeesTableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px;">Loading...</td></tr>`;
+      noAttendeesMsg.style.display = "none";
+      document.getElementById("eventStatsBar").style.display = "none";
+      attendeesModal.classList.add("active");
 
-    try {
-        const [attendeesRes, attendanceRes] = await Promise.all([
-            fetch(`/organizer/event-attendees?event_code=${eventCode}`),
-            fetch(`/organizer/attendance?event_code=${eventCode}`)
+      try {
+        const [attendeesRes, attendanceRes, statsRes] = await Promise.all([
+          fetch(`/organizer/event-attendees?event_code=${eventCode}`),
+          fetch(`/organizer/attendance?event_code=${eventCode}`),
+          fetch(`/organizer/event-stats?event_code=${eventCode}`)
         ]);
 
-        let attendees = [];
-        if (attendeesRes.ok) {
-            attendees = await attendeesRes.json();
-        } else if (attendeesRes.status === 404) {
-            attendees = []; // no attendees found
-        } else {
-            throw new Error("Failed to load attendees");
+        let attendees = attendeesRes.ok ? await attendeesRes.json() : [];
+        let attendance = attendanceRes.ok ? await attendanceRes.json() : [];
+
+        if (statsRes.ok) {
+          const stats = await statsRes.json();
+          document.getElementById("statExpected").textContent = stats.expected;
+          document.getElementById("statArrived").textContent = stats.arrived;
+          document.getElementById("statFaceOk").textContent = stats.face_id_success;
+          document.getElementById("statFaceFail").textContent = stats.face_id_failed;
+          document.getElementById("eventStatsBar").style.display = "grid";
         }
 
-        let attendance = [];
-        if (attendanceRes.ok) {
-            attendance = await attendanceRes.json();
-        }
-
-        // Create a quick lookup for attendance
         const attendanceMap = {};
-        attendance.forEach(a => {
-            attendanceMap[a.email] = a.attended;
-        });
+        attendance.forEach(a => { attendanceMap[a.email] = a.attended; });
 
-        // Update the table or show 'no attendees' message
         if (attendees.length === 0) {
-            attendeesTableBody.innerHTML = "";
-            noAttendeesMsg.style.display = "block";
+          attendeesTableBody.innerHTML = "";
+          noAttendeesMsg.style.display = "block";
         } else {
-            noAttendeesMsg.style.display = "none";
-            attendeesTableBody.innerHTML = attendees.map((att, index) => `
-                <tr>
-                    <td style="padding:8px; border:1px solid #ccc;">${index + 1}</td>
-                    <td style="padding:8px; border:1px solid #ccc;">${att.ticket_number || "-"}</td>
-                    <td style="padding:8px; border:1px solid #ccc;">${att.attendee_email}</td>
-                    <td style="padding:8px; border:1px solid #ccc;">${att.name || "-"}</td>
-                    <td style="padding:8px; border:1px solid #ccc;">${att.gender || "-"}</td>
-                    <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                        ${attendanceMap[att.attendee_email] ? "✅" : "❌"}
-                    </td>
-                </tr>
-            `).join("");
+          noAttendeesMsg.style.display = "none";
+          attendeesTableBody.innerHTML = attendees.map((att, index) => `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${att.ticket_number || "—"}</td>
+              <td>${att.attendee_email}</td>
+              <td>${att.name || "—"}</td>
+              <td>${att.gender || "—"}</td>
+              <td>
+                ${attendanceMap[att.attendee_email]
+                  ? '<span class="attendance-yes">✓ Present</span>'
+                  : '<span class="attendance-no">✗ Absent</span>'}
+              </td>
+            </tr>
+          `).join("");
         }
-
-        // ✅ Always show the modal (even if empty)
-        attendeesEventTitle.textContent = `Event Attendees (${eventCode})`;
-        attendeesModal.style.display = "flex";
-
-    } catch (error) {
-        console.error("Error loading attendees:", error);
-        attendeesTableBody.innerHTML = "<tr><td colspan='6'>Error loading attendees.</td></tr>";
-        attendeesModal.style.display = "flex";
+      } catch (err) {
+        attendeesTableBody.innerHTML = `<tr><td colspan="6" style="color:#DC2626;text-align:center;padding:16px;">Error loading attendees.</td></tr>`;
+      }
     }
-}
 
+    document.getElementById("closeAttendeesModal").onclick = () =>
+      document.getElementById("attendeesModal").classList.remove("active");
 
-// Close attendees modal
-document.getElementById("closeAttendeesModal").onclick = () => {
-    document.getElementById("attendeesModal").style.display = "none";
-};
+    window.onclick = (e) => {
+      ["attendeesModal", "createEventModal"].forEach(id => {
+        const m = document.getElementById(id);
+        if (e.target === m) m.classList.remove("active");
+      });
+    };
 
-// Close modals if clicking outside
-window.onclick = (e) => {
-    const attendeesModal = document.getElementById("attendeesModal");
-    const createEventModal = document.getElementById("createEventModal");
-    if (e.target === attendeesModal) attendeesModal.style.display = "none";
-    if (e.target === createEventModal) createEventModal.style.display = "none";
-};
+    const liveScanModal = document.getElementById("liveScanModal");
+    const liveVideo = document.getElementById("liveVideo");
+    const captureBtn = document.getElementById("captureBtn");
+    const scanStatus = document.getElementById("scanStatus");
+    const cameraView = document.getElementById("cameraView");
+    const scanResultView = document.getElementById("scanResultView");
 
-const liveScanModal = document.getElementById("liveScanModal");
-const liveVideo = document.getElementById("liveVideo");
-const captureBtn = document.getElementById("captureBtn");
-const scanStatus = document.getElementById("scanStatus");
-const closeLiveScanModal = document.getElementById("closeLiveScanModal");
+    function showCameraView() {
+      cameraView.style.display = "block";
+      scanResultView.style.display = "none";
+      captureBtn.disabled = false;
+    }
 
-// Open Live Scan modal when an event is selected
-// document.querySelectorAll(".selectEventBtn").forEach(btn => {
-//     btn.onclick = (e) => {
-//         e.stopPropagation();
-//         const eventCard = btn.closest(".event-card");
-//         selectedEventCode = eventCard.querySelector("small").textContent.replace(/[()]/g,'');
-//         liveScanModal.style.display = "flex";
-//         startCamera();
-//     };
-// });
+    function showResultView(attendee, count, alreadyAdmitted = false) {
+      cameraView.style.display = "none";
+      scanResultView.style.display = "block";
+      document.getElementById("resultIcon").textContent = alreadyAdmitted ? "⚠️" : "✅";
+      document.getElementById("resultLabel").style.color = alreadyAdmitted ? "#D97706" : "#059669";
+      document.getElementById("resultLabel").textContent = alreadyAdmitted ? "Already Admitted Earlier" : "Attendee Verified";
+      document.getElementById("resultName").textContent = attendee.name || "—";
+      document.getElementById("resultEmail").textContent = attendee.attendee_email || attendee.email || "—";
+      document.getElementById("resultTicket").textContent = attendee.ticket_number || "—";
+      document.getElementById("resultGender").textContent = attendee.gender || "—";
+      document.getElementById("resultCount").textContent = count;
 
-// Close modal & stop camera
-closeLiveScanModal.onclick = () => {
-    stopCamera();
-    liveScanModal.style.display = "none";
-};
+      const email = attendee.attendee_email || attendee.email || "";
+      const selfieImg = document.getElementById("resultSelfie");
+      const selfieFilename = email.replace(/@/g, "_").replace(/\./g, "_") + "_live.jpg";
+      selfieImg.style.display = "none";
+      selfieImg.onerror = () => { selfieImg.style.display = "none"; };
+      selfieImg.onload = () => { selfieImg.style.display = "block"; };
+      selfieImg.src = `/live_faces/${selfieFilename}`;
+    }
 
-// Camera setup
-let mediaStream = null;
-async function startCamera() {
-    scanStatus.textContent = "";
-    try {
+    document.getElementById("closeLiveScanModal").onclick = () => {
+      stopCamera();
+      showCameraView();
+      liveScanModal.classList.remove("active");
+    };
+
+    document.getElementById("scanNextBtn").onclick = () => {
+      showCameraView();
+      scanStatus.textContent = "";
+      startCamera();
+    };
+
+    document.getElementById("goToDashboardBtn").onclick = () => {
+      stopCamera();
+      showCameraView();
+      liveScanModal.classList.remove("active");
+    };
+
+    // Close on backdrop click
+    liveScanModal.addEventListener("click", (e) => {
+      if (e.target === liveScanModal) {
+        stopCamera();
+        showCameraView();
+        liveScanModal.classList.remove("active");
+      }
+    });
+
+    let mediaStream = null;
+
+    async function startCamera() {
+      scanStatus.textContent = "";
+      try {
         mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
         liveVideo.srcObject = mediaStream;
-    } catch (err) {
-        scanStatus.style.color = "red";
+      } catch (err) {
+        scanStatus.style.color = "#DC2626";
         scanStatus.textContent = "Error accessing camera: " + err.message;
+      }
     }
-}
 
-function stopCamera() {
-    if (mediaStream) {
+    function stopCamera() {
+      if (mediaStream) {
         mediaStream.getTracks().forEach(track => track.stop());
         mediaStream = null;
+      }
     }
-}
 
-// Capture & scan user
-captureBtn.onclick = async () => {
-    if (!mediaStream) return;
-    scanStatus.style.color = "black";
-    scanStatus.textContent = "Scanning...";
+    captureBtn.onclick = async () => {
+      if (!mediaStream) return;
+      scanStatus.style.color = "#7C3AED";
+      scanStatus.textContent = "Scanning...";
+      captureBtn.disabled = true;
 
-    // Capture frame from video
-    const canvas = document.createElement("canvas");
-    canvas.width = liveVideo.videoWidth;
-    canvas.height = liveVideo.videoHeight;
-    canvas.getContext("2d").drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
-    const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg"));
+      const canvas = document.createElement("canvas");
+      canvas.width = liveVideo.videoWidth;
+      canvas.height = liveVideo.videoHeight;
+      canvas.getContext("2d").drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg"));
 
-    const formData = new FormData();
-    formData.append("event_code", selectedEventCode);
-    formData.append("live_image", blob, "scan.jpg");
+      const formData = new FormData();
+      formData.append("event_code", selectedEventCode);
+      formData.append("live_image", blob, "scan.jpg");
 
-    try {
+      try {
         const res = await fetch("/organizer/scan-face", { method: "POST", body: formData });
         const data = await res.json();
 
         if (res.ok) {
-            scanStatus.style.color = "green";
-            scanStatus.textContent = `✅ Recognized: ${data.recognized_user}. Current attendance: ${data.current_attendance_count}`;
+          stopCamera();
+          try {
+            const attendeesRes = await fetch(`/organizer/event-attendees?event_code=${selectedEventCode}`);
+            const attendees = attendeesRes.ok ? await attendeesRes.json() : [];
+            const matched = attendees.find(a => a.attendee_email === data.recognized_user) || { email: data.recognized_user };
+            showResultView(matched, data.current_attendance_count, data.already_attended);
+          } catch {
+            showResultView({ email: data.recognized_user }, data.current_attendance_count, data.already_attended);
+          }
         } else {
-            scanStatus.style.color = "red";
-            scanStatus.textContent = `❌ ${data.message || data.detail}`;
+          scanStatus.style.color = "#DC2626";
+          scanStatus.textContent = `✗ ${data.message || data.detail}`;
+          captureBtn.disabled = false;
         }
-    } catch (err) {
-        scanStatus.style.color = "red";
-        scanStatus.textContent = "Error scanning user: " + err.message;
-    }
-};
-</script>
+      } catch (err) {
+        scanStatus.style.color = "#DC2626";
+        scanStatus.textContent = "Error: " + err.message;
+        captureBtn.disabled = false;
+      }
+    };
+  </script>
 
 </body>
 </html>

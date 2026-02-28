@@ -1,30 +1,350 @@
 <!DOCTYPE html>
-<html>
-<head><title>Verify Ticket</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Ticket | Entri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #5B21B6;
+      --primary-light: #7C3AED;
+      --primary-dark: #3B0764;
+      --accent: #F59E0B;
+      --bg: #F5F3FF;
+      --card: #FFFFFF;
+      --text: #1E1B4B;
+      --text-muted: #6B7280;
+      --border: #DDD6FE;
+      --success: #059669;
+      --error: #DC2626;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(59, 7, 100, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-diamond {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-diamond::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #F59E0B;
+      transform: rotate(45deg);
+      border-radius: 8px;
+    }
+
+    .logo-diamond img {
+      position: relative;
+      z-index: 1;
+      height: 28px;
+      filter: brightness(0);
+    }
+
+    .nav-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 24px;
+      min-height: calc(100vh - 64px);
+    }
+
+    .verify-card {
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(91, 33, 182, 0.1);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 560px;
+      overflow: hidden;
+    }
+
+    .card-top {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-top::before {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      top: -60px; right: -60px;
+    }
+
+    .card-top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245,158,11,0.2);
+      border: 1px solid rgba(245,158,11,0.35);
+      color: #FCD34D;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-top h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 6px;
+    }
+
+    .card-top p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-body { padding: 36px 32px; }
+
+    .form-group { margin-bottom: 22px; }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: 'Courier New', 'Courier', monospace;
+      color: var(--primary);
+      background: #FAFAFF;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.3px;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+      background: white;
+    }
+
+    .form-group input::placeholder { color: #C4B5FD; font-family: 'Inter', sans-serif; }
+
+    .input-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(91, 33, 182, 0.4);
+    }
+
+    #result {
+      margin-top: 24px;
+      border-radius: 14px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .result-inner {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .result-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .result-text h3 {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .result-text p {
+      font-size: 13px;
+    }
+
+    #result.valid .result-inner { background: #ECFDF5; border: 1.5px solid #A7F3D0; }
+    #result.valid .result-icon { background: #D1FAE5; }
+    #result.valid .result-text h3 { color: #065F46; }
+    #result.valid .result-text p { color: #047857; }
+
+    #result.invalid .result-inner { background: #FEF2F2; border: 1.5px solid #FECACA; }
+    #result.invalid .result-icon { background: #FEE2E2; }
+    #result.invalid .result-text h3 { color: #991B1B; }
+    #result.invalid .result-text p { color: #B91C1C; }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; }
+      main { padding: 32px 16px; }
+      .card-body { padding: 28px 20px; }
+    }
+  </style>
+</head>
 <body>
-    <h2>Verify Ticket</h2>
-    <form id="verifyForm">
-        Ticket ID (SHA256 Hash):<br>
-        <input type="text" id="ticketId" required size="70"><br>
-        <button type="submit">Verify</button>
-    </form>
-    <div id="result"></div>
-    <script>
-        const form = document.getElementById("verifyForm");
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            const ticketId = document.getElementById("ticketId").value;
 
-            const formData = new FormData();
-            formData.append("ticket_id", ticketId);
+  <header>
+    <a class="logo" href="/homepage.html">
+      <div class="logo-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+    </a>
+    <span class="nav-tag">Ticket Verification</span>
+  </header>
 
-            const res = await fetch("http://127.0.0.1:8000/verify-ticket", {
-                method: "POST",
-                body: formData
-            });
-            const data = await res.json();
-            document.getElementById("result").innerText = `Ticket is ${data.status}`;
-        };
-    </script>
+  <main>
+    <div class="verify-card">
+      <div class="card-top">
+        <div class="card-top-badge">🔍 Verification</div>
+        <h2>Verify Ticket</h2>
+        <p>Enter the SHA-256 ticket hash to check its validity.</p>
+      </div>
+
+      <div class="card-body">
+        <form id="verifyForm">
+          <div class="form-group">
+            <label>Ticket ID (SHA-256 Hash)</label>
+            <input type="text" id="ticketId" required
+              placeholder="e.g. a3f5c2d1e9b4..."
+              autocomplete="off" spellcheck="false">
+            <p class="input-hint">Paste the full SHA-256 hash of the ticket</p>
+          </div>
+          <button type="submit" class="submit-btn">Verify Ticket →</button>
+        </form>
+
+        <div id="result">
+          <div class="result-inner">
+            <div class="result-icon" id="resultIcon"></div>
+            <div class="result-text">
+              <h3 id="resultTitle"></h3>
+              <p id="resultSub"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById("verifyForm");
+    const resultDiv = document.getElementById("result");
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const ticketId = document.getElementById("ticketId").value.trim();
+
+      resultDiv.style.display = "none";
+      resultDiv.className = "";
+
+      const formData = new FormData();
+      formData.append("ticket_id", ticketId);
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/verify-ticket", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        const isValid = data.status === "valid";
+
+        resultDiv.style.display = "block";
+        resultDiv.className = isValid ? "valid" : "invalid";
+        document.getElementById("resultIcon").textContent = isValid ? "✓" : "✗";
+        document.getElementById("resultTitle").textContent = isValid ? "Ticket is Valid" : "Ticket is Invalid";
+        document.getElementById("resultSub").textContent = isValid
+          ? "This ticket has been verified and is authentic."
+          : "This ticket could not be verified. It may be invalid or tampered.";
+      } catch (err) {
+        resultDiv.style.display = "block";
+        resultDiv.className = "invalid";
+        document.getElementById("resultIcon").textContent = "⚠";
+        document.getElementById("resultTitle").textContent = "Verification Error";
+        document.getElementById("resultSub").textContent = err.message;
+      }
+    };
+  </script>
+
 </body>
 </html>

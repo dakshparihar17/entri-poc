@@ -58,6 +58,10 @@ def signup_page():
 def signup_page():
     return FileResponse(frontend_path / "login.html")  
 
+@app.get("/homepage.html")
+def homepage():
+    return FileResponse(frontend_path / "homepage.html")
+
 @app.get("/index.html")
 def read_index():
     return FileResponse(frontend_path / "index.html")  
@@ -261,8 +265,13 @@ async def login_user(request: Request):
 
     response = JSONResponse(content={})
 
+    def verify_password(plain: str, stored: str) -> bool:
+        if stored.startswith("$2b$") or stored.startswith("$2a$"):
+            return pwd_context.verify(plain, stored)
+        return plain == stored
+
     if user:
-        if not pwd_context.verify(password, user["password"]):
+        if not verify_password(password, user["password"]):
             raise HTTPException(status_code=401, detail="Invalid credentials")
         # Set cookie here
         response = JSONResponse(content={"redirect": "/dashboard.html", "role": "user"})
@@ -270,7 +279,7 @@ async def login_user(request: Request):
         return response
 
     elif organizer:
-        if not pwd_context.verify(password, organizer["password"]):
+        if not verify_password(password, organizer["password"]):
             raise HTTPException(status_code=401, detail="Invalid credentials")
         response = JSONResponse(content={"redirect": "/organizer.html", "role": "organizer"})
         response.set_cookie(key="user_email", value=organizer["email"], httponly=True)
@@ -279,6 +288,12 @@ async def login_user(request: Request):
 
     else:
         raise HTTPException(status_code=404, detail="Account not found")
+
+@app.post("/logout")
+async def logout():
+    response = JSONResponse(content={"message": "Logged out"})
+    response.delete_cookie(key="user_email")
+    return response
 
 @app.post("/signup.html")
 async def signup(response: Response,email: str = Form(...), password: str = Form(...), id_image: UploadFile = File(...)):
