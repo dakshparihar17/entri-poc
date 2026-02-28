@@ -1,175 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Issue Event Ticket</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Issue Ticket | Entri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #5B21B6;
+      --primary-light: #7C3AED;
+      --primary-dark: #3B0764;
+      --accent: #F59E0B;
+      --bg: #F5F3FF;
+      --card: #FFFFFF;
+      --text: #1E1B4B;
+      --text-muted: #6B7280;
+      --border: #DDD6FE;
+      --success: #059669;
+      --error: #DC2626;
+    }
+
     body {
-        font-family: 'Segoe UI', Tahoma, sans-serif;
-        background: #f4f6f9;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      color: var(--text);
     }
 
-    .ticket-container {
-        background: white;
-        padding: 30px 40px;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        width: 400px;
+    header {
+      background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(59, 7, 100, 0.3);
     }
 
-    h2 { text-align: center; margin-bottom: 20px; color: #0078ff; }
-
-    form { display: flex; flex-direction: column; }
-
-    label { margin-top: 10px; font-weight: bold; }
-    input, select {
-        margin-top: 5px;
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
     }
 
-    button {
-        margin-top: 20px;
-        padding: 12px;
-        border: none;
-        background: #0078ff;
-        color: white;
-        font-weight: bold;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: background 0.3s;
+    .logo-diamond {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
 
-    button:hover { background: #005fcc; }
+    .logo-diamond::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #F59E0B;
+      transform: rotate(45deg);
+      border-radius: 8px;
+    }
+
+    .logo-diamond img {
+      position: relative;
+      z-index: 1;
+      height: 28px;
+      filter: brightness(0);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: white; }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 24px;
+      min-height: calc(100vh - 64px);
+    }
+
+    .issue-card {
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(91, 33, 182, 0.1);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+    }
+
+    .card-top {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-top::before {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+      top: -60px; right: -60px;
+    }
+
+    .card-top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245,158,11,0.2);
+      border: 1px solid rgba(245,158,11,0.35);
+      color: #FCD34D;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-top h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 6px;
+    }
+
+    .card-top p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-body { padding: 36px 32px; }
+
+    .form-group { margin-bottom: 22px; }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+    }
+
+    .form-group input::placeholder { color: #C4B5FD; }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper::after {
+      content: '▾';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      font-size: 14px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(91, 33, 182, 0.4);
+    }
 
     #status {
-        margin-top: 15px;
-        text-align: center;
-        font-weight: bold;
-        font-size: 0.95rem;
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+      line-height: 1.5;
     }
-</style>
+
+    #status.success {
+      display: block;
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    #status.error {
+      display: block;
+      background: #FEF2F2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+
+    #status.loading {
+      display: block;
+      background: #EDE9FE;
+      color: #5B21B6;
+      border: 1px solid #DDD6FE;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; }
+      main { padding: 32px 16px; }
+      .card-body { padding: 28px 20px; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="ticket-container">
-    <h2>Generate Event Ticket</h2>
+  <header>
+    <a class="logo" href="/homepage.html">
+      <div class="logo-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+    </a>
+    <a class="back-link" href="/dashboard.html">← Back to Dashboard</a>
+  </header>
 
-    <form id="ticketForm">
-        <label for="email">Your Email:</label>
-        <input type="email" id="email" placeholder="user@example.com" required>
+  <main>
+    <div class="issue-card">
+      <div class="card-top">
+        <div class="card-top-badge">🎟️ Ticket Generation</div>
+        <h2>Generate Event Ticket</h2>
+        <p>Issue a ticket to access an event with your verified identity.</p>
+      </div>
 
-        <label for="eventSelect">Select Event:</label>
-        <select id="eventSelect" required>
-            <option value="">Loading events...</option>
-        </select>
+      <div class="card-body">
+        <form id="ticketForm">
+          <div class="form-group">
+            <label>Your Email</label>
+            <input type="email" id="email" placeholder="you@example.com" required>
+          </div>
 
-        <label for="ticketId">Ticket Number (Serial):</label>
-        <input type="text" id="ticketId" placeholder="e.g. 001" required>
+          <div class="form-group">
+            <label>Select Event</label>
+            <div class="select-wrapper">
+              <select id="eventSelect" required>
+                <option value="">Loading events...</option>
+              </select>
+            </div>
+          </div>
 
-        <button type="submit">Generate Ticket</button>
-    </form>
+          <div class="form-group">
+            <label>Ticket Serial Number</label>
+            <input type="text" id="ticketId" placeholder="e.g. 001" required>
+          </div>
 
-    <div id="status"></div>
-</div>
+          <button type="submit" class="submit-btn">Generate Ticket →</button>
+        </form>
 
-<script>
-const form = document.getElementById("ticketForm");
-const statusDiv = document.getElementById("status");
-const emailInput = document.getElementById("email");
-const eventSelect = document.getElementById("eventSelect");
+        <div id="status"></div>
+      </div>
+    </div>
+  </main>
 
-// Autofill email from query param (optional)
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get("email")) emailInput.value = urlParams.get("email");
+  <script>
+    const form = document.getElementById("ticketForm");
+    const statusDiv = document.getElementById("status");
+    const emailInput = document.getElementById("email");
+    const eventSelect = document.getElementById("eventSelect");
 
-// Fetch all events for dropdown
-(async () => {
-    try {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("email")) emailInput.value = urlParams.get("email");
+
+    (async () => {
+      try {
         const resEvents = await fetch("/events");
         if (!resEvents.ok) throw new Error("Cannot fetch events.");
         const allEvents = await resEvents.json();
 
         eventSelect.innerHTML = "";
         if (allEvents.length === 0) {
-            eventSelect.innerHTML = '<option value="">No events available.</option>';
+          eventSelect.innerHTML = '<option value="">No events available.</option>';
         } else {
-            eventSelect.innerHTML = '<option value="">Select an event</option>';
-            allEvents.forEach(ev => {
-                const opt = document.createElement("option");
-                opt.value = ev.event_code;
-                opt.textContent = `${ev.event_name} (${ev.event_code})`;
-                eventSelect.appendChild(opt);
-            });
+          eventSelect.innerHTML = '<option value="">Select an event</option>';
+          allEvents.forEach(ev => {
+            const opt = document.createElement("option");
+            opt.value = ev.event_code;
+            opt.textContent = `${ev.event_name} (${ev.event_code})`;
+            eventSelect.appendChild(opt);
+          });
         }
-    } catch (err) {
-        statusDiv.textContent = `❌ ${err.message}`;
-        statusDiv.style.color = "red";
+      } catch (err) {
+        statusDiv.className = "error";
+        statusDiv.textContent = `Error: ${err.message}`;
         eventSelect.innerHTML = '<option value="">Error loading events</option>';
-    }
-})();
+      }
+    })();
 
-// Handle form submission
-form.onsubmit = async (e) => {
-    e.preventDefault();
-    statusDiv.style.color = "blue";
-    statusDiv.textContent = "Processing ticket...";
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      statusDiv.className = "loading";
+      statusDiv.textContent = "Processing ticket...";
 
-    const userEmail = emailInput.value.trim();
-    const ticketId = document.getElementById("ticketId").value.trim();
-    const eventCode = eventSelect.value;
+      const userEmail = emailInput.value.trim();
+      const ticketId = document.getElementById("ticketId").value.trim();
+      const eventCode = eventSelect.value;
 
-    if (!userEmail || !ticketId || !eventCode) {
+      if (!userEmail || !ticketId || !eventCode) {
+        statusDiv.className = "error";
         statusDiv.textContent = "Please fill all fields.";
-        statusDiv.style.color = "red";
         return;
-    }
+      }
 
-    try {
+      try {
         const res = await fetch("/issue.html", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                user_email: userEmail,
-                ticket_id: ticketId,
-                event_code: eventCode
-            })
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_email: userEmail, ticket_id: ticketId, event_code: eventCode })
         });
 
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || "Failed to create ticket.");
 
-        statusDiv.style.color = "green";
         const selectedEvent = eventSelect.options[eventSelect.selectedIndex].text;
+        statusDiv.className = "success";
         statusDiv.innerHTML = `
-            ✅ Ticket for <strong>${selectedEvent}</strong> (No. ${data.ticket_number}) 
-            has been successfully added!<br>
-            <small>Added on: ${new Date(data.date_added).toLocaleString()}</small>
+          ✓ Ticket for <strong>${selectedEvent}</strong> (No. ${data.ticket_number}) issued successfully!<br>
+          <small>Added on: ${new Date(data.date_added).toLocaleString()}</small>
         `;
 
-        // Redirect to dashboard after 2 seconds
-        setTimeout(() => {
-            window.location.href = "/dashboard.html";
-        }, 2000);
-
+        setTimeout(() => { window.location.href = "/dashboard.html"; }, 2000);
         form.reset();
-
-    } catch (err) {
-        statusDiv.textContent = `❌ ${err.message}`;
-        statusDiv.style.color = "red";
-    }
-};
-</script>
+      } catch (err) {
+        statusDiv.className = "error";
+        statusDiv.textContent = `Error: ${err.message}`;
+      }
+    };
+  </script>
 
 </body>
 </html>

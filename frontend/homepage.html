@@ -4,115 +4,390 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome to Entri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #5B21B6;
+      --primary-light: #7C3AED;
+      --primary-dark: #3B0764;
+      --accent: #F59E0B;
+      --bg: #F5F3FF;
+      --card: #FFFFFF;
+      --text: #1E1B4B;
+      --text-muted: #6B7280;
+      --border: #DDD6FE;
+      --success: #059669;
+      --error: #DC2626;
+      --radius: 16px;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: linear-gradient(135deg, #f0f4ff, #ffffff);
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      color: var(--text);
+    }
+
+    /* Left Panel */
+    .hero-panel {
+      background: linear-gradient(145deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
       display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-panel::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      top: -100px;
+      right: -100px;
+    }
+
+    .hero-panel::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(245,158,11,0.1);
+      border-radius: 50%;
+      bottom: -80px;
+      left: -60px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-diamond {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-diamond::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #F59E0B;
+      transform: rotate(45deg);
+      border-radius: 12px;
+    }
+
+    .logo-diamond img {
+      position: relative;
+      z-index: 1;
+      height: 46px;
+      filter: brightness(0);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,158,11,0.2);
+      border: 1px solid rgba(245,158,11,0.4);
+      color: #FCD34D;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge::before {
+      content: '◆';
+      font-size: 8px;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 800;
+      color: white;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      max-width: 360px;
+      margin-bottom: 48px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+    }
+
+    .stat-item {
+      color: white;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Right Panel */
+    .form-panel {
+      display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      color: #333;
+      padding: 60px 40px;
     }
 
-    .card {
-      background: #fff;
-      padding: 40px 30px;
-      border-radius: 14px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    .form-card {
       width: 100%;
-      max-width: 380px;
-      text-align: center;
+      max-width: 400px;
     }
 
-    h2 {
-      margin-bottom: 20px;
-      color: #111827;
-      font-size: 24px;
+    .form-card h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .form-card p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 36px;
     }
 
     label {
-      font-weight: bold;
       display: block;
-      text-align: left;
-      margin-top: 15px;
-      color: #444;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     input[type="email"] {
-      margin-top: 6px;
-      padding: 10px;
       width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
     }
 
-    button {
-      margin-top: 20px;
-      padding: 10px 16px;
+    input[type="email"]:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+    }
+
+    input[type="email"]::placeholder { color: #C4B5FD; }
+
+    button[type="submit"] {
       width: 100%;
-      background-color: #007bff;
+      margin-top: 16px;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       border: none;
-      border-radius: 6px;
+      border-radius: 10px;
       color: white;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: background 0.25s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.2px;
     }
 
-    button:hover {
-      background-color: #0056b3;
+    button[type="submit"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(91, 33, 182, 0.4);
     }
+
+    button[type="submit"]:active { transform: translateY(0); }
 
     #status {
-      margin-top: 15px;
-      font-weight: bold;
-      color: #007bff;
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      min-height: 20px;
+      color: var(--primary-light);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0;
+      color: var(--border);
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .feature-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
     }
 
     footer {
-      position: absolute;
-      bottom: 15px;
-      width: 100%;
-      text-align: center;
-      font-size: 13px;
-      color: #666;
+      position: fixed;
+      bottom: 20px;
+      right: 40px;
+      font-size: 12px;
+      color: var(--text-muted);
     }
 
-    footer span {
-      color: #007bff;
-      font-weight: bold;
+    footer span { color: var(--primary-light); font-weight: 600; }
+
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .hero-panel { display: none; }
+      .form-panel { padding: 40px 24px; }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Welcome to Entri</h2>
-    <p style="margin-bottom: 25px; color: #555;">
-      Verify your identity once and unlock access to events effortlessly.
-    </p>
 
-    <form id="emailForm">
-      <label for="email">Email Address:</label>
-      <input
-        type="email"
-        id="email"
-        required
-        placeholder="Enter your email"
-        autocomplete="email"
-      />
-      <button type="submit">Continue</button>
-    </form>
-
-    <div id="status"></div>
+  <!-- Left Hero Panel -->
+  <div class="hero-panel">
+    <div class="logo">
+      <div class="logo-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">Biometric Identity Platform</div>
+      <h1 class="hero-title">Your Face is<br>Your <span>Ticket.</span></h1>
+      <p class="hero-sub">Verify your identity once and unlock seamless access to every event — no queues, no paper tickets.</p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Secure</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">&lt;2s</div>
+          <div class="stat-label">Verification</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">Zero</div>
+          <div class="stat-label">Paperwork</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <footer>
-    <p>Powered by <span>Entri</span> — A Smarter Way to Verify</p>
-  </footer>
+  <!-- Right Form Panel -->
+  <div class="form-panel">
+    <div class="form-card">
+      <h2>Get Started</h2>
+      <p>Enter your email to sign in or create a new account.</p>
+
+      <form id="emailForm">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="you@example.com" autocomplete="email" />
+        <button type="submit">Continue →</button>
+      </form>
+
+      <div id="status"></div>
+
+      <div class="divider"><span>How it works</span></div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">🪪</div>
+          Upload your government-issued ID once
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📸</div>
+          Take a quick live selfie for biometric matching
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎟️</div>
+          Access any event instantly with face scan
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Powered by <span>Entri</span> — A Smarter Way to Verify</footer>
 
   <script>
     const form = document.getElementById("emailForm");
@@ -121,7 +396,7 @@
     form.onsubmit = async (e) => {
       e.preventDefault();
       statusDiv.textContent = "Checking...";
-      statusDiv.style.color = "#007bff";
+      statusDiv.style.color = "#7C3AED";
 
       const email = document.getElementById("email").value;
 
@@ -135,18 +410,18 @@
         const data = await res.json();
 
         if (data.exists) {
-          statusDiv.textContent = "Redirecting to login...";
+          statusDiv.textContent = "Account found. Redirecting to login...";
           setTimeout(() => {
             window.location.href = `/login.html?email=${encodeURIComponent(email)}`;
           }, 700);
         } else {
-          statusDiv.textContent = "Redirecting to signup...";
+          statusDiv.textContent = "New user. Redirecting to signup...";
           setTimeout(() => {
             window.location.href = `/signup.html?email=${encodeURIComponent(email)}`;
           }, 700);
         }
       } catch (error) {
-        statusDiv.style.color = "red";
+        statusDiv.style.color = "#DC2626";
         statusDiv.textContent = `Error: ${error.message}`;
       }
     };

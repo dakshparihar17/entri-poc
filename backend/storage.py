@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from datetime import datetime
 
 data_file = Path(__file__).parent / "tickets.json"
 users_file = Path(__file__).parent / "users.json"
@@ -50,6 +51,19 @@ def get_tickets_by_email(email: str):
     with open(data_file, "r") as f:
         tickets = json.load(f)
         return [t for t in tickets if t.get("email") == email]
+
+def redeem_ticket(email: str, event_code: str):
+    """Mark the first unredeemed ticket for this email+event_code as redeemed."""
+    with open(data_file, "r+") as f:
+        tickets = json.load(f)
+        for t in tickets:
+            if t.get("email") == email and t.get("event_code") == event_code and not t.get("redeemed"):
+                t["redeemed"] = True
+                t["redeemed_at"] = datetime.now().isoformat()
+                break
+        f.seek(0)
+        f.truncate()
+        json.dump(tickets, f, indent=4)
     
 
 def load_json(filename: str):
