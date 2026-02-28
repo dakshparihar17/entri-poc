@@ -2,13 +2,13 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-data_file = Path(__file__).parent / "tickets.json"
-users_file = Path(__file__).parent / "users.json"
 data_dir = Path(__file__).parent / "data"
+data_dir.mkdir(exist_ok=True)
 
+data_file = data_dir / "tickets.json"
+users_file = data_dir / "users.json"
 
-
-# Initialize file if not exists
+# Initialize files if not present
 for file in [data_file, users_file]:
     if not file.exists():
         with open(file, "w") as f:

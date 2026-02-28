@@ -31,19 +31,15 @@ Thumbs.db
 # Application specific ignores
 # ==========================
 
-# --- User & Organizer data ---
-users.json
-organizers.json
-events.json
-tickets.json
-blockchain_data.json
-attendance.json
+# --- Runtime data (all JSON files in data/ are gitignored; folder is tracked via .gitkeep) ---
+backend/data/*.json
+!backend/data/.gitkeep
 
 # --- Uploaded or generated media ---
-uploads/
-faces/
-live_faces/
-tickets/
+backend/uploads/
+backend/faces/
+backend/live_faces/
+backend/tickets/
 
 
 # --- Sensitive configs & environment ---
