@@ -16,10 +16,13 @@ router = APIRouter()
 
 # Paths to data files
 BASE_DIR = Path(__file__).parent
-users_path = BASE_DIR / "users.json"
-attendance_path = BASE_DIR / "attendance.json"
-events_path = BASE_DIR / "events.json"
-tickets_path = BASE_DIR / "tickets.json"
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
+users_path = DATA_DIR / "users.json"
+attendance_path = DATA_DIR / "attendance.json"
+events_path = DATA_DIR / "events.json"
+tickets_path = DATA_DIR / "tickets.json"
 
 # Ensure attendance.json exists
 if not attendance_path.exists():
@@ -137,7 +140,7 @@ def check_attendance(event_code: str = Query(..., description="Event code")):
     Returns a dictionary mapping attendee emails to their attendance status (True/False)
     for a specific event. This will allow frontend to show ✅ if attended.
     """
-    attendance_file = BASE_DIR / "attendance.json"
+    attendance_file = DATA_DIR / "attendance.json"
     tickets = load_json(tickets_path)
 
     # Load attendance.json
@@ -166,9 +169,9 @@ def check_attendance(event_code: str = Query(..., description="Event code")):
 async def scan_face(event_code: str = Form(...), live_image: UploadFile = File(...)):
     """Scan live face image, match with user, and mark attendance."""
     base_dir = os.path.dirname(__file__)
-    users_file = os.path.join(base_dir, "users.json")
-    tickets_file = os.path.join(base_dir, "tickets.json")
-    attendance_file = os.path.join(base_dir, "attendance.json")
+    users_file = str(DATA_DIR / "users.json")
+    tickets_file = str(DATA_DIR / "tickets.json")
+    attendance_file = str(DATA_DIR / "attendance.json")
 
     users = load_json(users_file)
     tickets = load_json(tickets_file)
@@ -263,7 +266,7 @@ async def scan_face(event_code: str = Form(...), live_image: UploadFile = File(.
 def get_event_stats(event_code: str = Query(...)):
     """Return entry statistics for an event: expected, arrived, face_id_success, face_id_failed."""
     tickets = load_json(tickets_path)
-    att_path = BASE_DIR / "attendance.json"
+    att_path = DATA_DIR / "attendance.json"
     attendance_data = load_json(att_path) if att_path.exists() else {}
     if not isinstance(attendance_data, dict):
         attendance_data = {}
