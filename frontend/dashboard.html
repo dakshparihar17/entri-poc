@@ -1,217 +1,825 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f9fa; }
-        h1 { text-align: center; }
-        h2 { margin-top: 20px; }
-        .section { 
-            margin-bottom: 30px; 
-            padding: 15px; 
-            border: 1px solid #ddd; 
-            border-radius: 10px; 
-            background-color: #fff; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        button { 
-            margin: 5px 0; 
-            padding: 10px; 
-            cursor: pointer; 
-            width: 250px; 
-            border: none; 
-            border-radius: 6px; 
-            background-color: #007BFF; 
-            color: white; 
-            font-weight: bold;
-        }
-        button:hover { background-color: #0056b3; }
-        .ticket {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #fdfdfd;
-        }
-        /* Popup modal styling */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 10; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: 10% auto; 
-            padding: 20px; 
-            border-radius: 10px; 
-            width: 90%; 
-            max-width: 500px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .close {
-            float: right; 
-            font-size: 24px; 
-            cursor: pointer; 
-            color: #666;
-        }
-        .close:hover { color: black; }
-        .ticket-item {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        .ticket-item:last-child { border-bottom: none; }
-        .ticket-item small { color: gray; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Entri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #5B21B6;
+      --primary-light: #7C3AED;
+      --primary-dark: #3B0764;
+      --accent: #F59E0B;
+      --bg: #F5F3FF;
+      --card: #FFFFFF;
+      --text: #1E1B4B;
+      --text-muted: #6B7280;
+      --border: #EDE9FE;
+      --success: #059669;
+      --error: #DC2626;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(59, 7, 100, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-diamond {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-diamond::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #F59E0B;
+      transform: rotate(45deg);
+      border-radius: 8px;
+    }
+
+    .logo-diamond img {
+      position: relative;
+      z-index: 1;
+      height: 28px;
+      filter: brightness(0);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .btn-issue {
+      padding: 8px 20px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #1E1B4B;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-issue:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-logout {
+      padding: 8px 18px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.85);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: rgba(255,255,255,0.18);
+      color: white;
+    }
+
+    /* Main layout */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Page title */
+    .page-header {
+      margin-bottom: 36px;
+    }
+
+    .page-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .page-header p {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    /* Grid layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+    }
+
+    .left-col { display: flex; flex-direction: column; gap: 24px; }
+    .right-col { display: flex; flex-direction: column; gap: 24px; }
+
+    /* Card */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(91, 33, 182, 0.06);
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Profile photo card */
+    .profile-card {
+      text-align: center;
+      padding: 32px 28px;
+    }
+
+    .avatar-ring {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      background: linear-gradient(white, white) padding-box,
+                  linear-gradient(135deg, var(--primary), var(--accent)) border-box;
+      margin: 0 auto 16px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #userFace {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-placeholder {
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .profile-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .profile-email {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 12px;
+      background: #ECFDF5;
+      color: #059669;
+      border: 1px solid #A7F3D0;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Ticket card */
+    .ticket-card {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: white;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ticket-card::before {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      top: -80px; right: -60px;
+    }
+
+    .ticket-card .card-title { color: rgba(255,255,255,0.6); }
+
+    .ticket-event {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-meta {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-number {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-accent { color: #FCD34D; }
+
+    .view-all-btn {
+      margin-top: 16px;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .view-all-btn:hover { background: rgba(255,255,255,0.22); }
+
+    /* MRZ Card */
+    .mrz-card {}
+
+    .mrz-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .mrz-field {}
+
+    .mrz-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .mrz-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .mrz-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .mrz-badge.valid { background: #ECFDF5; color: #059669; }
+    .mrz-badge.invalid { background: #FEF2F2; color: #DC2626; }
+
+    .mrz-raw {
+      margin-top: 16px;
+      background: #F8F7FF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--primary);
+      word-break: break-all;
+      line-height: 1.6;
+    }
+
+    .loading-text { color: var(--text-muted); font-size: 14px; }
+
+    /* Buttons */
+    .btn-primary {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(91, 33, 182, 0.35);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 10, 41, 0.7);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active { display: flex; }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 36px;
+      width: 90%;
+      max-width: 520px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(91, 33, 182, 0.2);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .close-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--border);
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+
+    .close-btn:hover { background: #DDD6FE; color: var(--primary); }
+
+    .ticket-item {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ticket-item:last-child { margin-bottom: 0; }
+
+    .ticket-item-left { flex: 1; }
+
+    .ticket-item-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .ticket-item-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .ticket-item-badge {
+      background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .ticket-item {
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .ticket-item:hover { background: #FAFAFF; border-color: #A78BFA; }
+
+    .qr-icon-btn {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--primary-light);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .qr-icon-btn:hover { background: #EDE9FE; border-color: var(--primary-light); }
+
+    /* QR Modal */
+    .qr-modal-content { text-align: center; max-width: 340px; }
+
+    .qr-img {
+      width: 210px;
+      height: 210px;
+      border: 3px solid var(--border);
+      border-radius: 16px;
+      margin: 0 auto 20px;
+      display: block;
+      padding: 10px;
+      background: white;
+    }
+
+    .qr-event-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .qr-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .latest-ticket-click {
+      cursor: pointer;
+      flex: 1;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0 20px; }
+      main { padding: 24px 16px; }
+      .mrz-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to Your Dashboard</h1>
 
-    <!-- MRZ Details Section -->
-    <div class="section">
-        <h2>Your Verified ID (MRZ Details)</h2>
-        <pre id="mrzDetails">Loading...</pre>
+  <header>
+    <a class="logo" href="/homepage.html">
+      <div class="logo-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+    </a>
+    <div class="nav-right">
+      <span class="nav-tag">User Dashboard</span>
+      <button class="btn-issue" id="issueButton">+ Issue Ticket</button>
+      <button class="btn-logout" id="logoutButton">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Your Dashboard</h1>
+      <p>View your verified identity, profile, and event tickets.</p>
     </div>
 
-    <!-- Latest Ticket Section -->
-    <div class="section">
-        <h2>Latest Ticket</h2>
-        <div id="latestTicket">Loading...</div>
-        <button id="viewAllBtn" style="display:none;">View All Tickets</button>
-    </div>
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="left-col">
 
-    <!-- User Face Section -->
-    <div class="section">
-        <h2>Your Profile Photo</h2>
-        <img id="userFace" src="" alt="User Face" style="width:150px; border-radius:10px;">
-    </div>
-
-    <!-- Redirect to Issue Page -->
-    <div class="section" style="text-align:center;">
-        <h2>Issue a New Event Ticket</h2>
-        <button id="issueButton">Go to Issue Ticket Page</button>
-    </div>
-
-    <!-- Modal Popup for All Tickets -->
-    <div id="ticketModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <h2>All Your Tickets</h2>
-            <div id="allTickets"></div>
+        <!-- Profile Card -->
+        <div class="card profile-card">
+          <div class="avatar-ring">
+            <span class="avatar-placeholder" id="avatarPlaceholder">👤</span>
+            <img id="userFace" src="" alt="Profile" style="display:none;">
+          </div>
+          <div class="profile-name" id="profileName">Loading...</div>
+          <div class="profile-email" id="profileEmail"></div>
+          <div class="verified-badge">✓ Identity Verified</div>
         </div>
+
+        <!-- Latest Ticket -->
+        <div class="card ticket-card">
+          <div class="card-title">Latest Ticket</div>
+          <div id="latestTicketContent">
+            <div class="loading-text" style="color:rgba(255,255,255,0.5)">Loading...</div>
+          </div>
+          <button class="view-all-btn" id="viewAllBtn">View All Tickets →</button>
+        </div>
+
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-col">
+
+        <!-- MRZ Details -->
+        <div class="card mrz-card">
+          <div class="card-title">Verified ID — MRZ Details</div>
+          <div id="mrzContent">
+            <div class="loading-text">Loading identity data...</div>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </main>
 
-    <script>
-        let email = null;
-        let allTickets = [];
+  <!-- All Tickets Modal -->
+  <div id="ticketModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>All Your Tickets</h2>
+        <button class="close-btn" id="closeModal">&times;</button>
+      </div>
+      <div id="allTickets"></div>
+    </div>
+  </div>
 
-        // --- Fetch current user profile and MRZ ---
-        (async () => {
-            try {
-                const res = await fetch("/user/profile");
-                if (!res.ok) throw new Error("Could not fetch user profile");
-                const data = await res.json();
-                email = data.email;
+  <!-- QR Code Modal -->
+  <div id="qrModal" class="modal">
+    <div class="modal-content qr-modal-content">
+      <div class="modal-header">
+        <h2>Ticket QR Code</h2>
+        <button class="close-btn" id="closeQrModal">&times;</button>
+      </div>
+      <img id="qrImage" class="qr-img" src="" alt="QR Code">
+      <div id="qrRedeemedBanner" style="display:none;width:210px;height:210px;margin:0 auto 20px;border-radius:16px;background:#FEF2F2;border:3px solid #FECACA;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px;">
+        <div style="font-size:36px;">🚫</div>
+        <div style="font-size:15px;font-weight:800;color:#991B1B;">Ticket Used</div>
+        <div id="qrRedeemedAt" style="font-size:12px;color:#B91C1C;margin-top:4px;"></div>
+      </div>
+      <div class="qr-event-name" id="qrEventName"></div>
+      <div class="qr-meta" id="qrTicketId"></div>
+      <div class="qr-meta" id="qrDate"></div>
+    </div>
+  </div>
 
-                // Display MRZ info
-                document.getElementById("mrzDetails").textContent = JSON.stringify(data.mrz, null, 2);
+  <script>
+    let email = null;
+    let allTickets = [];
 
-                // Display cropped face
-                if (data.cropped_face_url) {
-                    document.getElementById("userFace").src = data.cropped_face_url;
-                }
+    (async () => {
+      try {
+        const res = await fetch("/user/profile");
+        if (!res.ok) throw new Error("Could not fetch user profile");
+        const data = await res.json();
+        email = data.email;
 
-                // Load tickets after user info is loaded
-                loadTickets();
-            } catch (err) {
-                document.getElementById("mrzDetails").textContent = "Error: " + err.message;
-                document.getElementById("latestTicket").textContent = "Unable to load tickets.";
-            }
-        })();
+        document.getElementById("profileEmail").textContent = email;
+        document.getElementById("profileName").textContent = data.mrz?.surname?.trim() || "User";
 
-        // --- Load User Tickets ---
-        async function loadTickets() {
-            try {
-                const res = await fetch("/user/tickets");
-                if (!res.ok) throw new Error("Failed to fetch tickets");
-                const tickets = await res.json();
-
-                // Assign serial numbers to tickets (1-based index)
-                allTickets = tickets.map((t, index) => ({
-                    ...t,
-                    serial_number: index + 1
-                }));
-
-                const latestDiv = document.getElementById("latestTicket");
-                const viewAllBtn = document.getElementById("viewAllBtn");
-
-                if (allTickets.length === 0) {
-                    latestDiv.innerHTML = "<p>No tickets yet.</p>";
-                    viewAllBtn.style.display = "none";
-                    return;
-                }
-
-                const latest = allTickets[allTickets.length - 1];
-                latestDiv.innerHTML = `
-                    <p><strong> #${latest.serial_number}</strong></p>
-                    <p><strong>Event:</strong> ${latest.event_name || "Unnamed Event"}</p>
-                    <p><strong>Date Added:</strong> ${formatDate(latest.date)}</p>
-                `;
-
-                viewAllBtn.style.display = "inline-block";
-            } catch (err) {
-                document.getElementById("latestTicket").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
-            }
+        if (data.cropped_face_url) {
+          const img = document.getElementById("userFace");
+          const placeholder = document.getElementById("avatarPlaceholder");
+          img.onerror = () => {
+            img.style.display = "none";
+            placeholder.style.display = "block";
+          };
+          img.src = data.cropped_face_url;
+          img.style.display = "block";
+          placeholder.style.display = "none";
         }
 
-        // --- Format Date Nicely ---
-        function formatDate(dateStr) {
-            if (!dateStr) return "N/A";
-            const date = new Date(dateStr);
-            return date.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+        renderMRZ(data.mrz);
+        loadTickets();
+      } catch (err) {
+        document.getElementById("mrzContent").textContent = "Error: " + err.message;
+      }
+    })();
+
+    function renderMRZ(mrz) {
+      if (!mrz) {
+        document.getElementById("mrzContent").innerHTML = '<div class="loading-text">No MRZ data found.</div>';
+        return;
+      }
+      const fields = [
+        { label: "Surname", value: mrz.surname },
+        { label: "Document No.", value: mrz.number },
+        { label: "Nationality", value: mrz.nationality },
+        { label: "Country", value: mrz.country },
+        { label: "Date of Birth", value: mrz.date_of_birth },
+        { label: "Expiry Date", value: mrz.expiration_date },
+        { label: "Sex", value: mrz.sex },
+        { label: "Document Type", value: mrz.type },
+      ];
+
+      const validChecks = [
+        { label: "Number Valid", ok: mrz.valid_number },
+        { label: "DOB Valid", ok: mrz.valid_date_of_birth },
+        { label: "Expiry Valid", ok: mrz.valid_expiration_date },
+        { label: "Composite Valid", ok: mrz.valid_composite },
+      ];
+
+      let html = '<div class="mrz-grid">';
+      fields.forEach(f => {
+        if (f.value) {
+          html += `<div class="mrz-field">
+            <div class="mrz-label">${f.label}</div>
+            <div class="mrz-value">${f.value}</div>
+          </div>`;
+        }
+      });
+      html += '</div>';
+
+      html += '<div style="margin-top:20px;"><div class="card-title" style="margin-bottom:12px;">Validation Checks</div><div style="display:flex;flex-wrap:wrap;gap:8px;">';
+      validChecks.forEach(v => {
+        html += `<span class="mrz-badge ${v.ok ? 'valid' : 'invalid'}">${v.ok ? '✓' : '✗'} ${v.label}</span>`;
+      });
+      html += '</div></div>';
+
+      if (mrz.raw_text) {
+        html += `<div class="mrz-raw">${mrz.raw_text.replace(/\n/g, '<br>')}</div>`;
+      }
+
+      document.getElementById("mrzContent").innerHTML = html;
+    }
+
+    async function loadTickets() {
+      try {
+        const res = await fetch("/user/tickets");
+        if (!res.ok) throw new Error("Failed to fetch tickets");
+        const tickets = await res.json();
+
+        allTickets = tickets.map((t, index) => ({ ...t, serial_number: index + 1 }));
+
+        const content = document.getElementById("latestTicketContent");
+        const viewAllBtn = document.getElementById("viewAllBtn");
+
+        if (allTickets.length === 0) {
+          content.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:14px;">No tickets yet.</div>';
+          viewAllBtn.style.display = "none";
+          return;
         }
 
-        // --- Modal Controls ---
-        const modal = document.getElementById("ticketModal");
-        const closeModal = document.getElementById("closeModal");
-        const allTicketsDiv = document.getElementById("allTickets");
+        const latest = allTickets[allTickets.length - 1];
+        const latestHint = latest.redeemed ? 'Ticket has been used' : 'Tap to view QR code →';
+        const latestHintColor = latest.redeemed ? 'rgba(252,165,165,0.8)' : 'rgba(255,255,255,0.5)';
+        content.innerHTML = `
+          <div class="latest-ticket-click" onclick="showQR(allTickets[allTickets.length-1])">
+            <div class="ticket-event">${latest.event_name || "Unnamed Event"}</div>
+            <div class="ticket-meta">Added ${formatDate(latest.date)}</div>
+            <div class="ticket-number">🎟️ <span>Ticket <span class="ticket-accent">#${latest.serial_number}</span></span></div>
+            <div style="margin-top:10px;font-size:12px;color:${latestHintColor};">${latestHint}</div>
+          </div>
+        `;
+        viewAllBtn.style.display = "inline-block";
+      } catch (err) {
+        document.getElementById("latestTicketContent").innerHTML =
+          `<div style="color:#FCA5A5;font-size:14px;">Error: ${err.message}</div>`;
+      }
+    }
 
-        document.getElementById("viewAllBtn").onclick = function() {
-            modal.style.display = "block";
-            if (allTickets.length === 0) {
-                allTicketsDiv.innerHTML = "<p>No tickets available.</p>";
-            } else {
-                allTicketsDiv.innerHTML = allTickets.map(t => `
-                    <div class="ticket-item">
-                        <strong> #${t.serial_number}</strong><br>
-                        <strong>Event:</strong> ${t.event_name || "Unnamed Event"}<br>
-                        <small><strong>Date Added:</strong> ${formatDate(t.date)}</small>
-                    </div>
-                `).join("");
-            }
-        };
+    function formatDate(dateStr) {
+      if (!dateStr) return "N/A";
+      return new Date(dateStr).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+    }
 
-        closeModal.onclick = function() {
-            modal.style.display = "none";
-        };
+    const modal = document.getElementById("ticketModal");
 
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = "none";
-            }
-        };
+    document.getElementById("viewAllBtn").onclick = () => {
+      if (allTickets.length === 0) {
+        document.getElementById("allTickets").innerHTML = "<p>No tickets available.</p>";
+      } else {
+        document.getElementById("allTickets").innerHTML = allTickets.map((t, i) => {
+          const badge = t.redeemed
+            ? `<span style="background:#FEF2F2;color:#DC2626;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;">✗ Used</span>`
+            : `<span class="ticket-item-badge">#${t.serial_number}</span>`;
+          return `
+            <div class="ticket-item" onclick="showQR(allTickets[${i}])">
+              <div class="ticket-item-left">
+                <div class="ticket-item-name">${t.event_name || "Unnamed Event"}</div>
+                <div class="ticket-item-meta">Added ${formatDate(t.date)}</div>
+              </div>
+              ${badge}
+              <button class="qr-icon-btn" title="Show QR">&#x2317;</button>
+            </div>`;
+        }).join("");
+      }
+      modal.classList.add("active");
+    };
 
-        // --- Redirect to Issue Ticket Page ---
-        document.getElementById("issueButton").onclick = () => {
-            window.location.href = `/issue.html?email=${encodeURIComponent(email)}`;
-        };
-    </script>
+    document.getElementById("closeModal").onclick = () => modal.classList.remove("active");
+
+    const qrModal = document.getElementById("qrModal");
+
+    window.showQR = (ticket) => {
+      const qrImage = document.getElementById("qrImage");
+      const qrBanner = document.getElementById("qrRedeemedBanner");
+      if (ticket.redeemed) {
+        qrImage.style.display = "none";
+        qrBanner.style.display = "flex";
+        document.getElementById("qrRedeemedAt").textContent = ticket.redeemed_at
+          ? `Used on: ${formatDate(ticket.redeemed_at)}`
+          : "";
+      } else {
+        qrImage.src = ticket.qr_code_url || "";
+        qrImage.style.display = "block";
+        qrBanner.style.display = "none";
+      }
+      document.getElementById("qrEventName").textContent = ticket.event_name || "Unnamed Event";
+      document.getElementById("qrTicketId").textContent = `Ticket ID: ${ticket.ticket_id || "—"}`;
+      document.getElementById("qrDate").textContent = `Issued: ${formatDate(ticket.date)}`;
+      qrModal.classList.add("active");
+    };
+
+    document.getElementById("closeQrModal").onclick = () => qrModal.classList.remove("active");
+
+    window.onclick = (e) => {
+      if (e.target === modal) modal.classList.remove("active");
+      if (e.target === qrModal) qrModal.classList.remove("active");
+    };
+
+    document.getElementById("issueButton").onclick = () => {
+      window.location.href = `/issue.html?email=${encodeURIComponent(email)}`;
+    };
+
+    document.getElementById("logoutButton").onclick = async () => {
+      await fetch("/logout", { method: "POST" });
+      window.location.href = "/homepage.html";
+    };
+  </script>
 </body>
 </html>

@@ -3,7 +3,7 @@ from fastapi import (
 )
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
-from storage import get_all_tickets, load_json, save_json
+from storage import get_all_tickets, load_json, save_json, redeem_ticket
 from pathlib import Path
 import face_recognition
 import tempfile
@@ -185,6 +185,10 @@ async def scan_face(event_code: str = Form(...), live_image: UploadFile = File(.
         live_encoding = face_recognition.face_encodings(live_image_data)[0]
     except IndexError:
         os.remove(temp_path)
+        attendance.setdefault(f"{event_code}_failures", []).append({
+            "timestamp": datetime.now().isoformat(), "reason": "no_face_detected"
+        })
+        save_json(attendance_file, attendance)
         return JSONResponse({"status": "error", "message": "No face detected in the live image."}, status_code=400)
 
     match_found = False
@@ -211,6 +215,10 @@ async def scan_face(event_code: str = Form(...), live_image: UploadFile = File(.
     os.remove(temp_path)
 
     if not match_found:
+        attendance.setdefault(f"{event_code}_failures", []).append({
+            "timestamp": datetime.now().isoformat(), "reason": "no_match"
+        })
+        save_json(attendance_file, attendance)
         return JSONResponse({
             "status": "fail",
             "message": "No matching user found in the system."
@@ -218,26 +226,55 @@ async def scan_face(event_code: str = Form(...), live_image: UploadFile = File(.
 
     user_ticket = next((t for t in tickets if t["email"] == recognized_user_email and t["event_code"] == event_code), None)
     if not user_ticket:
+        attendance.setdefault(f"{event_code}_failures", []).append({
+            "timestamp": datetime.now().isoformat(), "reason": "no_ticket"
+        })
+        save_json(attendance_file, attendance)
         return JSONResponse({
             "status": "fail",
             "message": f"User {recognized_user_email} does not have a valid ticket for this event."
         }, status_code=403)
 
     event_attendance = attendance.get(event_code, [])
-    if recognized_user_email not in [entry["email"] for entry in event_attendance]:
+    already_attended = recognized_user_email in [entry["email"] for entry in event_attendance]
+
+    if not already_attended:
         event_attendance.append({
             "email": recognized_user_email,
             "timestamp": datetime.now().isoformat()
         })
         attendance[event_code] = event_attendance
         save_json(attendance_file, attendance)
+        redeem_ticket(recognized_user_email, event_code)
 
     total_attendees = len(event_attendance)
 
     return JSONResponse({
         "status": "success",
-        "message": f"Successfully recognized {recognized_user_email}.",
+        "message": f"Successfully recognized {recognized_user_email}." if not already_attended else f"{recognized_user_email} already admitted.",
         "recognized_user": recognized_user_email,
         "event_code": event_code,
-        "current_attendance_count": total_attendees
+        "current_attendance_count": total_attendees,
+        "already_attended": already_attended
     }, status_code=200)
+
+
+@router.get("/organizer/event-stats")
+def get_event_stats(event_code: str = Query(...)):
+    """Return entry statistics for an event: expected, arrived, face_id_success, face_id_failed."""
+    tickets = load_json(tickets_path)
+    att_path = BASE_DIR / "attendance.json"
+    attendance_data = load_json(att_path) if att_path.exists() else {}
+    if not isinstance(attendance_data, dict):
+        attendance_data = {}
+
+    expected = len([t for t in tickets if t.get("event_code") == event_code])
+    arrived = len(attendance_data.get(event_code, []))
+    face_failed = len(attendance_data.get(f"{event_code}_failures", []))
+
+    return {
+        "expected": expected,
+        "arrived": arrived,
+        "face_id_success": arrived,
+        "face_id_failed": face_failed
+    }
