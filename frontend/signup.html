@@ -3,62 +3,273 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up</title>
+  <title>Sign Up | Entri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #5B21B6;
+      --primary-light: #7C3AED;
+      --primary-dark: #3B0764;
+      --accent: #F59E0B;
+      --bg: #F5F3FF;
+      --text: #1E1B4B;
+      --text-muted: #6B7280;
+      --border: #DDD6FE;
+      --success: #059669;
+      --error: #DC2626;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background: #f9fafb;
-      color: #333;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      color: var(--text);
     }
-    h2 {
-      text-align: center;
-      margin-bottom: 30px;
+
+    .hero-panel {
+      background: linear-gradient(145deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      position: relative;
+      overflow: hidden;
     }
-    .form-card {
-      background: white;
-      border: 1px solid #ddd;
+
+    .hero-panel::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      top: -100px; right: -100px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 60px;
+      position: relative;
+      z-index: 1;
+      text-decoration: none;
+    }
+
+    .logo-diamond {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-diamond::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #F59E0B;
+      transform: rotate(45deg);
       border-radius: 12px;
-      padding: 25px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
+
+    .logo-diamond img {
+      position: relative;
+      z-index: 1;
+      height: 46px;
+      filter: brightness(0);
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 20px;
+      padding-bottom: 28px;
+      position: relative;
+    }
+
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 40px;
+      width: 2px;
+      height: calc(100% - 20px);
+      background: rgba(255,255,255,0.15);
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(245,158,11,0.3);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #FCD34D;
+      flex-shrink: 0;
+    }
+
+    .step-text h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .step-text p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+
+    .hero-title {
+      font-size: 38px;
+      font-weight: 800;
+      color: white;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .hero-title span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    /* Right panel */
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 40px;
+      overflow-y: auto;
+    }
+
+    .form-card { width: 100%; max-width: 420px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      margin-bottom: 32px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--primary-light); }
+
+    .form-card h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .form-card > p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
     label {
-      font-weight: bold;
       display: block;
-      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      margin-top: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    input[type="email"],
+
+    label:first-of-type { margin-top: 0; }
+
     input[type="password"],
     input[type="file"] {
-      margin-top: 5px;
-      margin-bottom: 15px;
-      padding: 10px;
       width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
       font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
     }
-    button {
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 16px;
-      font-size: 16px;
+
+    input[type="password"]:focus,
+    input[type="file"]:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+    }
+
+    input[type="file"] {
       cursor: pointer;
+      color: var(--text-muted);
+      padding: 10px 16px;
+    }
+
+    input[type="password"]::placeholder { color: #C4B5FD; }
+
+    .upload-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    button[type="submit"] {
       width: 100%;
-      margin-top: 10px;
-      transition: background 0.2s;
+      margin-top: 28px;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    button:hover {
-      background: #0056b3;
+
+    button[type="submit"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(91, 33, 182, 0.4);
     }
+
     #status {
-      margin-top: 15px;
+      margin-top: 16px;
       text-align: center;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 500;
+      min-height: 20px;
     }
 
     /* Modal */
@@ -66,61 +277,141 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(15, 10, 41, 0.85);
+      backdrop-filter: blur(6px);
       justify-content: center;
       align-items: center;
       z-index: 1000;
     }
-    #liveFaceModal .modal-content {
+
+    .modal-content {
       background: white;
-      padding: 20px 30px;
-      border-radius: 12px;
+      padding: 40px;
+      border-radius: 20px;
       text-align: center;
-      max-width: 400px;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: 0 24px 60px rgba(91, 33, 182, 0.25);
     }
+
+    .modal-content h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .modal-content p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
     #cameraFeed {
+      border-radius: 14px;
+      width: 100%;
+      margin-bottom: 16px;
+      border: 3px solid var(--border);
+    }
+
+    .capture-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border: none;
       border-radius: 10px;
-      margin: 10px 0;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .capture-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(91, 33, 182, 0.35);
+    }
+
+    #captureStatus {
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      min-height: 18px;
+    }
+
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .hero-panel { display: none; }
+      .form-panel { padding: 40px 24px; }
     }
   </style>
 </head>
 <body>
-  <h2>Complete Your Signup</h2>
 
-  <div class="form-card">
-    <form id="signupForm" enctype="multipart/form-data">
-      <input type="hidden" id="email" name="email" value="" />
-      <label>Create Password:</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Enter a strong password"
-        required
-      />
+  <div class="hero-panel">
+    <a class="logo" href="/homepage.html">
+      <div class="logo-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+    </a>
+    <div class="hero-content">
+      <h1 class="hero-title">Create your<br><span>verified</span> identity.</h1>
+      <p class="hero-sub">Complete these steps once — your identity is verified permanently.</p>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-text">
+            <h3>Set a password</h3>
+            <p>Secure your account with a strong password</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-text">
+            <h3>Upload your ID</h3>
+            <p>We extract your MRZ data automatically</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-text">
+            <h3>Take a live selfie</h3>
+            <p>Biometric matching links your face to your ID</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <label>Upload Physical ID:</label>
-      <input
-        type="file"
-        id="idImage"
-        name="id_image"
-        accept="image/*"
-        required
-      />
+  <div class="form-panel">
+    <div class="form-card">
+      <a class="back-link" href="/homepage.html">← Back</a>
+      <h2>Complete Signup</h2>
+      <p>Fill in your details to create your verified Entri account.</p>
 
-      <button type="submit">Submit & Continue</button>
-    </form>
+      <form id="signupForm" enctype="multipart/form-data">
+        <input type="hidden" id="email" name="email" value="" />
 
-    <div id="status"></div>
+        <label>Create Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter a strong password" required />
+
+        <label>Upload Physical ID</label>
+        <input type="file" id="idImage" name="id_image" accept="image/*" required />
+        <p class="upload-hint">Passport, national ID, or government-issued document</p>
+
+        <button type="submit">Submit & Continue →</button>
+      </form>
+
+      <div id="status"></div>
+    </div>
   </div>
 
   <!-- Live Face Modal -->
   <div id="liveFaceModal">
     <div class="modal-content">
       <h2>Take a Live Selfie</h2>
-      <video id="cameraFeed" autoplay width="320" height="240"></video>
-      <br />
-      <button id="captureBtn">Capture Photo</button>
+      <p>Position your face in the frame and press Capture</p>
+      <video id="cameraFeed" autoplay></video>
+      <button class="capture-btn" id="captureBtn">📸 Capture Photo</button>
       <p id="captureStatus"></p>
     </div>
   </div>
@@ -129,13 +420,12 @@
     const form = document.getElementById("signupForm");
     const statusDiv = document.getElementById("status");
 
-    // Autofill email from query param
     const urlParams = new URLSearchParams(window.location.search);
     document.getElementById("email").value = urlParams.get("email") || "";
 
     form.onsubmit = async (e) => {
       e.preventDefault();
-      statusDiv.style.color = "blue";
+      statusDiv.style.color = "#7C3AED";
       statusDiv.textContent = "Processing registration...";
 
       const email = document.getElementById("email").value;
@@ -155,22 +445,18 @@
         const data = await res.json();
 
         if (!res.ok) {
-          statusDiv.style.color = "red";
+          statusDiv.style.color = "#DC2626";
           statusDiv.textContent = `Error: ${data.message}`;
           return;
         }
 
-        statusDiv.style.color = "green";
-        statusDiv.textContent =
-          "Registration successful! Please take a live selfie.";
+        statusDiv.style.color = "#059669";
+        statusDiv.textContent = "Registration successful! Please take a live selfie.";
 
-        // Wait for selfie capture before redirect
         await openLiveFaceModal(email);
-
-        // Redirect after selfie
         window.location.href = "/dashboard.html";
       } catch (err) {
-        statusDiv.style.color = "red";
+        statusDiv.style.color = "#DC2626";
         statusDiv.textContent = `Error: ${err.message}`;
       }
     };
@@ -191,6 +477,7 @@
           video.srcObject = stream;
         } catch (err) {
           status.textContent = "Cannot access camera: " + err.message;
+          status.style.color = "#DC2626";
           reject(err);
           return;
         }
@@ -199,14 +486,14 @@
           const canvas = document.createElement("canvas");
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
 
           canvas.toBlob(async (blob) => {
             const formData = new FormData();
             formData.append("email", email);
             formData.append("live_face", blob, "live_face.jpg");
 
+            status.style.color = "#7C3AED";
             status.textContent = "Uploading selfie...";
 
             try {
@@ -217,6 +504,7 @@
               const data = await res.json();
 
               if (res.ok) {
+                status.style.color = "#059669";
                 status.textContent = "Selfie captured successfully!";
                 stream.getTracks().forEach((track) => track.stop());
                 setTimeout(() => {
@@ -224,9 +512,11 @@
                   resolve();
                 }, 1000);
               } else {
+                status.style.color = "#DC2626";
                 status.textContent = "Error: " + data.message;
               }
             } catch (err) {
+              status.style.color = "#DC2626";
               status.textContent = "Upload failed: " + err.message;
             }
           }, "image/jpeg");
