@@ -50,7 +50,7 @@ blockchain = Blockchain()
 # Serve frontend files
 @app.get("/")
 def root():
-    return FileResponse(frontend_path / "homepage.html")
+    return FileResponse(Path(__file__).parent.parent / "index.html")
 
 @app.get("/issue.html")
 def issue_ticket_page():
