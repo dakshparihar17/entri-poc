@@ -151,13 +151,12 @@
 <section class="alt" id="how">
   <div class="container">
     <span class="tag">How it works</span>
-    <h2 class="sec-title">From sign-up to entry in four steps</h2>
+    <h2 class="sec-title">From sign-up to entry in three steps</h2>
     <p class="sec-sub">Entri replaces the entire ticketing and access control workflow with a seamless, identity-first experience.</p>
     <div class="steps">
-      <div class="step"><div class="sn">Step 01</div><div class="si">🪪</div><h3>Verified Identity</h3><p>Users upload a government ID. Entri reads the MRZ data, crops the face, and creates a cryptographic identity record — in seconds.</p></div>
-      <div class="step"><div class="sn">Step 02</div><div class="si">🤳</div><h3>Live Selfie Match</h3><p>A live selfie is compared against the ID photo using AI face recognition. No match = no access. Liveness detection prevents spoofing.</p></div>
-      <div class="step"><div class="sn">Step 03</div><div class="si">🎟️</div><h3>Blockchain Ticket</h3><p>Tickets are issued as cryptographically hashed QR codes tied to the holder's verified identity. Untransferable. Unforgeable.</p></div>
-      <div class="step"><div class="sn">Step 04</div><div class="si">🚪</div><h3>Face-Scan Entry</h3><p>At the gate, a camera matches the live face and marks attendance instantly — no phones out, no scanning delays, zero friction.</p></div>
+      <div class="step"><div class="sn">Step 01</div><div class="si">🤳</div><h3>Live Selfie Match</h3><p>A live selfie is compared against the ID photo using AI face recognition. No match = no access. Liveness detection prevents spoofing.</p></div>
+      <div class="step"><div class="sn">Step 02</div><div class="si">🎟️</div><h3>Blockchain Ticket</h3><p>Tickets are issued as cryptographically hashed QR codes tied to the holder's verified identity. Untransferable. Unforgeable.</p></div>
+      <div class="step"><div class="sn">Step 03</div><div class="si">🚪</div><h3>Face-Scan Entry</h3><p>At the gate, a camera matches the live face and marks attendance instantly — no phones out, no scanning delays, zero friction.</p></div>
     </div>
   </div>
 </section>
@@ -170,8 +169,7 @@
     <div class="fgrid">
       <div class="fc"><div class="fi">🧠</div><h3>AI Face Verification</h3><p>Powered by dlib — trusted by security researchers globally. Sub-second ID photo vs. live selfie matching with liveness detection.</p><span class="ftag">AI-powered</span></div>
       <div class="fc"><div class="fi">⛓️</div><h3>Blockchain-Backed Tickets</h3><p>Every ticket is cryptographically hashed and anchored to the holder's identity. No reselling, no fraud, no stolen tickets. Immutable by design.</p><span class="ftag">Fraud-proof</span></div>
-      <div class="fc"><div class="fi">🪪</div><h3>MRZ Government ID Parsing</h3><p>PassportEye + Tesseract OCR reads machine-readable zones from passports, national IDs, and driver's licenses in real time.</p><span class="ftag">Gov-grade</span></div>
-      <div class="fc"><div class="fi">📊</div><h3>Organizer Dashboard</h3><p>Create events, track real-time attendance, scan faces at entry, and review access logs — from one clean purpose-built dashboard.</p><span class="ftag">Real-time</span></div>
+<div class="fc"><div class="fi">📊</div><h3>Organizer Dashboard</h3><p>Create events, track real-time attendance, scan faces at entry, and review access logs — from one clean purpose-built dashboard.</p><span class="ftag">Real-time</span></div>
       <div class="fc"><div class="fi">📲</div><h3>QR Code Tickets</h3><p>Server-side generated QR codes, cryptographically bound to the attendee's verified identity. Offline-ready at the gate.</p><span class="ftag">Offline-ready</span></div>
       <div class="fc"><div class="fi">🔒</div><h3>Privacy-First Architecture</h3><p>Face data processed on your infrastructure. bcrypt hashing, cookie-based sessions. No third-party biometric cloud required.</p><span class="ftag">On-premise</span></div>
     </div>
@@ -188,8 +186,7 @@
       <div class="uc"><span class="ue">🎪</span><h3>Music Festivals</h3><p>Identity-locked tickets that can't be transferred or duplicated. Reduce queue times dramatically.</p></div>
       <div class="uc"><span class="ue">🏢</span><h3>Corporate Events</h3><p>Secure conference access for employees and guests. Full audit trails for compliance.</p></div>
       <div class="uc"><span class="ue">🌐</span><h3>Tech Conferences</h3><p>Replace badge printing with instant face recognition at every entry point.</p></div>
-      <div class="uc"><span class="ue">🎰</span><h3>Nightclubs &amp; Venues</h3><p>Age verification and ID checks automated at the door. Real-time digital guest list.</p></div>
-      <div class="uc"><span class="ue">🔐</span><h3>High-Security Facilities</h3><p>Government-grade MRZ parsing plus AI facial recognition where identity is non-negotiable.</p></div>
+<div class="uc"><span class="ue">🔐</span><h3>High-Security Facilities</h3><p>Government-grade MRZ parsing plus AI facial recognition where identity is non-negotiable.</p></div>
     </div>
   </div>
 </section>
@@ -202,8 +199,7 @@
     <div class="trow">
       <div class="tp"><span>⚡</span>FastAPI (Python 3.11)</div>
       <div class="tp"><span>🧠</span>dlib Face Recognition</div>
-      <div class="tp"><span>📄</span>PassportEye MRZ</div>
-      <div class="tp"><span>🔡</span>Tesseract OCR</div>
+<div class="tp"><span>🔡</span>Tesseract OCR</div>
       <div class="tp"><span>⛓️</span>Blockchain Ticket Hashing</div>
       <div class="tp"><span>🔐</span>bcrypt Auth</div>
       <div class="tp"><span>📲</span>QR Code Generation</div>
@@ -223,8 +219,7 @@
           <tr><td>Identity-locked tickets</td><td class="cx">✗</td><td class="cx">✗</td><td class="ck">✓</td></tr>
           <tr><td>AI face verification at entry</td><td class="cx">✗</td><td class="cx">✗</td><td class="ck">✓</td></tr>
           <tr><td>Blockchain fraud prevention</td><td class="cx">✗</td><td class="cx">✗</td><td class="ck">✓</td></tr>
-          <tr><td>MRZ government ID parsing</td><td class="cx">✗</td><td class="cx">✗</td><td class="ck">✓</td></tr>
-          <tr><td>Real-time attendance dashboard</td><td class="cx">✗</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+<tr><td>Real-time attendance dashboard</td><td class="cx">✗</td><td class="ck">✓</td><td class="ck">✓</td></tr>
           <tr><td>On-premise deployment</td><td class="ck">✓</td><td class="cx">✗</td><td class="ck">✓</td></tr>
           <tr><td>No physical tickets needed</td><td class="cx">✗</td><td class="ck">✓</td><td class="ck">✓</td></tr>
         </tbody>
@@ -237,36 +232,8 @@
   <div class="container">
     <span class="tag">Pricing</span>
     <h2 class="sec-title">Transparent pricing for every scale</h2>
-    <p class="sec-sub">From single events to full stadium deployments. Custom enterprise contracts available.</p>
+    <p class="sec-sub">Custom enterprise contracts for stadiums, venues, and organisations of every scale.</p>
     <div class="pgrid">
-      <div class="pc">
-        <div class="pt">Starter</div>
-        <div class="pa"><sup>$</sup>499<span class="pp">/ event</span></div>
-        <p class="pd">Perfect for organisers running one-off events up to 2,000 attendees.</p>
-        <ul class="pfl">
-          <li><span class="ch">✓</span>Up to 2,000 attendees</li>
-          <li><span class="ch">✓</span>AI face verification</li>
-          <li><span class="ch">✓</span>QR + blockchain tickets</li>
-          <li><span class="ch">✓</span>Organizer dashboard</li>
-          <li><span class="ch">✓</span>Email support</li>
-        </ul>
-        <button class="bp">Get started</button>
-      </div>
-      <div class="pc feat">
-        <div class="pb">Most Popular</div>
-        <div class="pt">Professional</div>
-        <div class="pa"><sup>$</sup>1,999<span class="pp">/ month</span></div>
-        <p class="pd">For venues and promoters running multiple events per month with high security needs.</p>
-        <ul class="pfl">
-          <li><span class="ch">✓</span>Unlimited events</li>
-          <li><span class="ch">✓</span>Up to 20,000 attendees / event</li>
-          <li><span class="ch">✓</span>MRZ government ID parsing</li>
-          <li><span class="ch">✓</span>Advanced analytics</li>
-          <li><span class="ch">✓</span>Priority support &amp; SLA</li>
-          <li><span class="ch">✓</span>Multi-gate deployment</li>
-        </ul>
-        <button class="bp ac">Get started</button>
-      </div>
       <div class="pc">
         <div class="pt">Enterprise</div>
         <div class="pa">Custom</div>
