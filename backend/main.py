@@ -88,6 +88,7 @@ def get_all_events():
 
 # Serve static files
 app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+app.mount("/assets", StaticFiles(directory=Path(__file__).parent.parent / "assets"), name="assets")
 app.mount("/tickets", StaticFiles(directory=tickets_path), name="tickets")
 app.mount("/faces", StaticFiles(directory=faces_dir_path), name="faces")
 app.mount("/live_faces", StaticFiles(directory=live_faces_dir), name="live_faces")
