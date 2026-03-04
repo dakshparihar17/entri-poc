@@ -15,7 +15,6 @@
     html { scroll-behavior: smooth; background: #030c16; }
     body { font-family: 'Inter', sans-serif; background: linear-gradient(165deg, #030c16 0%, #020a13 55%, #040e1c 100%); min-height: 100vh; color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-    /* ── NAV ── */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 18px 60px; background: rgba(3,12,22,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
     .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #fff 30%, var(--accent2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     nav ul { list-style: none; display: flex; gap: 36px; }
@@ -24,7 +23,6 @@
     .nav-cta { background: var(--accent); color: #fff; border: none; padding: 10px 22px; border-radius: 8px; font-size: .9rem; font-weight: 600; cursor: pointer; transition: background .2s; }
     .nav-cta:hover { background: #0284c7; }
 
-    /* ── HERO SPLIT ── */
     .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 60px 80px; position: relative; overflow: hidden; }
     .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 65% 55% at 15% 50%, rgba(14,165,233,.14) 0%, transparent 65%), radial-gradient(ellipse 40% 35% at 85% 15%, rgba(16,185,129,.09) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 60% 90%, rgba(14,165,233,.06) 0%, transparent 55%); }
     .hero-grid { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(56,189,248,.18) 1px, transparent 1px); background-size: 30px 30px; mask-image: radial-gradient(ellipse 85% 75% at 30% 45%, black 15%, transparent 72%); }
@@ -46,7 +44,6 @@
     .btn-g { background: transparent; color: var(--text); border: 1px solid var(--border); padding: 15px 32px; border-radius: 10px; font-size: .95rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; transition: all .25s; }
     .btn-g:hover { border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.04); }
 
-    /* Hero visual */
     .hero-visual { position: relative; border-radius: 18px; border: 1px solid rgba(14,165,233,.25); box-shadow: 0 30px 80px rgba(0,0,0,.5), 0 0 60px rgba(14,165,233,.12); overflow: hidden; background: var(--surface2); }
     .hero-visual-bar { background: var(--surface); padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
     .vdot { width: 10px; height: 10px; border-radius: 50%; }
@@ -54,7 +51,6 @@
     .vurl { background: rgba(255,255,255,.06); border-radius: 6px; padding: 4px 12px; font-size: .72rem; color: var(--muted); margin-left: 10px; flex: 1; max-width: 220px; }
     .hero-visual img { width: 100%; display: block; }
 
-    /* Floating badges on screenshot */
     .float-badges { position: absolute; bottom: -16px; left: -16px; display: flex; flex-direction: column; gap: 10px; }
     .fbadge { background: var(--surface); border: 1px solid rgba(14,165,233,.3); border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.4); backdrop-filter: blur(10px); white-space: nowrap; }
     .fbadge .fi { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
@@ -63,7 +59,6 @@
     .fbadge .fv { font-size: .95rem; font-weight: 800; color: var(--text); }
     .fbadge .fl2 { font-size: .72rem; color: var(--muted); }
 
-    /* Stats row */
     .hero-stats { position: relative; z-index: 1; max-width: 1200px; margin: 56px auto 0; display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     .hstat { flex: 1; padding: 28px 32px; background: var(--surface2); text-align: center; border-right: 1px solid var(--border); transition: background .2s; }
     .hstat:last-child { border-right: none; }
@@ -71,14 +66,12 @@
     .hstat .n { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--accent2), var(--green)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .hstat .l { font-size: .78rem; color: var(--muted); margin-top: 6px; }
 
-    /* ── TRUSTED BY ── */
     .trusted { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 36px 60px; display: flex; align-items: center; gap: 48px; overflow: hidden; }
     .trusted-label { font-size: .75rem; font-weight: 700; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
     .trusted-logos { display: flex; gap: 48px; align-items: center; flex: 1; justify-content: space-around; }
     .tlogo { font-size: .95rem; font-weight: 700; color: rgba(255,255,255,.2); letter-spacing: -.01em; transition: color .2s; white-space: nowrap; }
     .tlogo:hover { color: rgba(255,255,255,.4); }
 
-    /* ── SHARED SECTION STYLES ── */
     section { padding: 100px 24px; }
     .container { max-width: 1160px; margin: 0 auto; }
     .tag { display: inline-block; color: var(--accent2); font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 16px; }
@@ -86,7 +79,6 @@
     .sec-sub { color: var(--muted); font-size: 1rem; line-height: 1.75; max-width: 540px; margin-top: 14px; }
     .alt { background: var(--surface); }
 
-    /* ── HOW IT WORKS — SIDE-BY-SIDE ── */
     .hiw-rows { margin-top: 72px; display: flex; flex-direction: column; gap: 80px; }
     .hiw-row { display: flex; align-items: center; gap: 72px; }
     .hiw-row.rev { flex-direction: row-reverse; }
@@ -99,15 +91,6 @@
     .hiw-img { border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.4); width: 100%; display: block; transition: transform .3s; }
     .hiw-img:hover { transform: translateY(-4px); }
 
-    /* ── FEATURES ── */
-    .feat-highlight { margin-top: 48px; padding: 36px 40px; border-radius: var(--radius); background: linear-gradient(135deg, rgba(14,165,233,.12), rgba(16,185,129,.06)); border: 1px solid rgba(14,165,233,.2); display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
-    .fh-left h3 { font-size: 1.4rem; font-weight: 800; letter-spacing: -.03em; margin-bottom: 8px; }
-    .fh-left p { color: var(--muted); font-size: .9rem; line-height: 1.6; max-width: 400px; }
-    .fh-stats { display: flex; gap: 32px; flex-wrap: wrap; margin-left: auto; }
-    .fhs { text-align: center; }
-    .fhs .n { font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent2), var(--green)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    .fhs .l { font-size: .72rem; color: var(--muted); margin-top: 4px; }
-
     .fgrid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 20px; margin-top: 28px; }
     .fc { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; transition: border-color .2s, transform .2s; position: relative; overflow: hidden; }
     .fc::before { content:''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 0 0,rgba(14,165,233,.08),transparent); opacity: 0; transition: opacity .3s; }
@@ -118,7 +101,6 @@
     .fc p { color: var(--muted); font-size: .88rem; line-height: 1.65; }
     .ftag { display: inline-block; margin-top: 16px; font-size: .72rem; font-weight: 700; color: var(--green); background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.2); padding: 4px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: .05em; }
 
-    /* ── USE CASES ── */
     .ugrid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 20px; margin-top: 60px; }
     .uc { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px 28px; transition: all .25s; }
     .uc:hover { border-color: rgba(14,165,233,.4); background: #051018; transform: translateY(-3px); }
@@ -126,13 +108,6 @@
     .uc h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
     .uc p { color: var(--muted); font-size: .88rem; line-height: 1.6; }
 
-    /* ── TECHNOLOGY STACK ── */
-    .trow { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
-    .tp { background: var(--surface2); border: 1px solid var(--border); padding: 10px 20px; border-radius: 100px; font-size: .85rem; font-weight: 600; color: var(--muted); transition: all .2s; }
-    .tp:hover { color: var(--text); border-color: rgba(14,165,233,.4); }
-    .tp span { color: var(--accent2); margin-right: 6px; }
-
-    /* ── COMPARISON TABLE ── */
     .tw { margin-top: 56px; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; background: var(--surface2); border-radius: var(--radius); overflow: hidden; }
     thead { background: rgba(14,165,233,.12); }
@@ -142,7 +117,6 @@
     .ck { color: var(--green); } .cx { color: #444; }
     tr:hover td { background: rgba(255,255,255,.02); }
 
-    /* ── SCREENSHOTS ── */
     .screenshots { padding: 100px 24px; background: var(--surface); }
     .screenshots .container { max-width: 1200px; margin: 0 auto; }
     .screenshots-header { text-align: center; margin-bottom: 56px; }
@@ -162,7 +136,6 @@
     .screen-img:hover { transform: translateY(-4px); }
     .screen-caption { margin-top: 12px; font-size: 12px; color: var(--muted); text-align: center; font-weight: 500; }
 
-    /* ── PRICING ── */
     .pgrid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 24px; margin-top: 60px; align-items: start; }
     .pc { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 36px; position: relative; transition: transform .2s; }
     .pc:hover { transform: translateY(-4px); }
@@ -181,18 +154,6 @@
     .bp.ac { background: var(--accent); border-color: var(--accent); color: #fff; }
     .bp.ac:hover { background: #0284c7; }
 
-    /* ── TESTIMONIALS ── */
-    .tgrid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 20px; margin-top: 56px; }
-    .tc { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; transition: border-color .2s; }
-    .tc:hover { border-color: rgba(14,165,233,.3); }
-    .stars { color: #f59e0b; font-size: .9rem; margin-bottom: 16px; }
-    .tc p { color: var(--muted); font-size: .92rem; line-height: 1.7; }
-    .ta { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
-    .av { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .85rem; flex-shrink: 0; }
-    .an { font-size: .9rem; font-weight: 700; }
-    .ar { font-size: .78rem; color: var(--muted); }
-
-    /* ── FAQ ── */
     .faq-list { margin-top: 56px; display: flex; flex-direction: column; gap: 4px; }
     .faq-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color .2s; }
     .faq-item.open { border-color: rgba(14,165,233,.35); }
@@ -203,13 +164,11 @@
     .faq-a { display: none; padding: 0 28px 22px; color: var(--muted); font-size: .9rem; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 18px; }
     .faq-item.open .faq-a { display: block; }
 
-    /* ── CTA ── */
     .cta { text-align: center; padding: 120px 24px; background: radial-gradient(ellipse 80% 60% at 50% 100%,rgba(14,165,233,.15),transparent 70%); }
     .cta h2 { font-size: clamp(2.2rem,5vw,4rem); font-weight: 900; letter-spacing: -.04em; max-width: 700px; margin: 0 auto 20px; }
     .cta p { color: var(--muted); font-size: 1.1rem; max-width: 480px; margin: 0 auto 44px; line-height: 1.7; }
     .ca { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
-    /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); padding: 72px 60px 0; }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
     .footer-brand .fl { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg,#fff 30%,var(--accent2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; }
@@ -224,10 +183,8 @@
     .footer-bottom { border-top: 1px solid var(--border); margin-top: 56px; padding: 24px 0; display: flex; align-items: center; justify-content: space-between; }
     .footer-bottom p { color: var(--muted); font-size: .82rem; }
 
-    /* ── DIVIDER ── */
     .div { height: 1px; background: var(--border); }
 
-    /* ── RESPONSIVE ── */
     @media(max-width:900px){
       nav { padding: 16px 24px; }
       nav ul { display: none; }
@@ -253,7 +210,6 @@
 </head>
 <body>
 
-<!-- ── NAV ── -->
 <nav>
   <div class="logo">entri</div>
   <ul>
@@ -265,13 +221,10 @@
   <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Demo</button>
 </nav>
 
-<!-- ── HERO ── -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-
   <div class="hero-split">
-    <!-- Left: copy -->
     <div class="hero-left">
       <div class="badge"><span class="dot"></span>Now available for enterprise</div>
       <h1>Your face is<br/><span class="g">the ticket.</span></h1>
@@ -281,8 +234,6 @@
         <a href="#how" class="btn-g">See how it works ↓</a>
       </div>
     </div>
-
-    <!-- Right: app preview -->
     <div class="hero-right">
       <div class="hero-visual">
         <div class="hero-visual-bar">
@@ -293,27 +244,18 @@
         </div>
         <img src="/assets/screenshots/organiser-events.png" alt="Entri organiser dashboard" />
       </div>
-      <!-- Floating stat badges -->
       <div class="float-badges">
         <div class="fbadge">
           <div class="fi green">✓</div>
-          <div>
-            <div class="fv">99.9%</div>
-            <div class="fl2">Identity match accuracy</div>
-          </div>
+          <div><div class="fv">99.9%</div><div class="fl2">Identity match accuracy</div></div>
         </div>
         <div class="fbadge">
           <div class="fi purple">⚡</div>
-          <div>
-            <div class="fv">&lt;1s</div>
-            <div class="fl2">Face scan at gate</div>
-          </div>
+          <div><div class="fv">&lt;1s</div><div class="fl2">Face scan at gate</div></div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Stats bar -->
   <div class="hero-stats">
     <div class="hstat"><div class="n">&lt;1s</div><div class="l">Face verification speed</div></div>
     <div class="hstat"><div class="n">99.9%</div><div class="l">Identity match accuracy</div></div>
@@ -322,7 +264,6 @@
   </div>
 </section>
 
-<!-- ── TRUSTED BY ── -->
 <div class="trusted">
   <span class="trusted-label">Trusted by operators globally</span>
   <div class="trusted-logos">
@@ -334,15 +275,12 @@
   </div>
 </div>
 
-<!-- ── HOW IT WORKS ── -->
 <section class="alt" id="how">
   <div class="container">
     <span class="tag">How it works</span>
     <h2 class="sec-title">From sign-up to entry in three steps</h2>
     <p class="sec-sub">Entri replaces the entire ticketing and access control workflow with a seamless, identity-first experience.</p>
-
     <div class="hiw-rows">
-      <!-- Step 1 -->
       <div class="hiw-row">
         <div class="hiw-text">
           <div class="hiw-num">01</div>
@@ -354,8 +292,6 @@
           <img class="hiw-img" src="/assets/screenshots/user-dashboard.png" alt="Verified user dashboard with live selfie" loading="lazy" />
         </div>
       </div>
-
-      <!-- Step 2 -->
       <div class="hiw-row rev">
         <div class="hiw-text">
           <div class="hiw-num">02</div>
@@ -367,8 +303,6 @@
           <img class="hiw-img" src="/assets/screenshots/tickets.png" alt="Attendee ticket wallet" loading="lazy" />
         </div>
       </div>
-
-      <!-- Step 3 -->
       <div class="hiw-row">
         <div class="hiw-text">
           <div class="hiw-num">03</div>
@@ -384,38 +318,20 @@
   </div>
 </section>
 
-<!-- ── FEATURES ── -->
 <section id="features">
   <div class="container">
     <span class="tag">Features</span>
     <h2 class="sec-title">Everything security &amp; operations need</h2>
     <p class="sec-sub">Built for the people running the show — organizers, stadium ops, and security teams.</p>
-
-    <!-- Highlight banner -->
-    <div class="feat-highlight">
-      <div class="fh-left">
-        <h3>AI face match at <span class="g">&lt;1 second</span></h3>
-        <p>Powered by dlib — trusted by security researchers globally. Sub-second ID photo vs. live selfie matching with full liveness detection built in.</p>
-      </div>
-      <div class="fh-stats">
-        <div class="fhs"><div class="n">dlib</div><div class="l">Face engine</div></div>
-        <div class="fhs"><div class="n">128-D</div><div class="l">Face encoding</div></div>
-        <div class="fhs"><div class="n">0.6</div><div class="l">Match threshold</div></div>
-      </div>
-    </div>
-
     <div class="fgrid">
-      <div class="fc"><div class="fi">🧠</div><h3>AI Face Verification</h3><p>Sub-second ID photo vs. live selfie matching with liveness detection. Powered by dlib — trusted by security researchers globally.</p><span class="ftag">AI-powered</span></div>
       <div class="fc"><div class="fi">⛓️</div><h3>Blockchain-Backed Tickets</h3><p>Every ticket is cryptographically hashed and anchored to the holder's identity. No reselling, no fraud, no stolen tickets. Immutable by design.</p><span class="ftag">Fraud-proof</span></div>
       <div class="fc"><div class="fi">📊</div><h3>Organizer Dashboard</h3><p>Create events, track real-time attendance, scan faces at entry, and review access logs — from one clean purpose-built dashboard.</p><span class="ftag">Real-time</span></div>
       <div class="fc"><div class="fi">📲</div><h3>QR Code Tickets</h3><p>Server-side generated QR codes, cryptographically bound to the attendee's verified identity. Offline-ready at the gate.</p><span class="ftag">Offline-ready</span></div>
       <div class="fc"><div class="fi">🔒</div><h3>Privacy-First Architecture</h3><p>Face data processed on your infrastructure. bcrypt hashing, cookie-based sessions. No third-party biometric cloud required.</p><span class="ftag">On-premise</span></div>
-      <div class="fc"><div class="fi">🔡</div><h3>MRZ / OCR Parsing</h3><p>Government-grade Machine Readable Zone parsing via Tesseract OCR at signup. Automatically extracts name, DOB, and nationality from passports and ID cards.</p><span class="ftag">Gov-grade</span></div>
     </div>
   </div>
 </section>
 
-<!-- ── SCREENSHOTS ── -->
 <section class="screenshots" id="screenshots">
   <div class="container">
     <div class="screenshots-header">
@@ -423,7 +339,6 @@
       <h2 class="sec-title">The full platform, built and working</h2>
       <p class="sec-sub">Real screens from the live Entri platform — organiser tools, attendee dashboards, and face-scan entry, all in one place.</p>
     </div>
-
     <div class="screen-tabs">
       <button class="screen-tab active" onclick="showScreen('organiser', this)">Organiser Dashboard</button>
       <button class="screen-tab" onclick="showScreen('attendees', this)">Attendee View</button>
@@ -431,7 +346,6 @@
       <button class="screen-tab" onclick="showScreen('user', this)">User Dashboard</button>
       <button class="screen-tab" onclick="showScreen('create', this)">Create Event</button>
     </div>
-
     <div class="screen-panels">
       <div class="screen-panel active" id="screen-organiser">
         <div>
@@ -471,7 +385,6 @@
   </div>
 </section>
 
-<!-- ── USE CASES ── -->
 <section class="alt" id="usecases">
   <div class="container">
     <span class="tag">Use cases</span>
@@ -482,30 +395,11 @@
       <div class="uc"><span class="ue">🎪</span><h3>Music Festivals</h3><p>Identity-locked tickets that can't be transferred or duplicated. Reduce queue times dramatically.</p></div>
       <div class="uc"><span class="ue">🏢</span><h3>Corporate Events</h3><p>Secure conference access for employees and guests. Full audit trails for compliance.</p></div>
       <div class="uc"><span class="ue">🌐</span><h3>Tech Conferences</h3><p>Replace badge printing with instant face recognition at every entry point.</p></div>
-      <div class="uc"><span class="ue">🔐</span><h3>High-Security Facilities</h3><p>Government-grade MRZ parsing plus AI facial recognition where identity is non-negotiable.</p></div>
+      <div class="uc"><span class="ue">🔐</span><h3>High-Security Facilities</h3><p>Government-grade identity verification where getting it wrong is not an option.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ── TECHNOLOGY ── -->
-<section>
-  <div class="container">
-    <span class="tag">Technology</span>
-    <h2 class="sec-title">Enterprise-grade stack. No black boxes.</h2>
-    <p class="sec-sub">Built on proven, auditable open technologies. Deploy on your infrastructure and own your data.</p>
-    <div class="trow">
-      <div class="tp"><span>⚡</span>FastAPI (Python 3.11)</div>
-      <div class="tp"><span>🧠</span>dlib Face Recognition</div>
-      <div class="tp"><span>🔡</span>Tesseract OCR</div>
-      <div class="tp"><span>⛓️</span>Blockchain Ticket Hashing</div>
-      <div class="tp"><span>🔐</span>bcrypt Auth</div>
-      <div class="tp"><span>📲</span>QR Code Generation</div>
-      <div class="tp"><span>🐍</span>Uvicorn ASGI</div>
-    </div>
-  </div>
-</section>
-
-<!-- ── COMPARISON ── -->
 <section class="alt">
   <div class="container">
     <span class="tag">Why Entri</span>
@@ -526,7 +420,6 @@
   </div>
 </section>
 
-<!-- ── PRICING ── -->
 <section id="pricing">
   <div class="container">
     <span class="tag">Pricing</span>
@@ -551,93 +444,36 @@
   </div>
 </section>
 
-<!-- ── TESTIMONIALS ── -->
-<section class="alt">
-  <div class="container">
-    <span class="tag">Early feedback</span>
-    <h2 class="sec-title">What operators are saying</h2>
-    <div class="tgrid">
-      <div class="tc">
-        <div class="stars">★★★★★</div>
-        <p>"We ran a 5,000-person festival with Entri and eliminated all counterfeit tickets. Entry lines moved faster than ever. The face-scan at the gate is genuinely brilliant."</p>
-        <div class="ta"><div class="av" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)">JK</div><div><div class="an">James K.</div><div class="ar">Festival Director, UrbanSound Events</div></div></div>
-      </div>
-      <div class="tc">
-        <div class="stars">★★★★★</div>
-        <p>"Stadium ops was skeptical. After the pilot, leadership asked for a full-season contract immediately. The real-time attendance dashboard alone is worth it."</p>
-        <div class="ta"><div class="av" style="background:linear-gradient(135deg,#10b981,#0ea5e9)">SR</div><div><div class="an">Sanjay R.</div><div class="ar">Head of IT, Metropolitan Arena Group</div></div></div>
-      </div>
-      <div class="tc">
-        <div class="stars">★★★★★</div>
-        <p>"800 attendees. Zero badge mix-ups, zero gate crashes. Blockchain audit logs gave our compliance team everything they needed for the post-event report."</p>
-        <div class="ta"><div class="av" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">ML</div><div><div class="an">Maya L.</div><div class="ar">Operations Lead, TechForward Conference</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── FAQ ── -->
 <section id="faq">
   <div class="container">
     <span class="tag">FAQ</span>
     <h2 class="sec-title">Common questions, answered</h2>
     <p class="sec-sub">Everything you need to know before deploying Entri at your venue.</p>
-
     <div class="faq-list">
       <div class="faq-item open">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          How does face verification work?
-          <span class="faq-arrow">▾</span>
-        </div>
-        <div class="faq-a">
-          At signup, the attendee uploads a government-issued ID and takes a live selfie. Entri uses dlib to extract 128-dimensional face encodings from both images and computes the Euclidean distance. A distance below 0.6 confirms a match. Liveness detection ensures the selfie is taken in real time, preventing photo spoofing.
-        </div>
+        <div class="faq-q" onclick="toggleFaq(this)">How does face verification work?<span class="faq-arrow">▾</span></div>
+        <div class="faq-a">At signup, the attendee uploads a government-issued ID and takes a live selfie. Entri uses dlib to extract 128-dimensional face encodings from both images and computes the Euclidean distance. A distance below 0.6 confirms a match. Liveness detection ensures the selfie is taken in real time, preventing photo spoofing.</div>
       </div>
-
       <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          What stops someone from using a printed photo to spoof the system?
-          <span class="faq-arrow">▾</span>
-        </div>
-        <div class="faq-a">
-          Entri's liveness detection flags static images by analysing natural micro-movements and eye blink patterns during the capture window. Additionally, the gate-scan compares the live face against the stored verified encoding — not a stored photo — making it significantly harder to spoof with printed materials.
-        </div>
+        <div class="faq-q" onclick="toggleFaq(this)">What stops someone from using a printed photo to spoof the system?<span class="faq-arrow">▾</span></div>
+        <div class="faq-a">Entri's liveness detection flags static images by analysing natural micro-movements and eye blink patterns during the capture window. Additionally, the gate-scan compares the live face against the stored verified encoding — not a stored photo — making it significantly harder to spoof with printed materials.</div>
       </div>
-
       <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Can an attendee transfer their ticket to another person?
-          <span class="faq-arrow">▾</span>
-        </div>
-        <div class="faq-a">
-          No. Every ticket is cryptographically hashed and anchored to the identity of the person who purchased it. The hash incorporates the attendee's verified face encoding, meaning the ticket is biometrically locked. Even if a QR code were shared, the face at the gate would not match and entry would be denied.
-        </div>
+        <div class="faq-q" onclick="toggleFaq(this)">Can an attendee transfer their ticket to another person?<span class="faq-arrow">▾</span></div>
+        <div class="faq-a">No. Every ticket is cryptographically hashed and anchored to the identity of the person who purchased it. The hash incorporates the attendee's verified face encoding, meaning the ticket is biometrically locked. Even if a QR code were shared, the face at the gate would not match and entry would be denied.</div>
       </div>
-
       <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Is biometric data stored on the cloud or third-party servers?
-          <span class="faq-arrow">▾</span>
-        </div>
-        <div class="faq-a">
-          No. Entri is designed for on-premise deployment. All face encodings, ID photos, and live selfies are stored on your own infrastructure. No biometric data is sent to third-party cloud services. You own your data entirely.
-        </div>
+        <div class="faq-q" onclick="toggleFaq(this)">Is biometric data stored on the cloud or third-party servers?<span class="faq-arrow">▾</span></div>
+        <div class="faq-a">No. Entri is designed for on-premise deployment. All face encodings, ID photos, and live selfies are stored on your own infrastructure. No biometric data is sent to third-party cloud services. You own your data entirely.</div>
       </div>
-
       <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          What hardware is needed at the entry gate?
-          <span class="faq-arrow">▾</span>
-        </div>
-        <div class="faq-a">
-          Any device with a standard webcam or IP camera running a browser with access to the Entri organiser dashboard. No dedicated hardware is required. A laptop or tablet at each gate is sufficient for most venues. For high-volume entry points, Entri's API supports integration with purpose-built camera kiosks.
-        </div>
+        <div class="faq-q" onclick="toggleFaq(this)">What hardware is needed at the entry gate?<span class="faq-arrow">▾</span></div>
+        <div class="faq-a">Any device with a standard webcam or IP camera running a browser with access to the Entri organiser dashboard. No dedicated hardware is required. A laptop or tablet at each gate is sufficient for most venues. For high-volume entry points, Entri's API supports integration with purpose-built camera kiosks.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CTA ── -->
 <section class="cta" id="contact">
   <h2>Ready to make queues<br/><span class="g">a thing of the past?</span></h2>
   <p>Book a live demo and see Entri in action — from ID upload to face-scan entry in under a minute.</p>
@@ -647,10 +483,8 @@
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
 <footer>
   <div class="footer-grid">
-    <!-- Brand -->
     <div class="footer-brand">
       <span class="fl">entri</span>
       <p>Identity-first event access. AI face verification, blockchain-backed tickets, and frictionless gate entry — built for the people running the show.</p>
@@ -658,8 +492,6 @@
         <a class="fsoc" href="https://github.com/dakshparihar17/entri-poc" target="_blank" title="GitHub">⌥</a>
       </div>
     </div>
-
-    <!-- Product -->
     <div class="footer-col">
       <h4>Product</h4>
       <ul>
@@ -670,8 +502,6 @@
         <li><a href="#screenshots">Screenshots</a></li>
       </ul>
     </div>
-
-    <!-- Resources -->
     <div class="footer-col">
       <h4>Resources</h4>
       <ul>
@@ -681,8 +511,6 @@
         <li><a href="#how">Documentation</a></li>
       </ul>
     </div>
-
-    <!-- Company -->
     <div class="footer-col">
       <h4>Company</h4>
       <ul>
@@ -693,7 +521,6 @@
       </ul>
     </div>
   </div>
-
   <div class="footer-bottom">
     <p>© 2025 Entri. Identity. Simplified.</p>
     <p>Built with FastAPI, dlib, and ❤️</p>
@@ -707,13 +534,10 @@
     document.getElementById('screen-' + name).classList.add('active');
     btn.classList.add('active');
   }
-
   function toggleFaq(el) {
     const item = el.parentElement;
     const isOpen = item.classList.contains('open');
-    // Close all
     document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    // Open clicked if it was closed
     if (!isOpen) item.classList.add('open');
   }
 </script>
