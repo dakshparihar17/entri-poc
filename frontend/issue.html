@@ -10,28 +10,30 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary: #5B21B6;
-      --primary-light: #7C3AED;
-      --primary-dark: #3B0764;
-      --accent: #F59E0B;
-      --bg: #F5F3FF;
-      --card: #FFFFFF;
-      --text: #1E1B4B;
-      --text-muted: #6B7280;
-      --border: #DDD6FE;
-      --success: #059669;
-      --error: #DC2626;
+      --bg: #030c16;
+      --surface: #071828;
+      --surface2: #0c1f32;
+      --border: rgba(255,255,255,0.07);
+      --accent: #0ea5e9;
+      --accent2: #38bdf8;
+      --green: #10b981;
+      --text: #eef4ff;
+      --muted: #5a7fa0;
     }
+
+    html { background: #030c16; }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
+      background: linear-gradient(165deg, #030c16 0%, #020a13 55%, #040e1c 100%);
       min-height: 100vh;
       color: var(--text);
+      -webkit-font-smoothing: antialiased;
     }
 
     header {
-      background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+      background: rgba(3,12,22,0.85);
+      backdrop-filter: blur(20px);
       padding: 0 40px;
       height: 64px;
       display: flex;
@@ -40,7 +42,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 20px rgba(59, 7, 100, 0.3);
+      border-bottom: 1px solid var(--border);
     }
 
     .logo {
@@ -50,44 +52,27 @@
       text-decoration: none;
     }
 
-    .logo-diamond {
-      position: relative;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .logo-diamond::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: #F59E0B;
-      transform: rotate(45deg);
-      border-radius: 8px;
-    }
-
-    .logo-diamond img {
-      position: relative;
-      z-index: 1;
-      height: 28px;
-      filter: brightness(0);
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 30%, var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .back-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: rgba(255,255,255,0.7);
+      color: var(--muted);
       font-size: 13px;
       font-weight: 500;
       text-decoration: none;
       transition: color 0.2s;
     }
 
-    .back-link:hover { color: white; }
+    .back-link:hover { color: var(--accent2); }
 
     main {
       display: flex;
@@ -98,17 +83,18 @@
     }
 
     .issue-card {
-      background: var(--card);
+      background: var(--surface);
       border-radius: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(91, 33, 182, 0.1);
       border: 1px solid var(--border);
       width: 100%;
       max-width: 480px;
       overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(14,165,233,0.06);
     }
 
     .card-top {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      background: linear-gradient(135deg, #071828 0%, #0c1f32 100%);
+      border-bottom: 1px solid rgba(14,165,233,0.15);
       padding: 32px;
       position: relative;
       overflow: hidden;
@@ -117,19 +103,17 @@
     .card-top::before {
       content: '';
       position: absolute;
-      width: 200px; height: 200px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 50%;
-      top: -60px; right: -60px;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 80% 20%, rgba(14,165,233,0.12) 0%, transparent 60%);
     }
 
     .card-top-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(245,158,11,0.2);
-      border: 1px solid rgba(245,158,11,0.35);
-      color: #FCD34D;
+      background: rgba(14,165,233,0.12);
+      border: 1px solid rgba(14,165,233,0.25);
+      color: var(--accent2);
       padding: 5px 12px;
       border-radius: 100px;
       font-size: 12px;
@@ -142,7 +126,7 @@
     .card-top h2 {
       font-size: 26px;
       font-weight: 800;
-      color: white;
+      color: var(--text);
       letter-spacing: -0.5px;
       position: relative;
       z-index: 1;
@@ -151,7 +135,7 @@
 
     .card-top p {
       font-size: 14px;
-      color: rgba(255,255,255,0.65);
+      color: var(--muted);
       position: relative;
       z-index: 1;
     }
@@ -166,7 +150,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--text);
+      color: var(--muted);
       margin-bottom: 8px;
     }
 
@@ -179,23 +163,26 @@
       font-size: 14px;
       font-family: 'Inter', sans-serif;
       color: var(--text);
-      background: white;
+      background: var(--surface2);
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
       appearance: none;
     }
 
+    .form-group select option {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
     .form-group input:focus,
     .form-group select:focus {
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
     }
 
-    .form-group input::placeholder { color: #C4B5FD; }
+    .form-group input::placeholder { color: var(--muted); opacity: 0.5; }
 
-    .select-wrapper {
-      position: relative;
-    }
+    .select-wrapper { position: relative; }
 
     .select-wrapper::after {
       content: '▾';
@@ -203,7 +190,7 @@
       right: 14px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--text-muted);
+      color: var(--muted);
       pointer-events: none;
       font-size: 14px;
     }
@@ -211,7 +198,7 @@
     .submit-btn {
       width: 100%;
       padding: 14px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      background: var(--accent);
       border: none;
       border-radius: 10px;
       color: white;
@@ -219,13 +206,15 @@
       font-weight: 700;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
       margin-top: 8px;
+      box-shadow: 0 0 24px rgba(14,165,233,0.35);
     }
 
     .submit-btn:hover {
+      background: #0284c7;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(91, 33, 182, 0.4);
+      box-shadow: 0 8px 24px rgba(14,165,233,0.45);
     }
 
     #status {
@@ -240,23 +229,23 @@
 
     #status.success {
       display: block;
-      background: #ECFDF5;
-      color: #065F46;
-      border: 1px solid #A7F3D0;
+      background: rgba(16,185,129,0.1);
+      color: var(--green);
+      border: 1px solid rgba(16,185,129,0.25);
     }
 
     #status.error {
       display: block;
-      background: #FEF2F2;
-      color: #991B1B;
-      border: 1px solid #FECACA;
+      background: rgba(220,38,38,0.1);
+      color: #f87171;
+      border: 1px solid rgba(220,38,38,0.2);
     }
 
     #status.loading {
       display: block;
-      background: #EDE9FE;
-      color: #5B21B6;
-      border: 1px solid #DDD6FE;
+      background: rgba(14,165,233,0.1);
+      color: var(--accent2);
+      border: 1px solid rgba(14,165,233,0.2);
     }
 
     @media (max-width: 600px) {
@@ -270,7 +259,7 @@
 
   <header>
     <a class="logo" href="/homepage.html">
-      <div class="logo-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+      <span class="logo-text">entri</span>
     </a>
     <a class="back-link" href="/dashboard.html">← Back to Dashboard</a>
   </header>
