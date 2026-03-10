@@ -599,6 +599,21 @@
     </div>
   </div>
 
+  <!-- Logout Confirmation Modal -->
+  <div id="logoutModal" class="modal">
+    <div class="modal-content" style="max-width:400px;">
+      <div class="modal-header">
+        <h2>Log out?</h2>
+        <button class="close-btn" id="closeLogoutModal">&times;</button>
+      </div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">You will need to log in again to access the organizer dashboard.</p>
+      <div style="display:flex;gap:12px;">
+        <button class="btn btn-primary" id="confirmLogoutBtn" style="flex:1;justify-content:center;">Yes, log out</button>
+        <button class="btn btn-ghost" id="cancelLogoutBtn" style="flex:1;justify-content:center;">Stay logged in</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Live Scan Modal -->
   <div class="modal" id="liveScanModal">
     <div class="modal-content">
@@ -659,20 +674,55 @@
   </div>
 
   <script>
-    document.getElementById("logoutButton").onclick = async () => {
-      await fetch("/logout", { method: "POST" });
-      window.location.href = "/homepage.html";
-    };
-
     let organizerEmail = null;
     let selectedEventCode = null;
+    let isInternalNavigation = false;
+
+    // Logout button → show confirmation modal
+    document.getElementById("logoutButton").onclick = () => {
+      document.getElementById("logoutModal").classList.add("active");
+    };
+    document.getElementById("closeLogoutModal").onclick = () => {
+      document.getElementById("logoutModal").classList.remove("active");
+    };
+    document.getElementById("cancelLogoutBtn").onclick = () => {
+      document.getElementById("logoutModal").classList.remove("active");
+    };
+    document.getElementById("confirmLogoutBtn").onclick = async () => {
+      isInternalNavigation = true;
+      await fetch("/logout", { method: "POST" });
+      window.location.replace("/homepage.html");
+    };
+
+    // Warn before tab/window close and auto-logout if they leave
+    window.addEventListener('beforeunload', (e) => {
+      if (!isInternalNavigation) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+    window.addEventListener('pagehide', () => {
+      if (!isInternalNavigation) {
+        navigator.sendBeacon('/logout');
+      }
+    });
 
     (async () => {
       try {
         const resUser = await fetch("/user/profile");
-        if (!resUser.ok) throw new Error("Cannot fetch organizer info");
+        if (!resUser.ok) {
+          isInternalNavigation = true;
+          window.location.replace("/login.html");
+          return;
+        }
         const dataUser = await resUser.json();
         organizerEmail = dataUser.email;
+
+        // Prevent back-navigation to this page after logout
+        history.pushState(null, '', window.location.href);
+        window.addEventListener('popstate', () => {
+          history.pushState(null, '', window.location.href);
+        });
 
         const createEventModal = document.getElementById("createEventModal");
         const openBtn = document.getElementById("openModalBtn");
@@ -711,12 +761,8 @@
 
         loadEvents();
       } catch (err) {
-        document.getElementById("eventsContainer").innerHTML = `
-          <div class="no-events">
-            <div class="no-events-icon">⚠️</div>
-            <h3>Error loading events</h3>
-            <p>${err.message}</p>
-          </div>`;
+        isInternalNavigation = true;
+        window.location.replace("/login.html");
       }
     })();
 
@@ -839,7 +885,7 @@
       document.getElementById("attendeesModal").classList.remove("active");
 
     window.onclick = (e) => {
-      ["attendeesModal", "createEventModal"].forEach(id => {
+      ["attendeesModal", "createEventModal", "logoutModal"].forEach(id => {
         const m = document.getElementById(id);
         if (e.target === m) m.classList.remove("active");
       });
