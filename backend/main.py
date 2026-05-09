@@ -50,7 +50,7 @@ blockchain = Blockchain()
 # Serve frontend files
 @app.get("/")
 def root():
-    return FileResponse(frontend_path / "homepage.html")
+    return FileResponse(Path(__file__).parent.parent / "index.html")
 
 @app.get("/issue.html")
 def issue_ticket_page():
@@ -78,7 +78,15 @@ def client_dashboard():
 
 @app.get("/organizer.html")
 def organizer_dashboard():
-    return FileResponse( frontend_path / "organizer.html")  
+    return FileResponse( frontend_path / "organizer.html")
+
+@app.get("/martyn-law.html")
+def martyn_law_page():
+    return FileResponse(frontend_path / "martyn-law.html")
+
+@app.get("/martyn-law-checklist.html")
+def martyn_law_checklist_page():
+    return FileResponse(frontend_path / "martyn-law-checklist.html")
 
 @app.get("/events")
 def get_all_events():
@@ -88,6 +96,7 @@ def get_all_events():
 
 # Serve static files
 app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+app.mount("/assets", StaticFiles(directory=Path(__file__).parent.parent / "assets"), name="assets")
 app.mount("/tickets", StaticFiles(directory=tickets_path), name="tickets")
 app.mount("/faces", StaticFiles(directory=faces_dir_path), name="faces")
 app.mount("/live_faces", StaticFiles(directory=live_faces_dir), name="live_faces")

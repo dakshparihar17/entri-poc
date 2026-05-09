@@ -21,19 +21,19 @@
       --muted: #5a7fa0;
     }
 
-    html { background: var(--bg); }
+    html { background: #030c16; }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
+      background: linear-gradient(165deg, #030c16 0%, #020a13 55%, #040e1c 100%);
       color: var(--text);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
     header {
       background: rgba(3,12,22,0.85);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       padding: 0 40px;
       height: 64px;
       display: flex;
@@ -53,11 +53,11 @@
     }
 
     .logo-text {
-      font-size: 22px;
+      font-size: 1.4rem;
       font-weight: 800;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background: linear-gradient(135deg, #fff 30%, var(--accent2));
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
@@ -77,19 +77,20 @@
 
     .btn-logout {
       padding: 8px 18px;
-      background: rgba(255,255,255,0.06);
+      background: transparent;
       border: 1px solid var(--border);
       border-radius: 8px;
-      color: var(--text);
+      color: var(--muted);
       font-size: 13px;
       font-weight: 600;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
 
     .btn-logout:hover {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
     }
 
     main {
@@ -127,7 +128,7 @@
       font-weight: 700;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -136,33 +137,37 @@
     .btn-primary {
       background: var(--accent);
       color: white;
-      box-shadow: 0 2px 12px rgba(14,165,233,0.3);
+      box-shadow: 0 0 16px rgba(14,165,233,0.25);
     }
 
     .btn-primary:hover {
       background: #0284c7;
-      box-shadow: 0 4px 16px rgba(14,165,233,0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(14,165,233,0.35);
     }
 
     .btn-accent {
-      background: var(--green);
+      background: var(--accent);
       color: white;
-      box-shadow: 0 2px 12px rgba(16,185,129,0.25);
+      box-shadow: 0 0 16px rgba(14,165,233,0.25);
     }
 
     .btn-accent:hover {
-      background: #059669;
-      box-shadow: 0 4px 16px rgba(16,185,129,0.35);
+      background: #0284c7;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(14,165,233,0.35);
     }
 
     .btn-ghost {
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
+      background: transparent;
+      color: var(--muted);
       border: 1px solid var(--border);
     }
 
     .btn-ghost:hover {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      transform: translateY(-1px);
     }
 
     /* Events grid */
@@ -177,16 +182,26 @@
       border-radius: 16px;
       padding: 24px;
       border: 1px solid var(--border);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, border-color 0.2s;
       display: flex;
       flex-direction: column;
       gap: 12px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .event-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(14,165,233,0.08);
+    .event-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 0 0, rgba(14,165,233,0.06), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
     }
+
+    .event-card:hover { transform: translateY(-4px); border-color: rgba(14,165,233,0.3); }
+    .event-card:hover::before { opacity: 1; }
 
     .event-card-header {
       display: flex;
@@ -203,7 +218,7 @@
     }
 
     .event-code-badge {
-      background: rgba(14,165,233,0.1);
+      background: rgba(14,165,233,0.12);
       color: var(--accent2);
       border: 1px solid rgba(14,165,233,0.2);
       font-size: 11px;
@@ -235,7 +250,7 @@
       align-items: center;
       gap: 6px;
       background: rgba(16,185,129,0.1);
-      color: #6ee7b7;
+      color: var(--green);
       border: 1px solid rgba(16,185,129,0.25);
       padding: 4px 12px;
       border-radius: 100px;
@@ -263,10 +278,7 @@
       color: var(--muted);
     }
 
-    .no-events-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
+    .no-events-icon { font-size: 48px; margin-bottom: 16px; }
 
     .no-events h3 {
       font-size: 18px;
@@ -280,8 +292,8 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(6px);
+      background: rgba(2,10,19,0.88);
+      backdrop-filter: blur(8px);
       z-index: 200;
       justify-content: center;
       align-items: center;
@@ -298,7 +310,7 @@
       max-width: 540px;
       max-height: 85vh;
       overflow-y: auto;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 40px rgba(14,165,233,0.08);
       position: relative;
       animation: scaleUp 0.25s ease;
     }
@@ -326,7 +338,7 @@
     .close-btn {
       width: 32px; height: 32px;
       border-radius: 50%;
-      border: none;
+      border: 1px solid var(--border);
       background: var(--surface2);
       color: var(--muted);
       font-size: 18px;
@@ -338,7 +350,7 @@
       line-height: 1;
     }
 
-    .close-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+    .close-btn:hover { background: rgba(14,165,233,0.15); color: var(--accent2); }
 
     .form-group { margin-bottom: 18px; }
 
@@ -348,7 +360,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--text);
+      color: var(--muted);
       margin-bottom: 8px;
     }
 
@@ -367,8 +379,10 @@
 
     .form-group input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
     }
+
+    .form-group input::placeholder { color: var(--muted); opacity: 0.5; }
 
     .status-message {
       margin-top: 14px;
@@ -404,12 +418,13 @@
     }
 
     .attendees-table tr:last-child td { border-bottom: none; }
-    .attendees-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .attendees-table tr:hover td { background: rgba(14,165,233,0.04); }
 
     .attendance-yes {
       display: inline-block;
-      background: rgba(16,185,129,0.1);
-      color: #6ee7b7;
+      background: rgba(16,185,129,0.12);
+      color: var(--green);
+      border: 1px solid rgba(16,185,129,0.25);
       padding: 3px 10px;
       border-radius: 100px;
       font-size: 11px;
@@ -418,8 +433,9 @@
 
     .attendance-no {
       display: inline-block;
-      background: rgba(239,68,68,0.1);
-      color: #fca5a5;
+      background: rgba(220,38,38,0.1);
+      color: #f87171;
+      border: 1px solid rgba(220,38,38,0.2);
       padding: 3px 10px;
       border-radius: 100px;
       font-size: 11px;
@@ -468,9 +484,9 @@
     #liveVideo {
       width: 100%;
       border-radius: 14px;
-      border: 2px solid var(--border);
+      border: 2px solid rgba(14,165,233,0.25);
       margin-bottom: 16px;
-      background: #000;
+      background: var(--surface2);
     }
 
     @media (max-width: 600px) {
@@ -583,6 +599,21 @@
     </div>
   </div>
 
+  <!-- Logout Confirmation Modal -->
+  <div id="logoutModal" class="modal">
+    <div class="modal-content" style="max-width:400px;">
+      <div class="modal-header">
+        <h2>Log out?</h2>
+        <button class="close-btn" id="closeLogoutModal">&times;</button>
+      </div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">You will need to log in again to access the organizer dashboard.</p>
+      <div style="display:flex;gap:12px;">
+        <button class="btn btn-primary" id="confirmLogoutBtn" style="flex:1;justify-content:center;">Yes, log out</button>
+        <button class="btn btn-ghost" id="cancelLogoutBtn" style="flex:1;justify-content:center;">Stay logged in</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Live Scan Modal -->
   <div class="modal" id="liveScanModal">
     <div class="modal-content">
@@ -609,27 +640,27 @@
         <div style="background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:20px;">
           <div style="display:flex; flex-direction:column; gap:10px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Name</span>
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted);">Name</span>
               <span id="resultName" style="font-size:14px; font-weight:700; color:var(--text);">—</span>
             </div>
             <div style="border-top:1px solid var(--border);"></div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Email</span>
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted);">Email</span>
               <span id="resultEmail" style="font-size:13px; font-weight:600; color:var(--text);">—</span>
             </div>
             <div style="border-top:1px solid var(--border);"></div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Ticket #</span>
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted);">Ticket #</span>
               <span id="resultTicket" style="font-size:14px; font-weight:700; color:var(--accent2);">—</span>
             </div>
             <div style="border-top:1px solid var(--border);"></div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Gender</span>
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted);">Gender</span>
               <span id="resultGender" style="font-size:14px; font-weight:600; color:var(--text);">—</span>
             </div>
             <div style="border-top:1px solid var(--border);"></div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Total Admitted</span>
+              <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted);">Total Admitted</span>
               <span id="resultCount" style="font-size:14px; font-weight:700; color:var(--green);">—</span>
             </div>
           </div>
@@ -643,20 +674,55 @@
   </div>
 
   <script>
-    document.getElementById("logoutButton").onclick = async () => {
-      await fetch("/logout", { method: "POST" });
-      window.location.href = "/homepage.html";
-    };
-
     let organizerEmail = null;
     let selectedEventCode = null;
+    let isInternalNavigation = false;
+
+    // Logout button → show confirmation modal
+    document.getElementById("logoutButton").onclick = () => {
+      document.getElementById("logoutModal").classList.add("active");
+    };
+    document.getElementById("closeLogoutModal").onclick = () => {
+      document.getElementById("logoutModal").classList.remove("active");
+    };
+    document.getElementById("cancelLogoutBtn").onclick = () => {
+      document.getElementById("logoutModal").classList.remove("active");
+    };
+    document.getElementById("confirmLogoutBtn").onclick = async () => {
+      isInternalNavigation = true;
+      await fetch("/logout", { method: "POST" });
+      window.location.replace("/homepage.html");
+    };
+
+    // Warn before tab/window close and auto-logout if they leave
+    window.addEventListener('beforeunload', (e) => {
+      if (!isInternalNavigation) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+    window.addEventListener('pagehide', () => {
+      if (!isInternalNavigation) {
+        navigator.sendBeacon('/logout');
+      }
+    });
 
     (async () => {
       try {
         const resUser = await fetch("/user/profile");
-        if (!resUser.ok) throw new Error("Cannot fetch organizer info");
+        if (!resUser.ok) {
+          isInternalNavigation = true;
+          window.location.replace("/login.html");
+          return;
+        }
         const dataUser = await resUser.json();
         organizerEmail = dataUser.email;
+
+        // Prevent back-navigation to this page after logout
+        history.pushState(null, '', window.location.href);
+        window.addEventListener('popstate', () => {
+          history.pushState(null, '', window.location.href);
+        });
 
         const createEventModal = document.getElementById("createEventModal");
         const openBtn = document.getElementById("openModalBtn");
@@ -695,12 +761,8 @@
 
         loadEvents();
       } catch (err) {
-        document.getElementById("eventsContainer").innerHTML = `
-          <div class="no-events">
-            <div class="no-events-icon">⚠️</div>
-            <h3>Error loading events</h3>
-            <p>${err.message}</p>
-          </div>`;
+        isInternalNavigation = true;
+        window.location.replace("/login.html");
       }
     })();
 
@@ -823,7 +885,7 @@
       document.getElementById("attendeesModal").classList.remove("active");
 
     window.onclick = (e) => {
-      ["attendeesModal", "createEventModal"].forEach(id => {
+      ["attendeesModal", "createEventModal", "logoutModal"].forEach(id => {
         const m = document.getElementById(id);
         if (e.target === m) m.classList.remove("active");
       });
