@@ -10,18 +10,18 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary: #5B21B6;
-      --primary-light: #7C3AED;
-      --primary-dark: #3B0764;
-      --accent: #F59E0B;
-      --bg: #F5F3FF;
-      --card: #FFFFFF;
-      --text: #1E1B4B;
-      --text-muted: #6B7280;
-      --border: #EDE9FE;
-      --success: #059669;
-      --error: #DC2626;
+      --bg: #030c16;
+      --surface: #071828;
+      --surface2: #0c1f32;
+      --border: rgba(255,255,255,0.07);
+      --accent: #0ea5e9;
+      --accent2: #38bdf8;
+      --green: #10b981;
+      --text: #eef4ff;
+      --muted: #5a7fa0;
     }
+
+    html { background: var(--bg); }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -31,7 +31,9 @@
     }
 
     header {
-      background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+      background: rgba(3,12,22,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       padding: 0 40px;
       height: 64px;
       display: flex;
@@ -40,7 +42,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 20px rgba(59, 7, 100, 0.3);
+      border-bottom: 1px solid var(--border);
     }
 
     .logo {
@@ -50,30 +52,13 @@
       text-decoration: none;
     }
 
-    .logo-diamond {
-      position: relative;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .logo-diamond::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: #F59E0B;
-      transform: rotate(45deg);
-      border-radius: 8px;
-    }
-
-    .logo-diamond img {
-      position: relative;
-      z-index: 1;
-      height: 28px;
-      filter: brightness(0);
+    .logo-text {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .nav-right {
@@ -85,17 +70,17 @@
     .nav-tag {
       font-size: 12px;
       font-weight: 600;
-      color: rgba(255,255,255,0.6);
+      color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.8px;
     }
 
     .btn-logout {
       padding: 8px 18px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: rgba(255,255,255,0.85);
+      color: var(--text);
       font-size: 13px;
       font-weight: 600;
       font-family: 'Inter', sans-serif;
@@ -104,8 +89,7 @@
     }
 
     .btn-logout:hover {
-      background: rgba(255,255,255,0.18);
-      color: white;
+      background: rgba(255,255,255,0.1);
     }
 
     main {
@@ -132,7 +116,7 @@
 
     .page-header-left p {
       font-size: 15px;
-      color: var(--text-muted);
+      color: var(--muted);
     }
 
     .btn {
@@ -143,41 +127,42 @@
       font-weight: 700;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      background: var(--accent);
       color: white;
+      box-shadow: 0 2px 12px rgba(14,165,233,0.3);
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(91, 33, 182, 0.35);
+      background: #0284c7;
+      box-shadow: 0 4px 16px rgba(14,165,233,0.4);
     }
 
     .btn-accent {
-      background: var(--accent);
-      color: #1E1B4B;
+      background: var(--green);
+      color: white;
+      box-shadow: 0 2px 12px rgba(16,185,129,0.25);
     }
 
     .btn-accent:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(245,158,11,0.35);
+      background: #059669;
+      box-shadow: 0 4px 16px rgba(16,185,129,0.35);
     }
 
     .btn-ghost {
-      background: white;
-      color: var(--primary);
-      border: 1.5px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
 
     .btn-ghost:hover {
-      background: var(--border);
-      transform: translateY(-1px);
+      background: rgba(255,255,255,0.1);
     }
 
     /* Events grid */
@@ -188,10 +173,9 @@
     }
 
     .event-card {
-      background: var(--card);
+      background: var(--surface);
       border-radius: 16px;
       padding: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(91, 33, 182, 0.06);
       border: 1px solid var(--border);
       transition: transform 0.2s, box-shadow 0.2s;
       display: flex;
@@ -201,7 +185,7 @@
 
     .event-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(91, 33, 182, 0.14);
+      box-shadow: 0 8px 32px rgba(14,165,233,0.08);
     }
 
     .event-card-header {
@@ -219,8 +203,9 @@
     }
 
     .event-code-badge {
-      background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
-      color: var(--primary);
+      background: rgba(14,165,233,0.1);
+      color: var(--accent2);
+      border: 1px solid rgba(14,165,233,0.2);
       font-size: 11px;
       font-weight: 700;
       padding: 4px 10px;
@@ -240,7 +225,7 @@
       align-items: center;
       gap: 8px;
       font-size: 13px;
-      color: var(--text-muted);
+      color: var(--muted);
     }
 
     .event-meta-icon { font-size: 14px; }
@@ -249,9 +234,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #ECFDF5;
-      color: #059669;
-      border: 1px solid #A7F3D0;
+      background: rgba(16,185,129,0.1);
+      color: #6ee7b7;
+      border: 1px solid rgba(16,185,129,0.25);
       padding: 4px 12px;
       border-radius: 100px;
       font-size: 12px;
@@ -275,7 +260,7 @@
       grid-column: 1 / -1;
       text-align: center;
       padding: 60px 20px;
-      color: var(--text-muted);
+      color: var(--muted);
     }
 
     .no-events-icon {
@@ -295,7 +280,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 10, 41, 0.75);
+      background: rgba(0,0,0,0.7);
       backdrop-filter: blur(6px);
       z-index: 200;
       justify-content: center;
@@ -305,14 +290,15 @@
     .modal.active { display: flex; }
 
     .modal-content {
-      background: white;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 20px;
       padding: 36px;
       width: 90%;
       max-width: 540px;
       max-height: 85vh;
       overflow-y: auto;
-      box-shadow: 0 24px 60px rgba(91, 33, 182, 0.2);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
       position: relative;
       animation: scaleUp 0.25s ease;
     }
@@ -341,18 +327,18 @@
       width: 32px; height: 32px;
       border-radius: 50%;
       border: none;
-      background: var(--border);
-      color: var(--text-muted);
+      background: var(--surface2);
+      color: var(--muted);
       font-size: 18px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
       line-height: 1;
     }
 
-    .close-btn:hover { background: #DDD6FE; color: var(--primary); }
+    .close-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
 
     .form-group { margin-bottom: 18px; }
 
@@ -374,14 +360,14 @@
       font-size: 14px;
       font-family: 'Inter', sans-serif;
       color: var(--text);
-      background: white;
+      background: var(--surface2);
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .form-group input:focus {
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
     }
 
     .status-message {
@@ -399,8 +385,8 @@
     }
 
     .attendees-table th {
-      background: #F5F3FF;
-      color: var(--text-muted);
+      background: var(--surface2);
+      color: var(--muted);
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
@@ -418,12 +404,12 @@
     }
 
     .attendees-table tr:last-child td { border-bottom: none; }
-    .attendees-table tr:hover td { background: #FAFAFF; }
+    .attendees-table tr:hover td { background: rgba(255,255,255,0.03); }
 
     .attendance-yes {
       display: inline-block;
-      background: #ECFDF5;
-      color: #059669;
+      background: rgba(16,185,129,0.1);
+      color: #6ee7b7;
       padding: 3px 10px;
       border-radius: 100px;
       font-size: 11px;
@@ -432,8 +418,8 @@
 
     .attendance-no {
       display: inline-block;
-      background: #FEF2F2;
-      color: #DC2626;
+      background: rgba(239,68,68,0.1);
+      color: #fca5a5;
       padding: 3px 10px;
       border-radius: 100px;
       font-size: 11px;
@@ -453,7 +439,7 @@
     }
 
     .stat-box {
-      background: #FAFAFF;
+      background: var(--surface2);
       padding: 16px 12px;
       text-align: center;
     }
@@ -471,12 +457,12 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--text-muted);
+      color: var(--muted);
     }
 
-    .stat-box.stat-arrived .stat-box-number { color: #059669; }
-    .stat-box.stat-face-ok .stat-box-number { color: #059669; }
-    .stat-box.stat-face-fail .stat-box-number { color: #DC2626; }
+    .stat-box.stat-arrived .stat-box-number { color: var(--green); }
+    .stat-box.stat-face-ok .stat-box-number { color: var(--green); }
+    .stat-box.stat-face-fail .stat-box-number { color: #f87171; }
 
     /* Live scan modal */
     #liveVideo {
@@ -484,7 +470,7 @@
       border-radius: 14px;
       border: 2px solid var(--border);
       margin-bottom: 16px;
-      background: #0F0A29;
+      background: #000;
     }
 
     @media (max-width: 600px) {
@@ -498,7 +484,7 @@
 
   <header>
     <a class="logo" href="/homepage.html">
-      <div class="logo-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+      <span class="logo-text">entri</span>
     </a>
     <div class="nav-right">
       <span class="nav-tag">Organizer Dashboard</span>
@@ -618,33 +604,33 @@
           <div id="resultIcon" style="font-size:56px; margin-bottom:8px;">✅</div>
           <div id="resultLabel" style="font-size:15px; font-weight:700; color:#059669;">Attendee Verified</div>
           <img id="resultSelfie" src="" alt="Selfie"
-            style="width:96px; height:96px; border-radius:50%; object-fit:cover; border:3px solid #DDD6FE; margin-top:14px; display:none;">
+            style="width:96px; height:96px; border-radius:50%; object-fit:cover; border:3px solid var(--border); margin-top:14px; display:none;">
         </div>
-        <div style="background:#F5F3FF; border:1px solid #DDD6FE; border-radius:14px; padding:20px; margin-bottom:20px;">
+        <div style="background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:20px;">
           <div style="display:flex; flex-direction:column; gap:10px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Name</span>
               <span id="resultName" style="font-size:14px; font-weight:700; color:var(--text);">—</span>
             </div>
-            <div style="border-top:1px solid #EDE9FE;"></div>
+            <div style="border-top:1px solid var(--border);"></div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Email</span>
               <span id="resultEmail" style="font-size:13px; font-weight:600; color:var(--text);">—</span>
             </div>
-            <div style="border-top:1px solid #EDE9FE;"></div>
+            <div style="border-top:1px solid var(--border);"></div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Ticket #</span>
-              <span id="resultTicket" style="font-size:14px; font-weight:700; color:var(--primary);">—</span>
+              <span id="resultTicket" style="font-size:14px; font-weight:700; color:var(--accent2);">—</span>
             </div>
-            <div style="border-top:1px solid #EDE9FE;"></div>
+            <div style="border-top:1px solid var(--border);"></div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Gender</span>
               <span id="resultGender" style="font-size:14px; font-weight:600; color:var(--text);">—</span>
             </div>
-            <div style="border-top:1px solid #EDE9FE;"></div>
+            <div style="border-top:1px solid var(--border);"></div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Total Admitted</span>
-              <span id="resultCount" style="font-size:14px; font-weight:700; color:#059669;">—</span>
+              <span id="resultCount" style="font-size:14px; font-weight:700; color:var(--green);">—</span>
             </div>
           </div>
         </div>
@@ -683,7 +669,7 @@
 
         createForm.onsubmit = async (e) => {
           e.preventDefault();
-          statusDiv.style.color = "#7C3AED";
+          statusDiv.style.color = "#38bdf8";
           statusDiv.textContent = "Creating event...";
 
           const formData = new FormData();
@@ -697,12 +683,12 @@
           const data = await res.json();
 
           if (res.ok) {
-            statusDiv.style.color = "#059669";
+            statusDiv.style.color = "#10b981";
             statusDiv.textContent = `Event created! Code: ${data.event_code}`;
             createForm.reset();
             loadEvents();
           } else {
-            statusDiv.style.color = "#DC2626";
+            statusDiv.style.color = "#f87171";
             statusDiv.textContent = `Error: ${data.detail || data.message}`;
           }
         };
@@ -860,7 +846,7 @@
       cameraView.style.display = "none";
       scanResultView.style.display = "block";
       document.getElementById("resultIcon").textContent = alreadyAdmitted ? "⚠️" : "✅";
-      document.getElementById("resultLabel").style.color = alreadyAdmitted ? "#D97706" : "#059669";
+      document.getElementById("resultLabel").style.color = alreadyAdmitted ? "#fbbf24" : "#10b981";
       document.getElementById("resultLabel").textContent = alreadyAdmitted ? "Already Admitted Earlier" : "Attendee Verified";
       document.getElementById("resultName").textContent = attendee.name || "—";
       document.getElementById("resultEmail").textContent = attendee.attendee_email || attendee.email || "—";
@@ -912,7 +898,7 @@
         mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
         liveVideo.srcObject = mediaStream;
       } catch (err) {
-        scanStatus.style.color = "#DC2626";
+        scanStatus.style.color = "#f87171";
         scanStatus.textContent = "Error accessing camera: " + err.message;
       }
     }
@@ -926,7 +912,7 @@
 
     captureBtn.onclick = async () => {
       if (!mediaStream) return;
-      scanStatus.style.color = "#7C3AED";
+      scanStatus.style.color = "#38bdf8";
       scanStatus.textContent = "Scanning...";
       captureBtn.disabled = true;
 
@@ -955,12 +941,12 @@
             showResultView({ email: data.recognized_user }, data.current_attendance_count, data.already_attended);
           }
         } else {
-          scanStatus.style.color = "#DC2626";
+          scanStatus.style.color = "#f87171";
           scanStatus.textContent = `✗ ${data.message || data.detail}`;
           captureBtn.disabled = false;
         }
       } catch (err) {
-        scanStatus.style.color = "#DC2626";
+        scanStatus.style.color = "#f87171";
         scanStatus.textContent = "Error: " + err.message;
         captureBtn.disabled = false;
       }
