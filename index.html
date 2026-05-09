@@ -85,7 +85,7 @@
     .hiw-row { display: flex; align-items: center; gap: 72px; }
     .hiw-row.rev { flex-direction: row-reverse; }
     .hiw-text { flex: 0 0 44%; }
-    .hiw-visual { flex: 1; }
+    .hiw-visual { flex: 1; max-width: 420px; }
     .hiw-num { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(14,165,233,.15); border: 1px solid rgba(14,165,233,.3); font-size: .8rem; font-weight: 800; color: var(--accent2); letter-spacing: .05em; margin-bottom: 20px; }
     .hiw-text h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.03em; margin-bottom: 14px; }
     .hiw-text p { color: var(--muted); font-size: .95rem; line-height: 1.75; }
@@ -244,7 +244,6 @@
   <span class="logo">entri</span>
   <ul>
     <li><a href="#how">How it works</a></li>
-    <li><a href="#features">Features</a></li>
     <li><a href="#usecases">Use cases</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#martyn" style="color:var(--accent2)">Martyn's Law</a></li>
@@ -323,10 +322,6 @@
     <div class="venue-grid">
       <div class="venue-tag"><span class="ve">🏟️</span>Arenas &amp; Stadiums</div>
       <div class="venue-tag"><span class="ve">🎪</span>Music &amp; Festival Venues</div>
-      <div class="venue-tag"><span class="ve">🏢</span>Corporate Event Spaces</div>
-      <div class="venue-tag"><span class="ve">🎭</span>Theatres &amp; Arts Venues</div>
-      <div class="venue-tag"><span class="ve">🌐</span>Conference Centres</div>
-      <div class="venue-tag"><span class="ve">🏛️</span>Public Institutions</div>
     </div>
   </div>
 </section>
@@ -339,7 +334,6 @@
     <div class="card-grid">
       <div class="card"><div class="card-icon">🚪</div><h3>Controlled Entry &amp; Access Logging</h3><p>Every entry event is logged against a verified identity. Know who was admitted at each entrance point, and when.</p></div>
       <div class="card"><div class="card-icon">⛓️</div><h3>Tamper-Proof Audit Trail</h3><p>Blockchain-anchored access logs you can produce for compliance review, insurance, or incident investigation — immutable by design.</p></div>
-      <div class="card"><div class="card-icon">👥</div><h3>Repeatable Staff Workflows</h3><p>Simple enough for any staff member to follow under pressure. Consistent procedures across all entrance points, every event.</p></div>
       <div class="card"><div class="card-icon">📊</div><h3>Event-Level Reporting</h3><p>Post-event attendance and access reports, ready to download. Give your compliance team the documentation they need without extra work.</p></div>
     </div>
     <div class="compliance-box">
@@ -377,7 +371,7 @@
 
 <section class="alt" id="how">
   <div class="container">
-    <span class="tag">How it works</span>
+    <span class="tag">Workflow for Attendees</span>
     <h2 class="sec-title">From sign-up to entry in three steps</h2>
     <p class="sec-sub">Entri replaces the entire ticketing and access control workflow with a seamless, identity-first experience.</p>
     <div class="hiw-rows">
@@ -418,20 +412,6 @@
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
-<section id="how">
-  <div class="container">
-    <span class="tag">Features</span>
-    <h2 class="sec-title">Everything security &amp; operations need</h2>
-    <p class="sec-sub">Built for the people running the show — organizers, stadium ops, and security teams.</p>
-    <div class="fgrid">
-      <div class="fc"><div class="fi">⛓️</div><h3>Blockchain-Backed Tickets</h3><p>Every ticket is cryptographically hashed and anchored to the holder's identity. No reselling, no fraud, no stolen tickets. Immutable by design.</p><span class="ftag">Fraud-proof</span></div>
-      <div class="fc"><div class="fi">📊</div><h3>Organizer Dashboard</h3><p>Create events, track real-time attendance, scan faces at entry, and review access logs — from one clean purpose-built dashboard.</p><span class="ftag">Real-time</span></div>
-      <div class="fc"><div class="fi">📲</div><h3>QR Code Tickets</h3><p>Server-side generated QR codes, cryptographically bound to the attendee's verified identity. Offline-ready at the gate.</p><span class="ftag">Offline-ready</span></div>
-      <div class="fc"><div class="fi">🔒</div><h3>Privacy-First Architecture</h3><p>Face data processed on your infrastructure. bcrypt hashing, cookie-based sessions. No third-party biometric cloud required.</p><span class="ftag">On-premise</span></div>
-    </div>
-  </div>
-</section>
 
 <section class="screenshots" id="screenshots">
   <div class="container">
@@ -513,6 +493,10 @@
           <tr><td>Real-time attendance dashboard</td><td class="cx">✗</td><td class="ck">✓</td><td class="ck">✓</td></tr>
           <tr><td>On-premise deployment</td><td class="ck">✓</td><td class="cx">✗</td><td class="ck">✓</td></tr>
           <tr><td>No physical tickets needed</td><td class="cx">✗</td><td class="ck">✓</td><td class="ck">✓</td></tr>
+          <tr><td>Martyn's Law — immutable access audit trail</td><td class="cx">✗</td><td class="cx">✗</td><td class="ck">✓</td></tr>
+          <tr><td>Martyn's Law — known-attendee records at gate</td><td class="cx">✗</td><td class="cx">✗</td><td class="ck">✓</td></tr>
+          <tr><td>Martyn's Law — real-time capacity & headcount</td><td class="cx">✗</td><td class="cx">✗</td><td class="ck">✓</td></tr>
+          <tr><td>Martyn's Law — post-event compliance export</td><td class="cx">✗</td><td class="cx">✗</td><td class="ck">✓</td></tr>
         </tbody>
       </table>
     </div>
@@ -593,7 +577,6 @@
       <h4>Product</h4>
       <ul>
         <li><a href="#how">How it works</a></li>
-        <li><a href="#features">Features</a></li>
         <li><a href="#usecases">Use cases</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#screenshots">Screenshots</a></li>
