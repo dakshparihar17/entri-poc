@@ -306,7 +306,7 @@
         const data = await res.json();
 
         if (res.ok) {
-          statusDiv.style.color = "#059669";
+          statusDiv.style.color = "#10b981";
           statusDiv.textContent = "Login successful! Redirecting...";
 
           const redirectUrl = data.role === "organizer"
@@ -315,7 +315,7 @@
 
           setTimeout(() => { window.location.href = redirectUrl; }, 1000);
         } else {
-          statusDiv.style.color = "#DC2626";
+          statusDiv.style.color = "#f87171";
           statusDiv.textContent = `Error: ${data.detail || data.message}`;
         }
       } catch (error) {

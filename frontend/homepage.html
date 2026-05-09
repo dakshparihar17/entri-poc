@@ -61,6 +61,7 @@
       margin-bottom: 60px;
       position: relative;
       z-index: 1;
+      text-decoration: none;
     }
 
     .logo-text {
@@ -371,7 +372,7 @@
     form.onsubmit = async (e) => {
       e.preventDefault();
       statusDiv.textContent = "Checking...";
-      statusDiv.style.color = "#7C3AED";
+      statusDiv.style.color = "#38bdf8";
 
       const email = document.getElementById("email").value;
 
@@ -396,7 +397,7 @@
           }, 700);
         }
       } catch (error) {
-        statusDiv.style.color = "#DC2626";
+        statusDiv.style.color = "#f87171";
         statusDiv.textContent = `Error: ${error.message}`;
       }
     };

@@ -31,7 +31,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Header */
+    /* ── Header ── */
     header {
       background: rgba(3,12,22,0.85);
       backdrop-filter: blur(20px);
@@ -46,12 +46,7 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
+    .logo { display: flex; align-items: center; text-decoration: none; }
 
     .logo-text {
       font-size: 1.4rem;
@@ -96,7 +91,7 @@
       box-shadow: 0 4px 14px rgba(14,165,233,0.4);
     }
 
-    .btn-logout {
+    .btn {
       padding: 8px 18px;
       background: transparent;
       border: 1px solid var(--border);
@@ -113,6 +108,7 @@
       background: rgba(255,255,255,0.06);
       color: var(--text);
     }
+    .btn-primary:hover { background: #0284c7; box-shadow: 0 4px 16px rgba(14,165,233,0.4); }
 
     /* Main layout */
     main {
@@ -154,6 +150,7 @@
       padding: 28px;
       border: 1px solid var(--border);
     }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); }
 
     .card-title {
       font-size: 11px;
@@ -164,15 +161,21 @@
       margin-bottom: 16px;
     }
 
-    /* Profile photo card */
-    .profile-card {
-      text-align: center;
-      padding: 32px 28px;
+    /* ── Profile row ── */
+    .profile-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
     }
 
     .avatar-ring {
-      width: 120px;
-      height: 120px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       border: 2px solid rgba(14,165,233,0.4);
       margin: 0 auto 16px;
@@ -184,7 +187,7 @@
       background: var(--surface2);
     }
 
-    #userFace {
+    .avatar-ring img {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -192,16 +195,15 @@
       object-fit: cover;
     }
 
-    .avatar-placeholder {
-      font-size: 48px;
-      line-height: 1;
-    }
+    .avatar-placeholder { font-size: 28px; }
 
-    .profile-name {
+    .profile-info { flex: 1; }
+
+    .profile-email {
       font-size: 16px;
       font-weight: 700;
       color: var(--text);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     .profile-email {
@@ -209,7 +211,7 @@
       color: var(--muted);
     }
 
-    .verified-badge {
+    .badge {
       display: inline-flex;
       align-items: center;
       gap: 5px;
@@ -219,8 +221,9 @@
       border: 1px solid rgba(16,185,129,0.25);
       padding: 4px 12px;
       border-radius: 100px;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
     }
 
     /* Ticket card */
@@ -285,10 +288,9 @@
       font-weight: 600;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: background 0.2s;
-      display: none;
-      position: relative;
-      z-index: 1;
+      background: transparent;
+      color: var(--muted);
+      transition: all 0.2s;
     }
 
     .view-all-btn:hover { background: rgba(14,165,233,0.2); }
@@ -309,20 +311,34 @@
       margin-bottom: 4px;
     }
 
-    .mrz-value {
-      font-size: 14px;
-      font-weight: 600;
+    .ticket-left { flex: 1; }
+
+    .ticket-event-name {
+      font-size: 15px;
+      font-weight: 700;
       color: var(--text);
+      margin-bottom: 5px;
     }
 
-    .mrz-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
+    .ticket-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .ticket-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .ticket-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent2);
+      background: rgba(56,189,248,0.1);
+      border: 1px solid rgba(56,189,248,0.2);
       border-radius: 100px;
-      font-size: 11px;
-      font-weight: 600;
+      padding: 2px 10px;
+      white-space: nowrap;
     }
 
     .mrz-badge.valid { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
@@ -333,8 +349,40 @@
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 12px 14px;
-      font-family: 'Courier New', monospace;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .qr-btn:hover { background: rgba(14,165,233,0.1); color: var(--accent); border-color: var(--accent); }
+
+    /* ── Selfie prompt ── */
+    .selfie-prompt {
+      background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(56,189,248,0.05));
+      border: 1px solid rgba(14,165,233,0.25);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .selfie-prompt-text { flex: 1; }
+
+    .selfie-prompt-text strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent2);
+      margin-bottom: 2px;
+    }
+
+    .selfie-prompt-text span {
       font-size: 12px;
       color: var(--accent2);
       word-break: break-all;
@@ -366,7 +414,7 @@
       box-shadow: 0 8px 20px rgba(14,165,233,0.35);
     }
 
-    /* Modal */
+    /* ── Modals ── */
     .modal {
       display: none;
       position: fixed;
@@ -376,15 +424,15 @@
       z-index: 200;
       justify-content: center;
       align-items: center;
+      z-index: 200;
     }
-
     .modal.active { display: flex; }
 
     .modal-content {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 36px;
+      padding: 32px;
       width: 90%;
       max-width: 520px;
       max-height: 80vh;
@@ -397,12 +445,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .modal-header h2 {
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 18px;
+      font-weight: 700;
       color: var(--text);
     }
 
@@ -420,6 +468,7 @@
       transition: background 0.2s, color 0.2s;
       line-height: 1;
     }
+    .close-btn:hover { background: rgba(14,165,233,0.1); color: var(--accent2); }
 
     .close-btn:hover { background: rgba(14,165,233,0.15); color: var(--accent2); }
 
@@ -437,21 +486,30 @@
       background: var(--surface2);
     }
 
-    .ticket-item:last-child { margin-bottom: 0; }
+    .qr-event-name { text-align: center; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .qr-meta { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
 
-    .ticket-item-left { flex: 1; }
-
-    .ticket-item-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
+    /* Verify ID modal steps */
+    .step-indicator {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
     }
+
+    .step-dot {
+      height: 4px;
+      border-radius: 100px;
+      flex: 1;
+      background: var(--surface2);
+      transition: background 0.3s;
+    }
+    .step-dot.done { background: var(--accent); }
 
     .ticket-item-meta {
       font-size: 12px;
       color: var(--muted);
     }
+    .upload-label:hover { border-color: var(--accent); background: rgba(14,165,233,0.04); }
 
     .ticket-item-badge {
       background: rgba(14,165,233,0.12);
@@ -475,33 +533,37 @@
       font-size: 16px;
       cursor: pointer;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background 0.15s, border-color 0.15s;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
     }
+    .mrz-row:last-child { border-bottom: none; }
+    .mrz-key { color: var(--muted); }
+    .mrz-val { font-weight: 600; color: var(--text); }
 
     .qr-icon-btn:hover { background: rgba(14,165,233,0.12); border-color: rgba(14,165,233,0.3); }
 
-    /* QR Modal */
-    .qr-modal-content { text-align: center; max-width: 340px; }
+    /* Logout modal */
+    .logout-modal-text {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
 
     .qr-img {
       width: 210px;
       height: 210px;
       border: 2px solid rgba(14,165,233,0.25);
       border-radius: 16px;
-      margin: 0 auto 20px;
-      display: block;
-      padding: 10px;
-      background: white;
+      padding: 22px 28px;
+      margin-bottom: 24px;
     }
 
-    .qr-event-name {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 6px;
+    .details-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 18px;
     }
 
     .qr-meta {
@@ -510,19 +572,35 @@
       margin-bottom: 3px;
     }
 
-    .latest-ticket-click {
-      cursor: pointer;
-      flex: 1;
+    .details-subtitle {
+      font-size: 12px;
+      color: var(--muted);
     }
 
-    @media (max-width: 900px) {
-      .dashboard-grid { grid-template-columns: 1fr; }
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 24px;
     }
 
-    @media (max-width: 600px) {
-      header { padding: 0 20px; }
-      main { padding: 24px 16px; }
-      .mrz-grid { grid-template-columns: 1fr; }
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .detail-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--muted);
+    }
+
+    .detail-val {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
     }
   </style>
 </head>
@@ -533,69 +611,100 @@
       <span class="logo-text">entri</span>
     </a>
     <div class="nav-right">
-      <span class="nav-tag">User Dashboard</span>
-      <button class="btn-issue" id="issueButton">+ Issue Ticket</button>
-      <button class="btn-logout" id="logoutButton">Log Out</button>
+      <span class="nav-email" id="navEmail"></span>
+      <button class="btn btn-primary" id="issueTicketBtn">🎟️ Add Ticket</button>
+      <button class="btn btn-ghost" id="logoutButton">Log out</button>
     </div>
   </header>
 
   <main>
-    <div class="page-header">
-      <h1>Your Dashboard</h1>
-      <p>View your verified identity, profile, and event tickets.</p>
+
+    <!-- Profile + Identity row -->
+    <div class="profile-row">
+      <div class="avatar-ring">
+        <span class="avatar-placeholder" id="avatarPlaceholder">👤</span>
+        <img id="userFace" src="" alt="" style="display:none;" onerror="this.style.display='none';document.getElementById('avatarPlaceholder').style.display='block';">
+      </div>
+      <div class="profile-info">
+        <div class="profile-email" id="profileEmail">Loading…</div>
+        <div class="profile-status">
+          <span class="badge badge-unverified" id="verifyBadge">⚠ Identity not verified</span>
+        </div>
+      </div>
+      <button class="btn btn-ghost" id="verifyIdBtn" style="font-size:13px;">🪪 Verify Identity</button>
     </div>
 
-    <div class="dashboard-grid">
-      <!-- Left Column -->
-      <div class="left-col">
-
-        <!-- Profile Card -->
-        <div class="card profile-card">
-          <div class="avatar-ring">
-            <span class="avatar-placeholder" id="avatarPlaceholder">👤</span>
-            <img id="userFace" src="" alt="Profile" style="display:none;">
-          </div>
-          <div class="profile-name" id="profileName">Loading...</div>
-          <div class="profile-email" id="profileEmail"></div>
-          <div class="verified-badge">✓ Identity Verified</div>
+    <!-- Personal Details card -->
+    <div class="details-card" id="personalDetailsCard">
+      <div class="details-header">
+        <div>
+          <div class="details-title">Personal Details</div>
+          <div class="details-subtitle" id="detailsSubtitle">Add your details so organisers can recognise you</div>
         </div>
-
-        <!-- Latest Ticket -->
-        <div class="card ticket-card">
-          <div class="card-title">Latest Ticket</div>
-          <div id="latestTicketContent">
-            <div class="loading-text" style="color:rgba(255,255,255,0.5)">Loading...</div>
-          </div>
-          <button class="view-all-btn" id="viewAllBtn">View All Tickets →</button>
-        </div>
-
+        <button class="btn btn-ghost edit-btn" id="editDetailsBtn" style="font-size:12px;">✏️ Edit</button>
       </div>
 
-      <!-- Right Column -->
-      <div class="right-col">
+      <!-- View mode -->
+      <div id="detailsView" class="details-grid">
+        <div class="detail-item"><span class="detail-label">Full Name</span><span class="detail-val" id="dv-name">—</span></div>
+        <div class="detail-item"><span class="detail-label">Phone</span><span class="detail-val" id="dv-phone">—</span></div>
+        <div class="detail-item"><span class="detail-label">Date of Birth</span><span class="detail-val" id="dv-dob">—</span></div>
+        <div class="detail-item"><span class="detail-label">City</span><span class="detail-val" id="dv-city">—</span></div>
+      </div>
 
-        <!-- MRZ Details -->
-        <div class="card mrz-card">
-          <div class="card-title">Verified ID — MRZ Details</div>
-          <div id="mrzContent">
-            <div class="loading-text">Loading identity data...</div>
+      <!-- Edit mode -->
+      <div id="detailsEdit" style="display:none;">
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Full Name</span>
+            <input class="field-input" id="ef-name" placeholder="Your full name" style="padding:8px 12px;font-size:13px;">
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Phone</span>
+            <input class="field-input" id="ef-phone" placeholder="+1 555 000 0000" style="padding:8px 12px;font-size:13px;">
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Date of Birth</span>
+            <input class="field-input" id="ef-dob" type="date" style="padding:8px 12px;font-size:13px;">
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">City</span>
+            <input class="field-input" id="ef-city" placeholder="Your city" style="padding:8px 12px;font-size:13px;">
           </div>
         </div>
-
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <button class="btn btn-primary" id="saveDetailsBtn" style="font-size:13px;">Save</button>
+          <button class="btn btn-ghost" id="cancelDetailsBtn" style="font-size:13px;">Cancel</button>
+          <span id="detailsSaveStatus" style="font-size:13px;font-weight:500;align-self:center;"></span>
+        </div>
       </div>
     </div>
-  </main>
 
-  <!-- All Tickets Modal -->
-  <div id="ticketModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>All Your Tickets</h2>
-        <button class="close-btn" id="closeModal">&times;</button>
-      </div>
-      <div id="allTickets"></div>
+    <!-- Ticket tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="upcoming">Upcoming Events</button>
+      <button class="tab-btn" data-tab="past">Past Events</button>
     </div>
-  </div>
+
+    <!-- Upcoming Events panel -->
+    <div class="tab-panel active" id="panel-upcoming">
+      <div class="ticket-list" id="upcomingList">
+        <div class="empty-state">
+          <div class="empty-icon">⏳</div>
+          <p>Loading…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Past Events panel -->
+    <div class="tab-panel" id="panel-past">
+      <div class="ticket-list" id="pastList">
+        <div class="empty-state">
+          <div class="empty-icon">⏳</div>
+          <p>Loading…</p>
+        </div>
+      </div>
+    </div>
 
   <!-- Logout Confirmation Modal -->
   <div id="logoutModal" class="modal">
@@ -620,10 +729,10 @@
         <button class="close-btn" id="closeQrModal">&times;</button>
       </div>
       <img id="qrImage" class="qr-img" src="" alt="QR Code">
-      <div id="qrRedeemedBanner" style="display:none;width:210px;height:210px;margin:0 auto 20px;border-radius:16px;background:#FEF2F2;border:3px solid #FECACA;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px;">
+      <div id="qrRedeemedBanner" style="display:none; width:200px; height:200px; margin:0 auto 16px; background:rgba(239,68,68,0.1); border:2px solid rgba(239,68,68,0.3); border-radius:12px; display:none; flex-direction:column; align-items:center; justify-content:center; gap:8px;">
         <div style="font-size:36px;">🚫</div>
-        <div style="font-size:15px;font-weight:800;color:#991B1B;">Ticket Used</div>
-        <div id="qrRedeemedAt" style="font-size:12px;color:#B91C1C;margin-top:4px;"></div>
+        <div style="font-size:14px; font-weight:800; color:#f87171;">Ticket Used</div>
+        <div id="qrRedeemedAt" style="font-size:11px; color:#f87171;"></div>
       </div>
       <div class="qr-event-name" id="qrEventName"></div>
       <div class="qr-meta" id="qrTicketId"></div>
@@ -636,6 +745,15 @@
     let allTickets = [];
     let isInternalNavigation = false;
 
+  <script>
+    /* ── State ── */
+    let userEmail = null;
+    let isInternalNavigation = false;
+    let selfieTargetEventCode = null;
+    let verifyCameraStream = null;
+    let selfieCameraStream = null;
+
+    /* ── Auth check + back-nav prevention ── */
     (async () => {
       try {
         const res = await fetch("/user/profile");
@@ -645,7 +763,7 @@
           return;
         }
         const data = await res.json();
-        email = data.email;
+        userEmail = data.email;
 
         // Prevent back-navigation to this page after logout
         history.pushState(null, '', window.location.href);
@@ -658,17 +776,19 @@
 
         if (data.cropped_face_url) {
           const img = document.getElementById("userFace");
-          const placeholder = document.getElementById("avatarPlaceholder");
-          img.onerror = () => {
-            img.style.display = "none";
-            placeholder.style.display = "block";
-          };
           img.src = data.cropped_face_url;
           img.style.display = "block";
-          placeholder.style.display = "none";
+          document.getElementById("avatarPlaceholder").style.display = "none";
         }
 
-        renderMRZ(data.mrz);
+        populatePersonalDetails(data.personal_details || {});
+
+        // Prevent back navigation to this page once loaded
+        history.pushState(null, '', window.location.href);
+        window.addEventListener('popstate', () => {
+          history.pushState(null, '', window.location.href);
+        });
+
         loadTickets();
       } catch (err) {
         isInternalNavigation = true;
@@ -676,86 +796,41 @@
       }
     })();
 
-    function renderMRZ(mrz) {
-      if (!mrz) {
-        document.getElementById("mrzContent").innerHTML = '<div class="loading-text">No MRZ data found.</div>';
-        return;
-      }
-      const fields = [
-        { label: "Surname", value: mrz.surname },
-        { label: "Document No.", value: mrz.number },
-        { label: "Nationality", value: mrz.nationality },
-        { label: "Country", value: mrz.country },
-        { label: "Date of Birth", value: mrz.date_of_birth },
-        { label: "Expiry Date", value: mrz.expiration_date },
-        { label: "Sex", value: mrz.sex },
-        { label: "Document Type", value: mrz.type },
-      ];
 
-      const validChecks = [
-        { label: "Number Valid", ok: mrz.valid_number },
-        { label: "DOB Valid", ok: mrz.valid_date_of_birth },
-        { label: "Expiry Valid", ok: mrz.valid_expiration_date },
-        { label: "Composite Valid", ok: mrz.valid_composite },
-      ];
-
-      let html = '<div class="mrz-grid">';
-      fields.forEach(f => {
-        if (f.value) {
-          html += `<div class="mrz-field">
-            <div class="mrz-label">${f.label}</div>
-            <div class="mrz-value">${f.value}</div>
-          </div>`;
-        }
+    /* ── Tabs ── */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
       });
-      html += '</div>';
+    });
 
-      html += '<div style="margin-top:20px;"><div class="card-title" style="margin-bottom:12px;">Validation Checks</div><div style="display:flex;flex-wrap:wrap;gap:8px;">';
-      validChecks.forEach(v => {
-        html += `<span class="mrz-badge ${v.ok ? 'valid' : 'invalid'}">${v.ok ? '✓' : '✗'} ${v.label}</span>`;
-      });
-      html += '</div></div>';
-
-      if (mrz.raw_text) {
-        html += `<div class="mrz-raw">${mrz.raw_text.replace(/\n/g, '<br>')}</div>`;
-      }
-
-      document.getElementById("mrzContent").innerHTML = html;
-    }
-
+    /* ── Load tickets ── */
     async function loadTickets() {
       try {
         const res = await fetch("/user/tickets");
-        if (!res.ok) throw new Error("Failed to fetch tickets");
+        if (!res.ok) return;
         const tickets = await res.json();
 
-        allTickets = tickets.map((t, index) => ({ ...t, serial_number: index + 1 }));
+        const now = new Date();
+        const upcoming = tickets.filter(t => !t.event_date || new Date(t.event_date) >= now);
+        const past = tickets.filter(t => t.event_date && new Date(t.event_date) < now);
 
-        const content = document.getElementById("latestTicketContent");
-        const viewAllBtn = document.getElementById("viewAllBtn");
-
-        if (allTickets.length === 0) {
-          content.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:14px;">No tickets yet.</div>';
-          viewAllBtn.style.display = "none";
-          return;
-        }
-
-        const latest = allTickets[allTickets.length - 1];
-        const latestHint = latest.redeemed ? 'Ticket has been used' : 'Tap to view QR code →';
-        const latestHintColor = latest.redeemed ? 'rgba(252,165,165,0.8)' : 'rgba(255,255,255,0.5)';
-        content.innerHTML = `
-          <div class="latest-ticket-click" onclick="showQR(allTickets[allTickets.length-1])">
-            <div class="ticket-event">${latest.event_name || "Unnamed Event"}</div>
-            <div class="ticket-meta">Added ${formatDate(latest.date)}</div>
-            <div class="ticket-number">🎟️ <span>Ticket <span class="ticket-accent">#${latest.serial_number}</span></span></div>
-            <div style="margin-top:10px;font-size:12px;color:${latestHintColor};">${latestHint}</div>
-          </div>
-        `;
-        viewAllBtn.style.display = "inline-block";
+        renderUpcoming(upcoming);
+        renderPast(past);
       } catch (err) {
-        document.getElementById("latestTicketContent").innerHTML =
-          `<div style="color:#FCA5A5;font-size:14px;">Error: ${err.message}</div>`;
+        console.error("Failed to load tickets:", err);
       }
+    }
+
+    function isWithin48h(dateStr) {
+      if (!dateStr) return false;
+      const eventDate = new Date(dateStr);
+      const now = new Date();
+      const diff = eventDate - now;
+      return diff > 0 && diff <= 48 * 60 * 60 * 1000;
     }
 
     function formatDate(dateStr) {
@@ -763,55 +838,334 @@
       return new Date(dateStr).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
     }
 
-    const modal = document.getElementById("ticketModal");
+    function formatEventDate(dateStr) {
+      if (!dateStr) return "";
+      return new Date(dateStr).toLocaleDateString(undefined, { dateStyle: "medium" });
+    }
 
-    document.getElementById("viewAllBtn").onclick = () => {
-      if (allTickets.length === 0) {
-        document.getElementById("allTickets").innerHTML = "<p>No tickets available.</p>";
-      } else {
-        document.getElementById("allTickets").innerHTML = allTickets.map((t, i) => {
-          const badge = t.redeemed
-            ? `<span style="background:#FEF2F2;color:#DC2626;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;">✗ Used</span>`
-            : `<span class="ticket-item-badge">#${t.serial_number}</span>`;
-          return `
-            <div class="ticket-item" onclick="showQR(allTickets[${i}])">
-              <div class="ticket-item-left">
-                <div class="ticket-item-name">${t.event_name || "Unnamed Event"}</div>
-                <div class="ticket-item-meta">Added ${formatDate(t.date)}</div>
-              </div>
-              ${badge}
-              <button class="qr-icon-btn" title="Show QR">&#x2317;</button>
-            </div>`;
-        }).join("");
+    function renderUpcoming(tickets) {
+      const list = document.getElementById("upcomingList");
+      if (tickets.length === 0) {
+        list.innerHTML = `<div class="empty-state">
+          <div class="empty-icon">🎟️</div>
+          <h3>No upcoming events</h3>
+          <p>Add a ticket using an event code from your organiser.</p>
+        </div>`;
+        return;
       }
-      modal.classList.add("active");
+
+      list.innerHTML = "";
+      tickets.forEach(t => {
+        const needsSelfie = isWithin48h(t.event_date) && !t.has_selfie;
+
+        const wrapper = document.createElement("div");
+
+        if (needsSelfie) {
+          const prompt = document.createElement("div");
+          prompt.className = "selfie-prompt";
+          prompt.innerHTML = `
+            <div class="selfie-prompt-text">
+              <strong>📸 Entry selfie needed</strong>
+              <span>This event is within 48 hours — take your entry selfie now to check in.</span>
+            </div>
+            <button class="btn btn-primary" style="font-size:12px;padding:8px 14px;" onclick="openSelfieModal('${t.event_code}', '${(t.event_name || '').replace(/'/g, "\\'")}')">Take Selfie</button>
+          `;
+          wrapper.appendChild(prompt);
+        }
+
+        const card = document.createElement("div");
+        card.className = "ticket-card";
+        card.innerHTML = `
+          <div class="ticket-left">
+            <div class="ticket-event-name">${t.event_name || "Unnamed Event"}</div>
+            <div class="ticket-meta">
+              ${t.event_date ? `<span>📅 ${formatEventDate(t.event_date)}</span>` : `<span style="color:#f87171;">This event no longer exists</span>`}
+              ${t.event_location ? `<span>📍 ${t.event_location}</span>` : ""}
+              <span>Issued ${formatDate(t.date)}</span>
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <span class="ticket-num">#${t.ticket_number || t.ticket_id?.slice(-6).toUpperCase() || "—"}</span>
+            ${!t.redeemed ? `<button class="qr-btn" title="View QR" onclick='showQR(${JSON.stringify(t)})'>⊟</button>` : `<span class="att-yes">✓ Used</span>`}
+          </div>
+        `;
+        wrapper.appendChild(card);
+        list.appendChild(wrapper);
+      });
+    }
+
+    function renderPast(tickets) {
+      const list = document.getElementById("pastList");
+      if (tickets.length === 0) {
+        list.innerHTML = `<div class="empty-state">
+          <div class="empty-icon">📅</div>
+          <h3>No past events</h3>
+          <p>Tickets for events that have already happened will appear here.</p>
+        </div>`;
+        return;
+      }
+
+      list.innerHTML = "";
+      tickets.forEach(t => {
+        const card = document.createElement("div");
+        card.className = "ticket-card";
+        card.innerHTML = `
+          <div class="ticket-left">
+            <div class="ticket-event-name">${t.event_name || "Unnamed Event"}</div>
+            <div class="ticket-meta">
+              ${t.event_date ? `<span>📅 ${formatEventDate(t.event_date)}</span>` : ""}
+              ${t.event_location ? `<span>📍 ${t.event_location}</span>` : ""}
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <span class="ticket-num">#${t.ticket_number || t.ticket_id?.slice(-6).toUpperCase() || "—"}</span>
+            ${t.redeemed ? `<span class="att-yes">✓ Attended</span>` : `<span class="att-no">✗ Not scanned</span>`}
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    /* ── Issue Ticket (navigate to issue.html) ── */
+    document.getElementById("issueTicketBtn").onclick = () => {
+      isInternalNavigation = true;
+      window.location.href = `/issue.html?email=${encodeURIComponent(userEmail)}`;
     };
 
-    document.getElementById("closeModal").onclick = () => modal.classList.remove("active");
+    /* ── Personal Details ── */
+    function populatePersonalDetails(pd) {
+      document.getElementById("dv-name").textContent  = pd.full_name || "—";
+      document.getElementById("dv-phone").textContent = pd.phone    || "—";
+      document.getElementById("dv-dob").textContent   = pd.dob      || "—";
+      document.getElementById("dv-city").textContent  = pd.city     || "—";
 
-    const qrModal = document.getElementById("qrModal");
+      const allEmpty = !pd.full_name && !pd.phone && !pd.dob && !pd.city;
+      document.getElementById("detailsSubtitle").textContent = allEmpty
+        ? "Add your details so organisers can recognise you"
+        : "Your personal information";
+    }
 
+    document.getElementById("editDetailsBtn").onclick = () => {
+      // Pre-fill edit fields from view
+      document.getElementById("ef-name").value  = document.getElementById("dv-name").textContent  === "—" ? "" : document.getElementById("dv-name").textContent;
+      document.getElementById("ef-phone").value = document.getElementById("dv-phone").textContent === "—" ? "" : document.getElementById("dv-phone").textContent;
+      document.getElementById("ef-dob").value   = document.getElementById("dv-dob").textContent   === "—" ? "" : document.getElementById("dv-dob").textContent;
+      document.getElementById("ef-city").value  = document.getElementById("dv-city").textContent  === "—" ? "" : document.getElementById("dv-city").textContent;
+      document.getElementById("detailsView").style.display = "none";
+      document.getElementById("detailsEdit").style.display = "block";
+      document.getElementById("editDetailsBtn").style.display = "none";
+      document.getElementById("detailsSaveStatus").textContent = "";
+    };
+
+    document.getElementById("cancelDetailsBtn").onclick = () => {
+      document.getElementById("detailsView").style.display = "grid";
+      document.getElementById("detailsEdit").style.display = "none";
+      document.getElementById("editDetailsBtn").style.display = "";
+    };
+
+    document.getElementById("saveDetailsBtn").onclick = async () => {
+      const status = document.getElementById("detailsSaveStatus");
+      status.style.color = "var(--accent)";
+      status.textContent = "Saving…";
+
+      const payload = {
+        full_name: document.getElementById("ef-name").value.trim(),
+        phone:     document.getElementById("ef-phone").value.trim(),
+        dob:       document.getElementById("ef-dob").value,
+        city:      document.getElementById("ef-city").value.trim(),
+      };
+
+      try {
+        const res = await fetch("/user/personal-details", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          status.style.color = "var(--green)";
+          status.textContent = "✓ Saved";
+          populatePersonalDetails(payload);
+          setTimeout(() => {
+            document.getElementById("detailsView").style.display = "grid";
+            document.getElementById("detailsEdit").style.display = "none";
+            document.getElementById("editDetailsBtn").style.display = "";
+          }, 800);
+        } else {
+          status.style.color = "#f87171";
+          status.textContent = "Failed to save.";
+        }
+      } catch (err) {
+        status.style.color = "#f87171";
+        status.textContent = "Error: " + err.message;
+      }
+    };
+
+    /* ── QR Modal ── */
     window.showQR = (ticket) => {
-      const qrImage = document.getElementById("qrImage");
-      const qrBanner = document.getElementById("qrRedeemedBanner");
+      const img = document.getElementById("qrImage");
+      const banner = document.getElementById("qrRedeemedBanner");
       if (ticket.redeemed) {
-        qrImage.style.display = "none";
-        qrBanner.style.display = "flex";
+        img.style.display = "none";
+        banner.style.display = "flex";
         document.getElementById("qrRedeemedAt").textContent = ticket.redeemed_at
-          ? `Used on: ${formatDate(ticket.redeemed_at)}`
-          : "";
+          ? `Used on: ${formatDate(ticket.redeemed_at)}` : "";
       } else {
-        qrImage.src = ticket.qr_code_url || "";
-        qrImage.style.display = "block";
-        qrBanner.style.display = "none";
+        img.src = ticket.qr_code_url || "";
+        img.style.display = "block";
+        banner.style.display = "none";
       }
       document.getElementById("qrEventName").textContent = ticket.event_name || "Unnamed Event";
       document.getElementById("qrTicketId").textContent = `Ticket ID: ${ticket.ticket_id || "—"}`;
       document.getElementById("qrDate").textContent = `Issued: ${formatDate(ticket.date)}`;
-      qrModal.classList.add("active");
+      document.getElementById("qrModal").classList.add("active");
+    };
+    document.getElementById("closeQrModal").onclick = () => document.getElementById("qrModal").classList.remove("active");
+
+    /* ── Verify ID Modal ── */
+    document.getElementById("verifyIdBtn").onclick = () => {
+      resetVerifyModal();
+      document.getElementById("verifyModal").classList.add("active");
+    };
+    document.getElementById("closeVerifyModal").onclick = () => {
+      stopVerifyCamera();
+      document.getElementById("verifyModal").classList.remove("active");
     };
 
-    document.getElementById("closeQrModal").onclick = () => qrModal.classList.remove("active");
+    document.getElementById("idFileInput").addEventListener("change", function () {
+      if (this.files[0]) {
+        document.getElementById("idFileName").textContent = this.files[0].name;
+      }
+    });
+
+    document.querySelector("label[for='idFileInput']").onclick = () => {
+      document.getElementById("idFileInput").click();
+    };
+
+    document.getElementById("submitIdBtn").onclick = async () => {
+      const file = document.getElementById("idFileInput").files[0];
+      const status = document.getElementById("verifyStep1Status");
+      if (!file) {
+        status.style.color = "#f87171";
+        status.textContent = "Please choose an ID image first.";
+        return;
+      }
+
+      status.style.color = "var(--accent)";
+      status.textContent = "Scanning ID…";
+      document.getElementById("submitIdBtn").disabled = true;
+
+      const formData = new FormData();
+      formData.append("id_image", file);
+
+      try {
+        const res = await fetch("/user/verify-id", { method: "POST", body: formData });
+        const data = await res.json();
+
+        if (!res.ok) {
+          status.style.color = "#f87171";
+          status.textContent = data.message || "ID scan failed.";
+          document.getElementById("submitIdBtn").disabled = false;
+          return;
+        }
+
+        status.textContent = "";
+        showMrzPreview(data.mrz);
+        goToVerifyStep2();
+      } catch (err) {
+        status.style.color = "#f87171";
+        status.textContent = "Error: " + err.message;
+        document.getElementById("submitIdBtn").disabled = false;
+      }
+    };
+
+    function showMrzPreview(mrz) {
+      if (!mrz) return;
+      const fields = [
+        ["Name", mrz.surname],
+        ["Doc No.", mrz.number],
+        ["Nationality", mrz.nationality],
+        ["DOB", mrz.date_of_birth],
+        ["Expiry", mrz.expiration_date],
+        ["Sex", mrz.sex],
+      ].filter(([, v]) => v);
+
+      document.getElementById("mrzPreview").innerHTML = fields.map(([k, v]) =>
+        `<div class="mrz-row"><span class="mrz-key">${k}</span><span class="mrz-val">${v}</span></div>`
+      ).join("");
+    }
+
+    async function goToVerifyStep2() {
+      document.getElementById("verifyStep1").style.display = "none";
+      document.getElementById("verifyStep2").style.display = "block";
+      document.getElementById("verifyDot2").classList.add("done");
+      document.getElementById("verifyModalTitle").textContent = "Take a Selfie";
+
+      const status = document.getElementById("verifyStep2Status");
+      status.style.color = "var(--muted)";
+      status.textContent = "Position your face in the frame";
+
+      try {
+        verifyCameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById("verifyCameraFeed").srcObject = verifyCameraStream;
+      } catch (err) {
+        status.style.color = "#f87171";
+        status.textContent = "Camera access denied: " + err.message;
+      }
+    }
+
+    document.getElementById("captureVerifySelfieBtn").onclick = async () => {
+      if (!verifyCameraStream) return;
+      const status = document.getElementById("verifyStep2Status");
+      status.style.color = "var(--accent)";
+      status.textContent = "Matching faces…";
+      document.getElementById("captureVerifySelfieBtn").disabled = true;
+
+      const video = document.getElementById("verifyCameraFeed");
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext("2d").drawImage(video, 0, 0);
+
+      canvas.toBlob(async (blob) => {
+        const formData = new FormData();
+        formData.append("live_face", blob, "selfie.jpg");
+
+        try {
+          const res = await fetch("/user/verify-id/selfie", { method: "POST", body: formData });
+          const data = await res.json();
+
+          if (res.ok) {
+            status.style.color = "var(--green)";
+            status.textContent = "✓ Identity verified!";
+            stopVerifyCamera();
+            setTimeout(() => {
+              document.getElementById("verifyModal").classList.remove("active");
+              // Update badge
+              const badge = document.getElementById("verifyBadge");
+              badge.className = "badge badge-verified";
+              badge.textContent = "✓ Identity Verified";
+              document.getElementById("verifyIdBtn").style.display = "none";
+            }, 1200);
+          } else {
+            status.style.color = "#f87171";
+            status.textContent = data.message || "Face match failed.";
+            document.getElementById("captureVerifySelfieBtn").disabled = false;
+          }
+        } catch (err) {
+          status.style.color = "#f87171";
+          status.textContent = "Error: " + err.message;
+          document.getElementById("captureVerifySelfieBtn").disabled = false;
+        }
+      }, "image/jpeg");
+    };
+
+    function stopVerifyCamera() {
+      if (verifyCameraStream) {
+        verifyCameraStream.getTracks().forEach(t => t.stop());
+        verifyCameraStream = null;
+      }
+    }
 
     window.onclick = (e) => {
       if (e.target === modal) modal.classList.remove("active");
