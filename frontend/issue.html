@@ -21,19 +21,19 @@
       --muted: #5a7fa0;
     }
 
-    html { background: var(--bg); }
+    html { background: #030c16; }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
+      background: linear-gradient(165deg, #030c16 0%, #020a13 55%, #040e1c 100%);
       min-height: 100vh;
       color: var(--text);
+      -webkit-font-smoothing: antialiased;
     }
 
     header {
       background: rgba(3,12,22,0.85);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       padding: 0 40px;
       height: 64px;
       display: flex;
@@ -53,11 +53,11 @@
     }
 
     .logo-text {
-      font-size: 22px;
+      font-size: 1.4rem;
       font-weight: 800;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background: linear-gradient(135deg, #fff 30%, var(--accent2));
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
@@ -72,7 +72,7 @@
       transition: color 0.2s;
     }
 
-    .back-link:hover { color: var(--accent); }
+    .back-link:hover { color: var(--accent2); }
 
     main {
       display: flex;
@@ -89,11 +89,12 @@
       width: 100%;
       max-width: 480px;
       overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(14,165,233,0.06);
     }
 
     .card-top {
-      background: linear-gradient(135deg, rgba(14,165,233,0.08), rgba(56,189,248,0.04));
-      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, #071828 0%, #0c1f32 100%);
+      border-bottom: 1px solid rgba(14,165,233,0.15);
       padding: 32px;
       position: relative;
       overflow: hidden;
@@ -102,17 +103,15 @@
     .card-top::before {
       content: '';
       position: absolute;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba(14,165,233,0.06) 0%, transparent 70%);
-      border-radius: 50%;
-      top: -60px; right: -60px;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 80% 20%, rgba(14,165,233,0.12) 0%, transparent 60%);
     }
 
     .card-top-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(14,165,233,0.1);
+      background: rgba(14,165,233,0.12);
       border: 1px solid rgba(14,165,233,0.25);
       color: var(--accent2);
       padding: 5px 12px;
@@ -151,7 +150,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--text);
+      color: var(--muted);
       margin-bottom: 8px;
     }
 
@@ -170,17 +169,20 @@
       appearance: none;
     }
 
+    .form-group select option {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
     .form-group input:focus,
     .form-group select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
     }
 
-    .form-group input::placeholder { color: var(--muted); }
+    .form-group input::placeholder { color: var(--muted); opacity: 0.5; }
 
-    .select-wrapper {
-      position: relative;
-    }
+    .select-wrapper { position: relative; }
 
     .select-wrapper::after {
       content: '▾';
@@ -204,14 +206,15 @@
       font-weight: 700;
       font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
       margin-top: 8px;
-      box-shadow: 0 4px 20px rgba(14,165,233,0.3);
+      box-shadow: 0 0 24px rgba(14,165,233,0.35);
     }
 
     .submit-btn:hover {
       background: #0284c7;
-      box-shadow: 0 6px 24px rgba(14,165,233,0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(14,165,233,0.45);
     }
 
     #status {
@@ -227,20 +230,20 @@
     #status.success {
       display: block;
       background: rgba(16,185,129,0.1);
-      color: #6ee7b7;
+      color: var(--green);
       border: 1px solid rgba(16,185,129,0.25);
     }
 
     #status.error {
       display: block;
-      background: rgba(239,68,68,0.1);
-      color: #fca5a5;
-      border: 1px solid rgba(239,68,68,0.25);
+      background: rgba(220,38,38,0.1);
+      color: #f87171;
+      border: 1px solid rgba(220,38,38,0.2);
     }
 
     #status.loading {
       display: block;
-      background: rgba(14,165,233,0.08);
+      background: rgba(14,165,233,0.1);
       color: var(--accent2);
       border: 1px solid rgba(14,165,233,0.2);
     }
