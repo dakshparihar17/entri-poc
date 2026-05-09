@@ -114,7 +114,7 @@ def create_event(
     event_name: str = Form(...),
     date: str = Form(...),
     location: str = Form(...),
-    description: str = Form(...),
+    description: str = Form(""),
     organizer_email: str = Form(...)
 ):
     """Creates a new event for the organizer with a unique event code."""

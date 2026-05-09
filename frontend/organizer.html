@@ -635,7 +635,7 @@
           <div id="resultIcon" style="font-size:56px; margin-bottom:8px;">✅</div>
           <div id="resultLabel" style="font-size:15px; font-weight:700; color:#059669;">Attendee Verified</div>
           <img id="resultSelfie" src="" alt="Selfie"
-            style="width:96px; height:96px; border-radius:50%; object-fit:cover; border:3px solid #DDD6FE; margin-top:14px; display:none;">
+            style="width:96px; height:96px; border-radius:50%; object-fit:cover; border:3px solid var(--border); margin-top:14px; display:none;">
         </div>
         <div style="background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:20px;">
           <div style="display:flex; flex-direction:column; gap:10px;">
@@ -749,12 +749,12 @@
           const data = await res.json();
 
           if (res.ok) {
-            statusDiv.style.color = "#059669";
+            statusDiv.style.color = "#10b981";
             statusDiv.textContent = `Event created! Code: ${data.event_code}`;
             createForm.reset();
             loadEvents();
           } else {
-            statusDiv.style.color = "#DC2626";
+            statusDiv.style.color = "#f87171";
             statusDiv.textContent = `Error: ${data.detail || data.message}`;
           }
         };
@@ -908,7 +908,7 @@
       cameraView.style.display = "none";
       scanResultView.style.display = "block";
       document.getElementById("resultIcon").textContent = alreadyAdmitted ? "⚠️" : "✅";
-      document.getElementById("resultLabel").style.color = alreadyAdmitted ? "#D97706" : "#059669";
+      document.getElementById("resultLabel").style.color = alreadyAdmitted ? "#fbbf24" : "#10b981";
       document.getElementById("resultLabel").textContent = alreadyAdmitted ? "Already Admitted Earlier" : "Attendee Verified";
       document.getElementById("resultName").textContent = attendee.name || "—";
       document.getElementById("resultEmail").textContent = attendee.attendee_email || attendee.email || "—";
@@ -960,7 +960,7 @@
         mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
         liveVideo.srcObject = mediaStream;
       } catch (err) {
-        scanStatus.style.color = "#DC2626";
+        scanStatus.style.color = "#f87171";
         scanStatus.textContent = "Error accessing camera: " + err.message;
       }
     }
@@ -1003,12 +1003,12 @@
             showResultView({ email: data.recognized_user }, data.current_attendance_count, data.already_attended);
           }
         } else {
-          scanStatus.style.color = "#DC2626";
+          scanStatus.style.color = "#f87171";
           scanStatus.textContent = `✗ ${data.message || data.detail}`;
           captureBtn.disabled = false;
         }
       } catch (err) {
-        scanStatus.style.color = "#DC2626";
+        scanStatus.style.color = "#f87171";
         scanStatus.textContent = "Error: " + err.message;
         captureBtn.disabled = false;
       }

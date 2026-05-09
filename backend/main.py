@@ -216,8 +216,31 @@ def get_user_profile(request: Request):
         "email": user["email"],
         "mrz": user.get("mrz", {}),
         "cropped_face_url": face_url,
+        "id_verified": user.get("id_verified", False),
+        "personal_details": user.get("personal_details", {}),
         "role": "user"
     }
+
+
+@app.post("/user/personal-details")
+async def update_personal_details(request: Request):
+    email = request.cookies.get("user_email")
+    if not email:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    data = await request.json()
+    allowed = {"full_name", "phone", "dob", "city"}
+    details = {k: v for k, v in data.items() if k in allowed}
+
+    users = load_users()
+    for u in users:
+        if u["email"] == email:
+            u["personal_details"] = details
+            break
+    with open(users_file, "w") as f:
+        json.dump(users, f, indent=4)
+
+    return {"message": "Personal details saved."}
 
 
 @app.get("/user/face")
@@ -243,7 +266,7 @@ def get_mrz(email: str):
 
 @app.get("/user/tickets")
 def get_tickets(request: Request):
-    """Return tickets for the currently logged-in user."""
+    """Return tickets for the currently logged-in user, enriched with event details."""
     email = request.cookies.get("user_email")
     if not email:
         raise HTTPException(status_code=401, detail="Not logged in")
@@ -252,11 +275,18 @@ def get_tickets(request: Request):
     if not user_tickets:
         return []
 
-    # Add readable fields for dashboard
+    events = load_json("events.json")
+    events_map = {e["event_code"]: e for e in events}
+
+    selfie_filename = f"{email.replace('@','_').replace('.','_')}_live.jpg"
+    has_selfie = (live_faces_dir / selfie_filename).exists()
+
     for t in user_tickets:
-        # Example: event name derived from ID (you can later store actual names)
-        t["event_name"] = f"{t['event_name'][:6].upper()}"
         t["ticket_number"] = t["ticket_id"][-6:].upper()
+        ev = events_map.get(t["event_code"], {})
+        t["event_date"] = ev.get("date", "")
+        t["event_location"] = ev.get("location") or ev.get("venue", "")
+        t["has_selfie"] = has_selfie
 
     return user_tickets
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -312,62 +342,157 @@ async def logout():
     return response
 
 @app.post("/signup.html")
-async def signup(response: Response,email: str = Form(...), password: str = Form(...), id_image: UploadFile = File(...)):
-    # Check if user exists
+async def signup(response: Response, email: str = Form(...), password: str = Form(...)):
     if get_user_by_email(email):
         return JSONResponse(status_code=400, content={"message": "User already registered"})
-    
-    # Save uploaded file
+
+    hashed_password = pwd_context.hash(password)
+    save_user({
+        "email": email,
+        "password": hashed_password,
+        "mrz": {},
+        "id_verified": False,
+        "cropped_face_path": None
+    })
+
+    response.set_cookie(key="user_email", value=email, httponly=True)
+    return {"message": "User registered successfully"}
+
+
+@app.post("/user/verify-id")
+async def verify_id(request: Request, id_image: UploadFile = File(...)):
+    """Step 1 of identity verification: upload ID, extract MRZ + face crop."""
+    email = request.cookies.get("user_email")
+    if not email:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
     file_path = uploads_path / id_image.filename
     with open(file_path, "wb") as f:
         shutil.copyfileobj(id_image.file, f)
 
-    # Read MRZ
     mrz = read_mrz(str(file_path))
     if not mrz:
         return JSONResponse(status_code=400, content={"message": "MRZ not detected. Please upload a clearer image."})
     mrz_data = mrz.to_dict()
 
-    # Verify ID (mock for now)
-    verified = True  
-    if not verified:
-        return JSONResponse(status_code=400, content={"message": "ID verification failed. Please try again."})
-
-    # ---- FACE CROPPING START ----
     image = face_recognition.load_image_file(str(file_path))
     face_locations = face_recognition.face_locations(image)
-
-    cropped_face_path = None
-    if face_locations:
-        top, right, bottom, left = face_locations[0]  # Take the first face
-        face_image = image[top:bottom, left:right]
-
-        pil_image = Image.fromarray(face_image)
-        face_filename = f"{email.replace('@','_').replace('.','_')}_face.jpg"
-        face_save_path = faces_dir / face_filename
-        pil_image.save(face_save_path)
-
-        cropped_face_path = str(face_save_path)
-    else:
+    if not face_locations:
         return JSONResponse(status_code=400, content={"message": "No face detected in uploaded image."})
-    # ---- FACE CROPPING END ----
-    hashed_password = pwd_context.hash(password)
 
-    # Save user info (including cropped face)
-    save_user({
-        "email": email,
-        "password": hashed_password,
-        "mrz": mrz_data,
-        "id_image_path": str(file_path),
-        "cropped_face_path": cropped_face_path
-    })
+    top, right, bottom, left = face_locations[0]
+    face_image = image[top:bottom, left:right]
+    pil_image = Image.fromarray(face_image)
+    face_filename = f"{email.replace('@','_').replace('.','_')}_face.jpg"
+    face_save_path = faces_dir / face_filename
+    pil_image.save(face_save_path)
 
-    response.set_cookie(key="user_email", value=email, httponly=True)
-    return {
-        "message": "User registered successfully",
-        "mrz": mrz_data,
-        "cropped_face_path": cropped_face_path
-    }
+    users = load_users()
+    for u in users:
+        if u["email"] == email:
+            u["mrz"] = mrz_data
+            u["id_image_path"] = str(file_path)
+            u["cropped_face_path"] = str(face_save_path)
+            break
+    with open(users_file, "w") as f:
+        json.dump(users, f, indent=4)
+
+    return {"message": "ID processed. Please take a selfie to complete verification.", "mrz": mrz_data}
+
+
+@app.post("/user/verify-id/selfie")
+async def verify_id_selfie(request: Request, live_face: UploadFile = File(...)):
+    """Step 2 of identity verification: compare selfie against ID face."""
+    email = request.cookies.get("user_email")
+    if not email:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    user = get_user_by_email(email)
+    if not user or not user.get("cropped_face_path"):
+        raise HTTPException(status_code=400, detail="Please upload your ID photo first.")
+
+    live_face_filename = f"{email.replace('@','_').replace('.','_')}_live.jpg"
+    live_face_path = live_faces_dir / live_face_filename
+    with open(live_face_path, "wb") as f:
+        shutil.copyfileobj(live_face.file, f)
+
+    try:
+        cropped_image = face_recognition.load_image_file(user["cropped_face_path"])
+        live_image = face_recognition.load_image_file(str(live_face_path))
+    except Exception as e:
+        live_face_path.unlink(missing_ok=True)
+        return JSONResponse(status_code=400, content={"message": f"Error loading images: {str(e)}"})
+
+    cropped_encodings = face_recognition.face_encodings(cropped_image)
+    live_encodings = face_recognition.face_encodings(live_image)
+
+    if not cropped_encodings:
+        live_face_path.unlink(missing_ok=True)
+        return JSONResponse(status_code=400, content={"message": "No face detected in ID photo."})
+    if not live_encodings:
+        live_face_path.unlink(missing_ok=True)
+        return JSONResponse(status_code=400, content={"message": "No face detected in selfie. Please retake."})
+
+    match = face_recognition.compare_faces([cropped_encodings[0]], live_encodings[0])
+    if not match[0]:
+        live_face_path.unlink()
+        return JSONResponse(status_code=400, content={"message": "Selfie does not match ID photo. Please try again."})
+
+    users = load_users()
+    for u in users:
+        if u["email"] == email:
+            u["id_verified"] = True
+            u["live_face_path"] = str(live_face_path)
+            break
+    with open(users_file, "w") as f:
+        json.dump(users, f, indent=4)
+
+    return {"message": "Identity verified successfully!"}
+
+
+@app.post("/user/selfie")
+async def save_event_selfie(request: Request, event_code: str = Form(...), live_face: UploadFile = File(...)):
+    """Save event entry selfie. Only allowed within 48 hours of the event."""
+    email = request.cookies.get("user_email")
+    if not email:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    tickets = get_tickets_by_email(email)
+    if not any(t["event_code"] == event_code for t in tickets):
+        raise HTTPException(status_code=403, detail="No ticket found for this event.")
+
+    events = load_json("events.json")
+    event = next((e for e in events if e["event_code"] == event_code), None)
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found.")
+
+    event_date_str = event.get("date")
+    if event_date_str:
+        try:
+            event_dt = datetime.fromisoformat(event_date_str)
+        except ValueError:
+            event_dt = datetime.strptime(event_date_str, "%Y-%m-%d")
+        now = datetime.now()
+        delta = event_dt - now
+        if delta.total_seconds() > 48 * 3600:
+            return JSONResponse(status_code=400, content={"message": "Selfie window opens 48 hours before the event."})
+        if delta.total_seconds() < 0:
+            return JSONResponse(status_code=400, content={"message": "This event has already passed."})
+
+    live_face_filename = f"{email.replace('@','_').replace('.','_')}_live.jpg"
+    live_face_path = live_faces_dir / live_face_filename
+    with open(live_face_path, "wb") as f:
+        shutil.copyfileobj(live_face.file, f)
+
+    users = load_users()
+    for u in users:
+        if u["email"] == email:
+            u["live_face_path"] = str(live_face_path)
+            break
+    with open(users_file, "w") as f:
+        json.dump(users, f, indent=4)
+
+    return {"message": "Entry selfie saved successfully!"}
 
 
 @app.post("/signup/live-face")

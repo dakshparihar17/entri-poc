@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Entri — Identity. Simplified.</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
       --bg: #030c16; --surface: #071828; --surface2: #0c1f32;
       --border: rgba(255,255,255,0.07); --accent: #0ea5e9; --accent2: #38bdf8;
@@ -211,7 +213,10 @@
 <body>
 
 <nav>
-  <div class="logo">entri</div>
+  <a class="nav-logo" href="/">
+    <div class="nav-diamond"><img src="/static/assets/logo.png" alt="Entri"></div>
+    <span class="nav-wordmark">entri</span>
+  </a>
   <ul>
     <li><a href="#how">How it works</a></li>
     <li><a href="#features">Features</a></li>
@@ -219,7 +224,7 @@
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="/martyn-law.html" style="color:var(--accent2)">Martyn's Law</a></li>
   </ul>
-  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Demo</button>
+  <a class="nav-cta" href="/homepage.html">Get Started →</a>
 </nav>
 
 <section class="hero">
@@ -360,9 +365,10 @@
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section id="features">
+<!-- HOW IT WORKS -->
+<section id="how">
   <div class="container">
     <span class="tag">Features</span>
     <h2 class="sec-title">Everything security &amp; operations need</h2>
@@ -444,11 +450,12 @@
   </div>
 </section>
 
-<section class="alt">
+<!-- COMPARISON -->
+<section class="alt-bg">
   <div class="container">
-    <span class="tag">Why Entri</span>
-    <h2 class="sec-title">The future of access vs. the past</h2>
-    <div class="tw">
+    <span class="section-tag">Why Entri</span>
+    <h2 class="section-title">What changes when entry is <span>identity-first</span></h2>
+    <div class="table-wrap">
       <table>
         <thead><tr><th>Capability</th><th>Traditional Ticketing</th><th>Basic Digital</th><th style="color:#38bdf8">Entri</th></tr></thead>
         <tbody>
@@ -525,8 +532,9 @@
     <a href="mailto:dakshparihar17@gmail.com" class="btn-p">Book a Demo</a>
     <a href="https://github.com/dakshparihar17/entri-poc" target="_blank" class="btn-g">View on GitHub ↗</a> 
   </div>
-</section>
+</div>
 
+<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
