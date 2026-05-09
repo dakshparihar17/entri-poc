@@ -78,7 +78,15 @@ def client_dashboard():
 
 @app.get("/organizer.html")
 def organizer_dashboard():
-    return FileResponse( frontend_path / "organizer.html")  
+    return FileResponse( frontend_path / "organizer.html")
+
+@app.get("/martyn-law.html")
+def martyn_law_page():
+    return FileResponse(frontend_path / "martyn-law.html")
+
+@app.get("/martyn-law-checklist.html")
+def martyn_law_checklist_page():
+    return FileResponse(frontend_path / "martyn-law-checklist.html")
 
 @app.get("/events")
 def get_all_events():
