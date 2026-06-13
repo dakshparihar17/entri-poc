@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compliance Centre | Entri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #030c16;
+      --surface: #071828;
+      --surface2: #0c1f32;
+      --border: rgba(255,255,255,0.07);
+      --accent: #0ea5e9;
+      --accent2: #38bdf8;
+      --green: #10b981;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --text: #eef4ff;
+      --muted: #5a7fa0;
+    }
+
+    html { background: #030c16; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(165deg, #030c16 0%, #020a13 55%, #040e1c 100%);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: rgba(3,12,22,0.85);
+      backdrop-filter: blur(20px);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 30%, var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .btn-back {
+      padding: 8px 18px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-back:hover {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .page-header {
+      margin-bottom: 48px;
+    }
+
+    .page-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 560px;
+    }
+
+    /* Section layout */
+    .section {
+      margin-bottom: 52px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section-title h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+
+    .section-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    .badge-live {
+      background: rgba(16,185,129,0.12);
+      color: var(--green);
+      border: 1px solid rgba(16,185,129,0.25);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-live::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .badge-sia {
+      background: rgba(239,68,68,0.12);
+      color: var(--red);
+      border: 1px solid rgba(239,68,68,0.25);
+    }
+
+    /* Live signals grid */
+    .signals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .signal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .signal-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 0 0, rgba(14,165,233,0.05), transparent);
+      pointer-events: none;
+    }
+
+    .signal-card:hover { border-color: rgba(14,165,233,0.25); }
+
+    .signal-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .signal-value {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -1px;
+    }
+
+    .signal-value.green { color: var(--green); }
+    .signal-value.blue { color: var(--accent2); }
+    .signal-value.amber { color: var(--amber); }
+
+    .signal-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .signal-footer {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .signal-footer .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.6s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    /* Alerts panel */
+    .alerts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      color: var(--amber);
+      font-weight: 500;
+    }
+
+    .alert-item .alert-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    .alert-item.alert-clear {
+      background: rgba(16,185,129,0.07);
+      border-color: rgba(16,185,129,0.2);
+      color: var(--green);
+    }
+
+    /* Gate velocity bars */
+    .gate-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .gate-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gate-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      width: 52px;
+      flex-shrink: 0;
+    }
+
+    .gate-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .gate-bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    .gate-rate {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent2);
+      width: 56px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Reports grid */
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .report-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .report-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 0 0, rgba(14,165,233,0.05), transparent);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .report-card:hover { border-color: rgba(14,165,233,0.25); transform: translateY(-3px); }
+    .report-card:hover::before { opacity: 1; }
+
+    .report-card.primary-report {
+      border-color: rgba(14,165,233,0.2);
+    }
+
+    .report-card.primary-report::after {
+      content: 'SIA Key';
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent2);
+      background: rgba(14,165,233,0.12);
+      border: 1px solid rgba(14,165,233,0.2);
+      padding: 3px 8px;
+      border-radius: 100px;
+    }
+
+    .report-icon {
+      font-size: 28px;
+    }
+
+    .report-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .report-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .report-export-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .export-btn {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border: 1px solid var(--border);
+    }
+
+    .export-btn.pdf {
+      background: rgba(239,68,68,0.08);
+      color: #f87171;
+      border-color: rgba(239,68,68,0.2);
+    }
+
+    .export-btn.pdf:hover {
+      background: rgba(239,68,68,0.16);
+      transform: translateY(-1px);
+    }
+
+    .export-btn.csv {
+      background: rgba(16,185,129,0.08);
+      color: var(--green);
+      border-color: rgba(16,185,129,0.2);
+    }
+
+    .export-btn.csv:hover {
+      background: rgba(16,185,129,0.16);
+      transform: translateY(-1px);
+    }
+
+    /* SIA documents */
+    .sia-doc-card {
+      background: var(--surface);
+      border: 1px solid rgba(239,68,68,0.35);
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sia-doc-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 60% at 0 0, rgba(239,68,68,0.06), transparent);
+      pointer-events: none;
+    }
+
+    .sia-warning-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+
+    .sia-warning-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    .sia-warning-text {
+      font-size: 13px;
+      color: #fca5a5;
+      line-height: 1.55;
+    }
+
+    .sia-warning-text strong {
+      color: #f87171;
+      font-weight: 700;
+    }
+
+    .sia-doc-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sia-doc-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .sia-doc-row:first-of-type { padding-top: 0; }
+
+    .sia-doc-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .sia-doc-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .sia-doc-info h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .sia-doc-info p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .sia-deadline-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: rgba(239,68,68,0.12);
+      color: #f87171;
+      border: 1px solid rgba(239,68,68,0.25);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .sia-doc-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-sia {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      border: 1px solid rgba(239,68,68,0.3);
+      background: rgba(239,68,68,0.1);
+      color: #f87171;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-sia:hover {
+      background: rgba(239,68,68,0.18);
+      transform: translateY(-1px);
+    }
+
+    /* Compliance manager bar */
+    .compliance-manager-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .compliance-manager-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+    }
+
+    .compliance-manager-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent2);
+      background: rgba(14,165,233,0.1);
+      border: 1px solid rgba(14,165,233,0.2);
+      padding: 3px 12px;
+      border-radius: 100px;
+    }
+
+    /* Event selector */
+    .event-selector-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .event-selector-bar label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .event-selector {
+      padding: 9px 14px;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      min-width: 240px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .event-selector:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+    }
+
+    /* Export toast */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast-icon { font-size: 18px; }
+
+    @media (max-width: 900px) {
+      .signals-grid, .reports-grid { grid-template-columns: 1fr; }
+      header { padding: 0 16px; }
+      main { padding: 28px 16px 60px; }
+    }
+
+    @media (max-width: 600px) {
+      .sia-doc-row { flex-direction: column; align-items: flex-start; }
+      .sia-doc-actions { flex-direction: row; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="/homepage.html">
+      <span class="logo-text">entri</span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-tag">Compliance Centre</span>
+      <a class="btn-back" href="/organizer.html">← Dashboard</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Compliance Centre</h1>
+      <p>Live safety signals, per-event audit reports, and SIA documentation — all in one place for your matchday operations team.</p>
+      <div class="compliance-manager-bar" id="complianceManagerBar" style="display:none;">
+        <span class="compliance-manager-label">Designated Compliance Manager</span>
+        <span class="compliance-manager-name" id="complianceManagerName"></span>
+      </div>
+    </div>
+
+    <!-- ── SECTION 1: LIVE DASHBOARD ── -->
+    <div class="section">
+      <div class="section-title">
+        <h2>Live Dashboard</h2>
+        <span class="section-badge badge-live">Live</span>
+      </div>
+
+      <div class="event-selector-bar">
+        <label>Event</label>
+        <select class="event-selector" id="liveEventSelector">
+          <option value="">— Select an event —</option>
+        </select>
+      </div>
+
+      <div class="signals-grid">
+
+        <!-- Signal 1: Verified Occupancy -->
+        <div class="signal-card">
+          <div class="signal-label">Verified Occupancy</div>
+          <div class="signal-value green" id="occupancyValue">—</div>
+          <div class="signal-sub" id="occupancySub">Select an event above</div>
+          <div class="signal-footer">
+            <div class="dot"></div>
+            <span id="occupancyFooter">No event selected</span>
+          </div>
+        </div>
+
+        <!-- Signal 2: Entry Velocity -->
+        <div class="signal-card">
+          <div class="signal-label">Entry Velocity per Gate</div>
+          <div class="signal-value blue" id="velocityValue">142</div>
+          <div class="signal-sub">scans/min across all active gates</div>
+
+          <div class="gate-bars" style="margin-top: 14px;">
+            <div class="gate-row">
+              <span class="gate-name">Gate A</span>
+              <div class="gate-bar-track"><div class="gate-bar-fill" style="width: 88%;"></div></div>
+              <span class="gate-rate">52 /min</span>
+            </div>
+            <div class="gate-row">
+              <span class="gate-name">Gate B</span>
+              <div class="gate-bar-track"><div class="gate-bar-fill" style="width: 60%;"></div></div>
+              <span class="gate-rate">38 /min</span>
+            </div>
+            <div class="gate-row">
+              <span class="gate-name">Gate C</span>
+              <div class="gate-bar-track"><div class="gate-bar-fill" style="width: 82%;"></div></div>
+              <span class="gate-rate">52 /min</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signal 3: Active Alerts -->
+        <div class="signal-card">
+          <div class="signal-label">Active Alerts</div>
+          <div class="signal-value amber" id="alertsValue">2</div>
+          <div class="signal-sub">Require attention</div>
+
+          <div class="alerts-list">
+            <div class="alert-item">
+              <span class="alert-icon">⚠️</span>
+              Gate B throughput below 35 /min threshold
+            </div>
+            <div class="alert-item">
+              <span class="alert-icon">⚠️</span>
+              ID mismatch — 3 failed biometric attempts (Gate A)
+            </div>
+            <div class="alert-item alert-clear">
+              <span class="alert-icon">✓</span>
+              Capacity within safe limits
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: REPORTS ── -->
+    <div class="section">
+      <div class="section-title">
+        <h2>Reports</h2>
+      </div>
+
+      <div class="event-selector-bar">
+        <label>Event</label>
+        <select class="event-selector" id="reportEventSelector">
+          <option value="">— Select an event —</option>
+        </select>
+      </div>
+
+      <div class="reports-grid">
+
+        <!-- Entry Audit Report -->
+        <div class="report-card primary-report">
+          <div class="report-icon">🗂️</div>
+          <div class="report-name">Entry Audit Report</div>
+          <div class="report-desc">
+            Timestamped, gate-by-gate verified entry log. The primary record required under SIA regulations — captures every biometric and QR scan event with attendee identity and outcome.
+          </div>
+          <div class="report-export-row">
+            <button class="export-btn pdf" onclick="exportReport('Entry Audit Report', 'pdf')">
+              ⬇ PDF
+            </button>
+            <button class="export-btn csv" onclick="exportReport('Entry Audit Report', 'csv')">
+              ⬇ CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Occupancy Report -->
+        <div class="report-card">
+          <div class="report-icon">📊</div>
+          <div class="report-name">Occupancy Report</div>
+          <div class="report-desc">
+            Per-event capacity and verified occupancy over time. Includes biometric-confirmed headcount, fill-rate trends, and gate-level breakdowns for the full event window.
+          </div>
+          <div class="report-export-row">
+            <button class="export-btn pdf" onclick="exportReport('Occupancy Report', 'pdf')">
+              ⬇ PDF
+            </button>
+            <button class="export-btn csv" onclick="exportReport('Occupancy Report', 'csv')">
+              ⬇ CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Incident Report -->
+        <div class="report-card">
+          <div class="report-icon">🚨</div>
+          <div class="report-name">Incident Report</div>
+          <div class="report-desc">
+            Log of all flagged events — failed biometric matches, duplicate scan attempts, refused entries, and manual overrides. Chronologically ordered per event.
+          </div>
+          <div class="report-export-row">
+            <button class="export-btn pdf" onclick="exportReport('Incident Report', 'pdf')">
+              ⬇ PDF
+            </button>
+            <button class="export-btn csv" onclick="exportReport('Incident Report', 'csv')">
+              ⬇ CSV
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── SECTION 3: SIA DOCUMENTS ── -->
+    <div class="section">
+      <div class="section-title">
+        <h2>SIA Documents</h2>
+        <span class="section-badge badge-sia">Action Required</span>
+      </div>
+
+      <div class="sia-doc-card">
+        <div class="sia-warning-banner">
+          <span class="sia-warning-icon">🔴</span>
+          <div class="sia-warning-text">
+            The documents below are subject to statutory deadlines under the Martyn's Law (Terrorism (Protection of Premises) Act). <strong>Any revision to the Act triggers a 30-day submission window</strong> — failure to submit within this period may result in a compliance breach. Review and resubmit promptly following any legislative update.
+          </div>
+        </div>
+
+        <div class="sia-doc-row">
+          <div class="sia-doc-left">
+            <div class="sia-doc-icon">📋</div>
+            <div class="sia-doc-info">
+              <h4>Organiser Compliance Statement</h4>
+              <p>Signed declaration confirming this venue's compliance with the Terrorism (Protection of Premises) Act. Must be resubmitted within 30 days of any revision under the Act.</p>
+            </div>
+          </div>
+          <div class="sia-doc-actions">
+            <span class="sia-deadline-badge">30-day window</span>
+            <button class="btn-sia" onclick="downloadDoc('Organiser Compliance Statement')">
+              ⬇ Download
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast notification -->
+  <div class="toast" id="exportToast">
+    <span class="toast-icon" id="toastIcon">✅</span>
+    <span id="toastMsg">Export started</span>
+  </div>
+
+  <script>
+    function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    let selectedLiveEvent = null;
+
+    // Load organizer profile and populate both event selectors
+    (async () => {
+      try {
+        const profileRes = await fetch("/user/profile");
+        if (!profileRes.ok) return;
+        const profile = await profileRes.json();
+
+        if (profile.name) {
+          document.getElementById("complianceManagerName").textContent = profile.name;
+          document.getElementById("complianceManagerBar").style.display = "flex";
+        }
+
+        const eventsRes = await fetch(`/organizer/events?email=${encodeURIComponent(profile.email)}`);
+        if (!eventsRes.ok) return;
+        const events = await eventsRes.json();
+
+        ["liveEventSelector", "reportEventSelector"].forEach(id => {
+          const sel = document.getElementById(id);
+          events.forEach(ev => {
+            const opt = document.createElement("option");
+            opt.value = ev.event_code;
+            opt.textContent = `${ev.event_name} (${ev.event_code})`;
+            sel.appendChild(opt);
+          });
+        });
+      } catch (_) {}
+    })();
+
+    // Live Dashboard event selector — fetch real stats
+    document.getElementById("liveEventSelector").addEventListener("change", async (e) => {
+      selectedLiveEvent = e.target.value;
+      if (!selectedLiveEvent) {
+        document.getElementById("occupancyValue").textContent = "—";
+        document.getElementById("occupancySub").textContent = "Select an event above";
+        document.getElementById("occupancyFooter").textContent = "No event selected";
+        return;
+      }
+      await refreshOccupancy(selectedLiveEvent);
+    });
+
+    async function refreshOccupancy(eventCode) {
+      try {
+        const res = await fetch(`/organizer/event-stats?event_code=${encodeURIComponent(eventCode)}`);
+        if (!res.ok) return;
+        const stats = await res.json();
+        const sold = stats.expected;
+        const scanned = stats.arrived;
+        const pct = sold > 0 ? Math.round(scanned / sold * 100) : 0;
+        document.getElementById("occupancyValue").textContent = scanned.toLocaleString();
+        document.getElementById("occupancySub").textContent =
+          `of ${sold.toLocaleString()} sold tickets · ${scanned} scanned`;
+        document.getElementById("occupancyFooter").textContent =
+          `${pct}% scanned in · updating live`;
+      } catch (_) {}
+    }
+
+    // Simulate live ticking for velocity/gate bars only
+    setInterval(() => {
+      if (selectedLiveEvent) {
+        refreshOccupancy(selectedLiveEvent);
+      }
+
+      const v = randomInt(130, 158);
+      document.getElementById("velocityValue").textContent = v;
+
+      document.querySelectorAll(".gate-bar-fill").forEach(bar => {
+        bar.style.width = randomInt(45, 95) + "%";
+      });
+
+      document.querySelectorAll(".gate-rate").forEach((el, i) => {
+        const rates = [randomInt(38, 58), randomInt(28, 48), randomInt(38, 58)];
+        el.textContent = rates[i] + " /min";
+      });
+    }, 3000);
+
+    // Export handler
+    function exportReport(name, format) {
+      const eventSel = document.getElementById("reportEventSelector");
+      const eventLabel = eventSel.options[eventSel.selectedIndex]?.text;
+      if (!eventSel.value) {
+        showToast("⚠️", "Select an event first");
+        return;
+      }
+      showToast("✅", `${name} (${format.toUpperCase()}) export started for ${eventLabel}`);
+    }
+
+    function downloadDoc(name) {
+      showToast("✅", `${name} download started`);
+    }
+
+    function showToast(icon, msg) {
+      const toast = document.getElementById("exportToast");
+      document.getElementById("toastIcon").textContent = icon;
+      document.getElementById("toastMsg").textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3200);
+    }
+  </script>
+
+</body>
+</html>
