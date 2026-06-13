@@ -236,6 +236,18 @@
     @media(max-width:480px){
       .footer-grid { grid-template-columns: 1fr; }
     }
+    .rotating-text {
+      display: inline-block;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .rotating-text.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    .rotating-text.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -257,7 +269,7 @@
   <div class="hero-split">
     <div class="hero-left">
       <div class="badge"><span class="dot"></span>Supporting Martyn's Law readiness</div>
-      <h1>Helping venues prepare for<br/><span class="g">Martyn's Law.</span></h1>
+      <h1>Helping venues prepare for<br/><span class="g rotating-text" id="rotatingHero">Martyn's Law.</span></h1>
       <p class="hero-sub">Entri gives venue operators identity-first entry, complete access audit trails, and repeatable staff workflows — everything you need to evidence your protective security measures.</p>
       <div class="hero-actions">
         <a href="#contact" class="btn-p">Book a Readiness Call</a>
@@ -621,6 +633,22 @@
     document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
     if (!isOpen) item.classList.add('open');
   }
+
+  (function() {
+    const words = ["Martyn's Law.", "Compliance.", "Safer Venues.", "Secured Gates."];
+    let idx = 0;
+    const el = document.getElementById('rotatingHero');
+    setInterval(() => {
+      el.classList.add('fade-out');
+      setTimeout(() => {
+        idx = (idx + 1) % words.length;
+        el.textContent = words[idx];
+        el.classList.remove('fade-out');
+        el.classList.add('fade-in');
+        setTimeout(() => el.classList.remove('fade-in'), 350);
+      }, 350);
+    }, 2500);
+  })();
 </script>
 </body>
 </html>

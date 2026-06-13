@@ -514,7 +514,10 @@
         <h1>Your Events</h1>
         <p>Manage events, view attendees, and scan guests in real time.</p>
       </div>
-      <button class="btn btn-accent" id="openModalBtn">+ Create New Event</button>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <a href="/compliance.html" class="btn btn-ghost" style="text-decoration:none;" id="complianceLink">🛡️ Compliance</a>
+        <button class="btn btn-accent" id="openModalBtn">+ Create New Event</button>
+      </div>
     </div>
 
     <div id="eventsContainer">
@@ -693,6 +696,12 @@
       await fetch("/logout", { method: "POST" });
       window.location.replace("/homepage.html");
     };
+
+    document.getElementById("complianceLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      isInternalNavigation = true;
+      window.location.href = "/compliance.html";
+    });
 
     // Warn before tab/window close and auto-logout if they leave
     window.addEventListener('beforeunload', (e) => {

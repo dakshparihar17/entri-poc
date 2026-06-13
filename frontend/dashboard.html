@@ -741,11 +741,6 @@
   </div>
 
   <script>
-    let email = null;
-    let allTickets = [];
-    let isInternalNavigation = false;
-
-  <script>
     /* ── State ── */
     let userEmail = null;
     let isInternalNavigation = false;
@@ -771,8 +766,7 @@
           history.pushState(null, '', window.location.href);
         });
 
-        document.getElementById("profileEmail").textContent = email;
-        document.getElementById("profileName").textContent = data.mrz?.surname?.trim() || "User";
+        document.getElementById("profileEmail").textContent = userEmail;
 
         if (data.cropped_face_url) {
           const img = document.getElementById("userFace");
@@ -1023,6 +1017,7 @@
     document.getElementById("closeQrModal").onclick = () => document.getElementById("qrModal").classList.remove("active");
 
     /* ── Verify ID Modal ── */
+    if (document.getElementById("verifyModal")) {
     document.getElementById("verifyIdBtn").onclick = () => {
       resetVerifyModal();
       document.getElementById("verifyModal").classList.add("active");
@@ -1159,6 +1154,7 @@
         }
       }, "image/jpeg");
     };
+    } // end verifyModal guard
 
     function stopVerifyCamera() {
       if (verifyCameraStream) {
@@ -1172,11 +1168,6 @@
       if (e.target === qrModal) qrModal.classList.remove("active");
       const logoutModal = document.getElementById("logoutModal");
       if (e.target === logoutModal) logoutModal.classList.remove("active");
-    };
-
-    document.getElementById("issueButton").onclick = () => {
-      isInternalNavigation = true;
-      window.location.href = `/issue.html?email=${encodeURIComponent(email)}`;
     };
 
     // Logout button → show confirmation modal
