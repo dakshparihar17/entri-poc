@@ -88,6 +88,10 @@ def compliance_page():
 def martyn_law_page():
     return FileResponse(frontend_path / "martyn-law.html")
 
+@app.get("/googleb4a7924049f608d6.html")
+def google_site_verification():
+    return FileResponse(frontend_path / "googleb4a7924049f608d6.html")
+
 @app.get("/martyn-law-checklist.html")
 def martyn_law_checklist_page():
     return FileResponse(frontend_path / "martyn-law-checklist.html")
