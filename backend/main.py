@@ -61,40 +61,24 @@ def signup_page():
     return FileResponse(frontend_path / "signup.html")  
 
 @app.get("/login.html")
-def signup_page():
-    return FileResponse(frontend_path / "login.html")  
+def login_page():
+    return FileResponse(frontend_path / "login.html")
 
 @app.get("/homepage.html")
 def homepage():
     return FileResponse(frontend_path / "homepage.html")
 
-@app.get("/index.html")
-def read_index():
-    return FileResponse(frontend_path / "index.html")  
-
 @app.get("/dashboard.html")
 def client_dashboard():
-    return FileResponse(frontend_path / "dashboard.html")  
+    return FileResponse(frontend_path / "dashboard.html")
 
 @app.get("/organizer.html")
 def organizer_dashboard():
     return FileResponse( frontend_path / "organizer.html")
 
-@app.get("/compliance.html")
-def compliance_page():
-    return FileResponse(frontend_path / "compliance.html")
-
-@app.get("/martyn-law.html")
-def martyn_law_page():
-    return FileResponse(frontend_path / "martyn-law.html")
-
 @app.get("/googleb4a7924049f608d6.html")
 def google_site_verification():
     return FileResponse(frontend_path / "googleb4a7924049f608d6.html")
-
-@app.get("/martyn-law-checklist.html")
-def martyn_law_checklist_page():
-    return FileResponse(frontend_path / "martyn-law-checklist.html")
 
 @app.get("/events")
 def get_all_events():
@@ -185,8 +169,6 @@ async def check_email(request: Request):
     exists = any(u["email"] == email for u in users) or any(o["email"] == email for o in organizers)
     return {"exists": exists}
 
-
-CURRENT_USER = {"email": "test@example.com"}
 
 @app.get("/user/current")
 def get_current_user(request: Request):
@@ -571,17 +553,3 @@ async def save_live_face(email: str = Form(...), live_face: UploadFile = File(..
         json.dump(users, f, indent=4)
 
     return {"message": "Live selfie verified and saved successfully", "live_face_path": str(live_face_path)}
-
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# def add_organizer(email, password, name):
-#     with open("organizers.json", "r") as f:
-#         data = json.load(f)
-#     hashed = pwd_context.hash(password)
-#     data.append({"email": email, "password": hashed, "name": name})
-#     with open("organizers.json", "w") as f:
-#         json.dump(data, f, indent=2)
-#     print(f"✅ Organizer {email} added.")
-
-# add_organizer("eventhost@entriplatform.com", "secure123", "Host One")

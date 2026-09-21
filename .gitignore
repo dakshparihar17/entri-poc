@@ -64,3 +64,4 @@ __temp__/
 test_output/
 debug/
 *.tmp
+.claude/

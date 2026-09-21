@@ -1,8 +1,7 @@
 from fastapi import (
-    APIRouter, HTTPException, Query, Form, File, UploadFile, FastAPI
+    APIRouter, HTTPException, Query, Form, File, UploadFile
 )
 from fastapi.responses import JSONResponse, FileResponse, StreamingResponse
-from fastapi.staticfiles import StaticFiles
 from storage import get_all_tickets, load_json, save_json, redeem_ticket
 from pathlib import Path
 import face_recognition
@@ -36,10 +35,6 @@ tickets_path = DATA_DIR / "tickets.json"
 if not attendance_path.exists():
     with open(attendance_path, "w") as f:
         json.dump({}, f)
-
-# ✅ Serve static files (including tickets.json)
-app = FastAPI()
-app.mount("/backend", StaticFiles(directory=str(BASE_DIR)), name="backend")
 
 
 @router.get("/tickets.json")

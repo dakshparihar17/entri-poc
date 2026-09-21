@@ -14,11 +14,6 @@ for file in [data_file, users_file]:
         with open(file, "w") as f:
             json.dump([], f)
 
-# # Initialize file if not exists
-# if not data_file.exists():
-#     with open(data_file, "w") as f:
-#         json.dump([], f)
-
 def save_ticket(ticket_data: dict):
     with open(data_file, "r+") as f:
         data = json.load(f)

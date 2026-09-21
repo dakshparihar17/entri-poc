@@ -91,10 +91,10 @@ The frontend is served directly by the backend — no separate server needed.
 ```
 entri-poc/
 ├── setup.sh                  # One-time setup script — run this first
-├── requirements.txt          # Python dependencies
 │
 ├── backend/
 │   ├── main.py               # FastAPI app, all routes
+│   ├── requirements.txt      # Python dependencies
 │   ├── storage.py            # JSON read/write helpers for users & tickets
 │   ├── organizers.py         # Organizer routes (events, attendance, face scan)
 │   ├── blockchain.py         # Lightweight in-memory blockchain for ticket hashing
