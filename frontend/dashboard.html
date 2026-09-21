@@ -602,6 +602,151 @@
       font-weight: 500;
       color: var(--text);
     }
+
+    /* ── Details card ── */
+    .details-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    .details-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .field-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 8px 12px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+    }
+
+    /* ── Tabs ── */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+      width: fit-content;
+    }
+    .tab-btn {
+      padding: 8px 20px;
+      background: transparent;
+      border: none;
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(14,165,233,0.35);
+    }
+
+    /* ── Tab panels ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Ticket list ── */
+    .ticket-list { display: flex; flex-direction: column; gap: 12px; }
+    .ticket-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 20px;
+    }
+    .ticket-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .att-yes {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 100px;
+      padding: 3px 10px;
+    }
+    .att-no {
+      font-size: 12px;
+      font-weight: 700;
+      color: #f87171;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 100px;
+      padding: 3px 10px;
+    }
+    .qr-btn {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--accent2);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .qr-btn:hover { background: rgba(14,165,233,0.12); border-color: rgba(14,165,233,0.3); }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--muted);
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .empty-state p { font-size: 13px; }
+
+    /* ── Verify ID badge variants ── */
+    .badge-verified { background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+    .badge-unverified { background: rgba(245,158,11,0.08); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+
+    /* ── Ghost button ── */
+    .btn-ghost {
+      padding: 8px 18px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+
+    /* ── QR modal centering ── */
+    .qr-modal-content { display: flex; flex-direction: column; align-items: center; }
   </style>
 </head>
 <body>
@@ -740,6 +885,47 @@
     </div>
   </div>
 
+  <!-- Verify Identity Modal -->
+  <div id="verifyModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="verifyModalTitle">Verify Identity</h2>
+        <button class="close-btn" id="closeVerifyModal">&times;</button>
+      </div>
+
+      <div class="step-indicator">
+        <div class="step-dot done" id="verifyDot1"></div>
+        <div class="step-dot" id="verifyDot2"></div>
+      </div>
+
+      <!-- Step 1: Upload ID -->
+      <div id="verifyStep1">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Upload a clear photo of your government-issued ID. We'll extract your details and face automatically.</p>
+
+        <label for="idFileInput" class="upload-label" style="display:block;border:2px dashed var(--border);border-radius:12px;padding:28px 20px;text-align:center;cursor:pointer;margin-bottom:12px;transition:border-color 0.2s,background 0.2s;">
+          <div style="font-size:28px;margin-bottom:8px;">📄</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">Click to upload ID photo</div>
+          <div style="font-size:12px;color:var(--muted);">JPG, PNG supported</div>
+        </label>
+        <input type="file" id="idFileInput" accept="image/*,.pdf" style="display:none;">
+        <div id="idFileName" style="font-size:12px;color:var(--accent2);margin-bottom:16px;min-height:18px;"></div>
+
+        <button class="btn btn-primary" id="submitIdBtn" style="width:100%;justify-content:center;">Scan ID</button>
+        <div id="verifyStep1Status" style="margin-top:12px;font-size:13px;font-weight:500;text-align:center;min-height:20px;"></div>
+      </div>
+
+      <!-- Step 2: Selfie -->
+      <div id="verifyStep2" style="display:none;">
+        <div id="mrzPreview" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;flex-direction:column;gap:6px;font-size:13px;"></div>
+
+        <video id="verifyCameraFeed" autoplay playsinline style="width:100%;border-radius:12px;border:1px solid var(--border);background:#000;margin-bottom:12px;max-height:220px;object-fit:cover;"></video>
+
+        <button class="btn btn-primary" id="captureVerifySelfieBtn" style="width:100%;justify-content:center;">📸 Take Selfie</button>
+        <div id="verifyStep2Status" style="margin-top:12px;font-size:13px;font-weight:500;text-align:center;min-height:20px;"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
     /* ── State ── */
     let userEmail = null;
@@ -776,6 +962,13 @@
         }
 
         populatePersonalDetails(data.personal_details || {});
+
+        if (data.id_verified) {
+          const badge = document.getElementById("verifyBadge");
+          badge.className = "badge badge-verified";
+          badge.textContent = "✓ Identity Verified";
+          document.getElementById("verifyIdBtn").style.display = "none";
+        }
 
         // Prevent back navigation to this page once loaded
         history.pushState(null, '', window.location.href);
@@ -1033,10 +1226,6 @@
       }
     });
 
-    document.querySelector("label[for='idFileInput']").onclick = () => {
-      document.getElementById("idFileInput").click();
-    };
-
     document.getElementById("submitIdBtn").onclick = async () => {
       const file = document.getElementById("idFileInput").files[0];
       const status = document.getElementById("verifyStep1Status");
@@ -1155,6 +1344,21 @@
       }, "image/jpeg");
     };
     } // end verifyModal guard
+
+    function resetVerifyModal() {
+      stopVerifyCamera();
+      document.getElementById("verifyStep1").style.display = "block";
+      document.getElementById("verifyStep2").style.display = "none";
+      document.getElementById("verifyDot1").classList.add("done");
+      document.getElementById("verifyDot2").classList.remove("done");
+      document.getElementById("verifyModalTitle").textContent = "Verify Identity";
+      document.getElementById("verifyStep1Status").textContent = "";
+      document.getElementById("verifyStep2Status").textContent = "";
+      document.getElementById("idFileName").textContent = "";
+      document.getElementById("idFileInput").value = "";
+      document.getElementById("submitIdBtn").disabled = false;
+      document.getElementById("mrzPreview").innerHTML = "";
+    }
 
     function stopVerifyCamera() {
       if (verifyCameraStream) {

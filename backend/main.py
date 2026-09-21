@@ -16,11 +16,11 @@ import face_recognition
 import hashlib
 import shutil
 from PIL import Image
+import fitz  # PyMuPDF
 from pathlib import Path
 from blockchain import Blockchain
-from storage import save_ticket , get_tickets_by_email
+from storage import save_ticket, get_tickets_by_email, get_all_tickets
 from organizers import router as organiser_router
-from organizers import router
 
 
 app = FastAPI()
@@ -128,6 +128,11 @@ def issue_ticket(data: TicketRequest):
     event = next((e for e in events if e["event_code"] == data.event_code), None)
     if not event:
         raise HTTPException(status_code=404, detail="Invalid event code. Please check and try again.")
+
+    # Reject if this ticket number is already claimed for this event
+    all_tickets = get_all_tickets()
+    if any(t.get("ticket_id") == data.ticket_id and t.get("event_code") == data.event_code for t in all_tickets):
+        raise HTTPException(status_code=400, detail=f"Ticket #{data.ticket_id} has already been claimed for this event.")
 
     # Generate unique hash for backend reference
     ticket_id_raw = f"{data.user_email}-{data.ticket_id}-{data.event_code}"
@@ -377,6 +382,19 @@ async def verify_id(request: Request, id_image: UploadFile = File(...)):
     file_path = uploads_path / id_image.filename
     with open(file_path, "wb") as f:
         shutil.copyfileobj(id_image.file, f)
+
+    # Convert PDF to JPEG so passporteye and face_recognition can process it
+    if file_path.suffix.lower() == ".pdf":
+        try:
+            doc = fitz.open(str(file_path))
+            page = doc[0]
+            pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))  # 2× zoom → ~144 DPI
+            jpg_path = file_path.with_suffix(".jpg")
+            pix.save(str(jpg_path))
+            doc.close()
+            file_path = jpg_path
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"message": f"Could not read PDF: {str(e)}"})
 
     mrz = read_mrz(str(file_path))
     if not mrz:
